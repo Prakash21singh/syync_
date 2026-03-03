@@ -1,0 +1,16 @@
+export const MIME_TYPES = {
+  'application/vnd.google-apps.folder': 'Folder',
+  'application/vnd.google-apps.document': 'Google Docs',
+  'application/zip': 'ZIP Archive',
+  'application/x-zip-compressed': 'ZIP Archive',
+  'application/vnd.google-apps.spreadsheet': 'Google Sheets',
+  'image/jpeg': 'JPEG Image',
+  'audio/mpeg': 'MP3 Audio',
+  'video/mp4': 'MP4 Video',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Word Document',
+  'application/pdf': 'PDF Document',
+  'application/vnd.rar': 'RAR Archive',
+  'application/rar': 'RAR Archive',
+  'application/vnd.android.package-archive': 'Android Package',
+  'application/json': 'JSON Document',
+} as const;

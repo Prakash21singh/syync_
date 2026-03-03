@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "adapter" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "adapter_account_info" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;

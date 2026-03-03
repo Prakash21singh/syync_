@@ -1,0 +1,93 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: #fefefe;
+  --color-surface: #f3f4f7;
+  --color-foreground: #2a2d3a;
+  --color-primary: #6d71f0;
+  --color-muted: #e5ebf4;
+  --color-border: #e5ebf4;
+  --color-border-secondary: #cacfe0;
+  --color-primary-foreground: #fefefe;
+  --color-disabled: #cacfe0;
+  --color-text-secondary: #a5a1b3;
+  --font-mont: var(--font-montserrat);
+}
+
+:root.dark {
+  --color-background: #0f1117;
+  --color-surface: #1a1d29;
+  --color-foreground: #fefefe;
+  --color-primary: #6d71f0;
+  --color-muted: #2a2f3f;
+  --color-border: #2a2f3f;
+  --color-border-secondary: #3a3f52;
+  --color-disabled: #3a3f52;
+  --color-text-secondary: #a5a1b3;
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: #fefefe;
+  --foreground: #2a2d3a;
+  --card: #f3f4f7;
+  --card-foreground: #2a2d3a;
+  --popover: #ffffff;
+  --popover-foreground: #2a2d3a;
+  --primary: #6d71f0;
+  --primary-foreground: #fefefe;
+  --secondary: #e5ebf4;
+  --secondary-foreground: #2a2d3a;
+  --muted: #e5ebf4;
+  --muted-foreground: #a5a1b3;
+  --accent: #cacfe0;
+  --accent-foreground: #2a2d3a;
+  --destructive: #ef4444;
+  --destructive-foreground: #fefefe;
+  --border: #e5ebf4;
+  --input: #e5ebf4;
+  --ring: #6d71f0;
+}
+
+.dark {
+  --background: #0f1117;
+  --foreground: #fefefe;
+  --card: #1a1d29;
+  --card-foreground: #fefefe;
+  --popover: #1a1d29;
+  --popover-foreground: #fefefe;
+  --primary: #6d71f0;
+  --primary-foreground: #fefefe;
+  --secondary: #2a2f3f;
+  --secondary-foreground: #fefefe;
+  --muted: #2a2f3f;
+  --muted-foreground: #a5a1b3;
+  --accent: #3a3f52;
+  --accent-foreground: #fefefe;
+  --destructive: #ef4444;
+  --destructive-foreground: #fefefe;
+  --border: #2a2f3f;
+  --input: #2a2f3f;
+  --ring: #6d71f0;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
