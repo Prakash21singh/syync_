@@ -45,7 +45,7 @@ async function handler(req: NextRequest, session: any) {
       return NextResponse.json<ValidateResponse>({
         status: 'valid',
         message: 'Token is valid',
-      });
+      } );
     }
 
     if (adapter?.refresh_token) {

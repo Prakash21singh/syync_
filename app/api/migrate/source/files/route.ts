@@ -130,8 +130,8 @@ async function getFilesFromAdapter(
     const params = new URLSearchParams({
       corpora: (queryParams.corpora as string) || 'user',
       driveId: (queryParams.driveId as string) || '',
-      includeItemsFromAllDrives: true.toString(),
-      supportsAllDrives: 'true',
+      includeItemsFromAllDrives: false.toString(),
+      supportsAllDrives: 'false',
       q: (queryParams.q as string) || '',
       orderBy: (queryParams.orderBy as string) || 'createdTime desc',
       fields:

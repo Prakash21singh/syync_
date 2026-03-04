@@ -1,12 +1,14 @@
 import prisma from '@/lib/prisma';
+import { discoveryQueue } from '@/lib/queues/discovery-queue';
 import { migrationQueue } from '@/lib/queues/migration-queue';
 import { withAuth } from '@/lib/with-auth';
 import { NextRequest, NextResponse } from 'next/server';
-
+import {findResouceType} from "@/utils/functions/find-resourcetype"
 type InputFile = {
   id: string;
-  mimeType:string;
-  size:string
+  mimeType: string;
+  size: string;
+  name: string;
 };
 
 async function handler(req: NextRequest, session: any) {
@@ -70,21 +72,20 @@ async function handler(req: NextRequest, session: any) {
         sourceAdapterId: body.sourceAdapterId,
         destinationAdapterId: body.destAdapterId,
         userId: session.user.id,
-        files: {
+        selections: {
           create: body.selectedFiles.map((file: InputFile) => ({
-            fileId: file.id,
-            size:Number(file.size),
-            mimeType:file.mimeType,
-            source: sourceAdapter.adapter_type,
-            destination: destinationAdapter.adapter_type,
-            status: 'PENDING',
+            sourceId: file.id,
+            name: file.name || 'Unknown', // Fallback name
+            type: findResouceType(sourceAdapter.adapter_type, file),
+            mimeType: file.mimeType,
           })),
         },
+        totalFiles: body.selectedFiles.length,
       },
     });
 
-    await migrationQueue.add(
-      'start-migration',
+    await discoveryQueue.add(
+      'start-discovery',
       {
         userId: migration.userId,
         migrationId: migration.id,
@@ -106,6 +107,7 @@ async function handler(req: NextRequest, session: any) {
       { status: 201 },
     );
   } catch (error) {
+    console.log("Error", error)
     return NextResponse.json(
       {
         error: 'migration_failed',

@@ -50,8 +50,6 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
     );
   };
 
-  console.log(selectedFiles)
-
   const isSelected = (id: string) => selectedFiles.some((f) => f.id === id);
 
   // ─── Fetch source files ───────────────────────────────────────────────────
@@ -80,6 +78,7 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
 
       if (data.adapter_type === 'GOOGLE_DRIVE') {
         setFiles(data.files);
+        console.log(data.files);
       }
     } catch (err) {
       setMessage({
@@ -90,6 +89,7 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
       setIsMigrating(false);
     }
   };
+
 
   // ─── Start migration ──────────────────────────────────────────────────────
   const handleMigrate = async () => {

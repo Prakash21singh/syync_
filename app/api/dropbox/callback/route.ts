@@ -14,12 +14,6 @@ async function handler(req: NextRequest, session: any) {
     return new Response('Missing code or state', { status: 400 });
   }
 
-  console.log({
-    clientId: process.env.NEXT_PUBLIC_DROPBOX_APP_KEY,
-    clientSecret: process.env.NEXT_PUBLIC_DROPBOX_CLIENT_SECRET,
-    redirectUri: `${process.env.NEXT_PUBLIC_BASE_URL}/api/dropbox/callback`,
-  });
-  // You can add additional verification for the state parameter here
   const tokenExchangeURL = getDropboxOAuthTokenURL();
 
   const options: RequestInit = {
@@ -83,14 +77,14 @@ async function handler(req: NextRequest, session: any) {
       expires_in: tokenData.expires_in,
       token_type: tokenData.token_type,
       scope: tokenData.scope,
-      name: `${userInfo.name}'s Dropbox`,
+      name: `${userInfo.name.given_name || userInfo.name.display_name}'s Dropbox`,
     });
 
     await prisma.adapterAccountInfo.create({
       data: {
         adapterId: adapter.id,
         email: userInfo.email,
-        name: userInfo.name.display_name,
+        name: userInfo.name.given_name || userInfo.name.display_name,
         avatar: userInfo.profile_photo_url || undefined,
       },
     });

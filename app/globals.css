@@ -16,6 +16,7 @@
   --color-disabled: #cacfe0;
   --color-text-secondary: #a5a1b3;
   --font-mont: var(--font-montserrat);
+  --font-sarabun: var(--font-sarabun);
 }
 
 :root.dark {

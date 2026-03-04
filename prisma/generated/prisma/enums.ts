@@ -17,11 +17,32 @@ export const AdapterName = {
 export type AdapterName = (typeof AdapterName)[keyof typeof AdapterName]
 
 
+export const MigrationFileStatus = {
+  PENDING: 'PENDING',
+  TRANSFERRING: 'TRANSFERRING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+} as const
+
+export type MigrationFileStatus = (typeof MigrationFileStatus)[keyof typeof MigrationFileStatus]
+
+
+export const MigrationSelectionType = {
+  FILE: 'FILE',
+  FOLDER: 'FOLDER'
+} as const
+
+export type MigrationSelectionType = (typeof MigrationSelectionType)[keyof typeof MigrationSelectionType]
+
+
 export const MigrationStatus = {
   PENDING: 'PENDING',
-  SUCCESS: 'SUCCESS',
+  DISCOVERING: 'DISCOVERING',
+  TRANSFERRING: 'TRANSFERRING',
+  COMPLETED: 'COMPLETED',
   FAILED: 'FAILED',
-  RETRY: 'RETRY'
+  RETRYING: 'RETRYING',
+  SKIPPED: 'SKIPPED'
 } as const
 
 export type MigrationStatus = (typeof MigrationStatus)[keyof typeof MigrationStatus]

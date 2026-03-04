@@ -58,6 +58,7 @@ export const ModelName = {
   Adapter: 'Adapter',
   AdapterAccountInfo: 'AdapterAccountInfo',
   Migration: 'Migration',
+  MigrationSelection: 'MigrationSelection',
   MigrationFile: 'MigrationFile'
 } as const
 
@@ -171,21 +172,35 @@ export const MigrationScalarFieldEnum = {
   status: 'status',
   sourceAdapterId: 'sourceAdapterId',
   destinationAdapterId: 'destinationAdapterId',
+  totalFiles: 'totalFiles',
+  completedFiles: 'completedFiles',
+  failedFiles: 'failedFiles',
+  userId: 'userId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  userId: 'userId'
+  updatedAt: 'updatedAt'
 } as const
 
 export type MigrationScalarFieldEnum = (typeof MigrationScalarFieldEnum)[keyof typeof MigrationScalarFieldEnum]
 
 
+export const MigrationSelectionScalarFieldEnum = {
+  id: 'id',
+  sourceId: 'sourceId',
+  name: 'name',
+  type: 'type',
+  mimeType: 'mimeType',
+  migrationId: 'migrationId'
+} as const
+
+export type MigrationSelectionScalarFieldEnum = (typeof MigrationSelectionScalarFieldEnum)[keyof typeof MigrationSelectionScalarFieldEnum]
+
+
 export const MigrationFileScalarFieldEnum = {
   id: 'id',
-  fileId: 'fileId',
+  sourceFileId: 'sourceFileId',
   size: 'size',
   mimeType: 'mimeType',
-  source: 'source',
-  destination: 'destination',
+  path: 'path',
   status: 'status',
   migrationId: 'migrationId'
 } as const
