@@ -3,7 +3,7 @@ import { discoveryQueue } from '@/lib/queues/discovery-queue';
 import { migrationQueue } from '@/lib/queues/migration-queue';
 import { withAuth } from '@/lib/with-auth';
 import { NextRequest, NextResponse } from 'next/server';
-import {findResouceType} from "@/utils/functions/find-resourcetype"
+import { findResouceType } from '@/utils/functions/find-resourcetype';
 type InputFile = {
   id: string;
   mimeType: string;
@@ -78,6 +78,7 @@ async function handler(req: NextRequest, session: any) {
             name: file.name || 'Unknown', // Fallback name
             type: findResouceType(sourceAdapter.adapter_type, file),
             mimeType: file.mimeType,
+            size: file.size,
           })),
         },
         totalFiles: body.selectedFiles.length,
@@ -107,7 +108,7 @@ async function handler(req: NextRequest, session: any) {
       { status: 201 },
     );
   } catch (error) {
-    console.log("Error", error)
+    console.log('Error', error);
     return NextResponse.json(
       {
         error: 'migration_failed',

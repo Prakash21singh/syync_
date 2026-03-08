@@ -90,7 +90,6 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
     }
   };
 
-
   // ─── Start migration ──────────────────────────────────────────────────────
   const handleMigrate = async () => {
     if (!canMigrate) return;

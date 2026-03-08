@@ -45,7 +45,7 @@ async function handler(req: NextRequest, session: any) {
       return NextResponse.json<ValidateResponse>({
         status: 'valid',
         message: 'Token is valid',
-      } );
+      });
     }
 
     if (adapter?.refresh_token) {
@@ -145,7 +145,6 @@ async function rotateToken(adapter: Partial<Adapter>) {
         }
 
         const data = await res.json();
-        console.log(data);
 
         return {
           access_token: data.access_token,

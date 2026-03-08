@@ -1228,6 +1228,7 @@ export const MigrationSelectionScalarFieldEnum = {
   name: 'name',
   type: 'type',
   mimeType: 'mimeType',
+  size: 'size',
   migrationId: 'migrationId'
 } as const
 
@@ -1240,6 +1241,7 @@ export const MigrationFileScalarFieldEnum = {
   size: 'size',
   mimeType: 'mimeType',
   path: 'path',
+  name: 'name',
   status: 'status',
   migrationId: 'migrationId'
 } as const

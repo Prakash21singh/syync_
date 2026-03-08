@@ -132,7 +132,7 @@ async function getFilesFromAdapter(
       driveId: (queryParams.driveId as string) || '',
       includeItemsFromAllDrives: false.toString(),
       supportsAllDrives: 'false',
-      q: (queryParams.q as string) || '',
+      q: "'root' in parents and trashed=false",
       orderBy: (queryParams.orderBy as string) || 'createdTime desc',
       fields:
         'nextPageToken, files(id,name,mimeType,size,createdTime,modifiedTime,parents,webViewLink,iconLink,hasThumbnail,thumbnailLink)',

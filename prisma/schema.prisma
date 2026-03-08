@@ -160,6 +160,7 @@
     name String                // cache name to reduce API calls
     type MigrationSelectionType
     mimeType String?
+    size String?
 
     migrationId String
     migration Migration @relation(fields: [migrationId], references: [id])
@@ -174,6 +175,7 @@
     size Int?
     mimeType String?
     path String
+    name String
 
     status MigrationFileStatus
 

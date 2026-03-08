@@ -108,7 +108,7 @@ export function AdapterSelector({ role, adapter, disabledAdapter }: Props) {
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent className="w-[400px] bg-background p-0" align="start">
+        <PopoverContent className="w-[400px] font-sarabun bg-background p-0" align="start">
           <Command>
             <CommandInput placeholder="Search adapters..." />
             <CommandList>

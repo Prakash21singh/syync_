@@ -10,7 +10,7 @@ const RootPage = async (props: Props) => {
   });
 
   return (
-    <div>
+    <div className="font-sarabun">
       <AdapterSelection isLoggedIn={!!session?.user} userId={session?.user.id!} />
     </div>
   );
