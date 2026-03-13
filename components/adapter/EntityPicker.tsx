@@ -2,14 +2,14 @@
 import Image from 'next/image';
 import { List, LayoutGrid } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import type { DriveFile, EntityView } from '@/types/index';
+import type { BaseFile, DriveFile, EntityView } from '@/types/index';
 
 interface Props {
-  files: DriveFile[];
+  files: BaseFile[];
   view: EntityView;
   onViewChange: (v: EntityView) => void;
   isSelected: (id: string) => boolean;
-  onSelect: (file: DriveFile) => void;
+  onSelect: (file: BaseFile) => void;
 }
 
 export function EntityPicker({ files, view, onViewChange, isSelected, onSelect }: Props) {
@@ -57,7 +57,6 @@ export function EntityPicker({ files, view, onViewChange, isSelected, onSelect }
                 <p className="font-medium text-foreground">{file.name}</p>
                 <p className="text-xs text-muted-foreground">{file.mimeType}</p>
               </div>
-              <span className="text-xs text-muted-foreground">{file.kind}</span>
             </div>
           ) : (
             <div
@@ -71,8 +70,8 @@ export function EntityPicker({ files, view, onViewChange, isSelected, onSelect }
             >
               <div className="flex items-center gap-x-3">
                 <Image
-                  src={file.thumbailLink ?? file.iconLink}
-                  alt="Thumbnail"
+                  src={file.preview || ""}
+                  alt={file.type || "Thumbnail"}
                   width={20}
                   height={20}
                   className="object-cover"

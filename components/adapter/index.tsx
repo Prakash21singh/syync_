@@ -9,6 +9,7 @@ import { MigrationSummary } from './MigrationSummary';
 import { StatusMessage } from './StatusMessage';
 import RequireLogin from '../auth/require-login';
 import type {
+  BaseFile,
   DriveFile,
   EntityView,
   MigrationResponse,
@@ -30,8 +31,8 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
   // ─── Migration state ────────────────────────────────────────────────────────
   const [showLogin, setShowLogin] = useState(false);
   const [isMigrating, setIsMigrating] = useState(false);
-  const [files, setFiles] = useState<DriveFile[]>([]);
-  const [selectedFiles, setSelectedFiles] = useState<DriveFile[]>([]);
+  const [files, setFiles] = useState<BaseFile[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<BaseFile[]>([]);
   const [entityView, setEntityView] = useState<EntityView>('list');
   const [message, setMessage] = useState<StatusMessageType | null>(null);
 
@@ -44,7 +45,7 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
     dest.status === 'valid';
 
   // ─── Entity selection ────────────────────────────────────────────────────────
-  const handleEntitySelect = (file: DriveFile) => {
+  const handleEntitySelect = (file: BaseFile) => {
     setSelectedFiles((prev) =>
       prev.some((f) => f.id === file.id) ? prev.filter((f) => f.id !== file.id) : [...prev, file],
     );
@@ -76,10 +77,7 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
         return;
       }
 
-      if (data.adapter_type === 'GOOGLE_DRIVE') {
-        setFiles(data.files);
-        console.log(data.files);
-      }
+      setFiles(data.files);
     } catch (err) {
       setMessage({
         type: 'error',
@@ -90,6 +88,7 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
     }
   };
 
+  console.log(selectedFiles)
   // ─── Start migration ──────────────────────────────────────────────────────
   const handleMigrate = async () => {
     if (!canMigrate) return;

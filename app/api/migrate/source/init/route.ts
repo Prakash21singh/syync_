@@ -11,9 +11,22 @@ type InputFile = {
   name: string;
 };
 
+type RequestBody = { 
+  sourceAdapterId:string;
+  destAdapterId:string;
+  selectedFiles:{
+    id:string;
+    name:string;
+    pathname:string | null;
+    size: string | null;
+    type: "folder" | "file",
+    mimeType:string | null;
+  }[]
+}
+
 async function handler(req: NextRequest, session: any) {
   try {
-    const body = await req.json();
+    const body:RequestBody = await req.json();
 
     // ✅ Strong validation
     if (
@@ -65,6 +78,18 @@ async function handler(req: NextRequest, session: any) {
       );
     }
 
+    const selections = body.selectedFiles.map((file)=>({
+      sourceId:file.id,
+      name :
+        file.name.lastIndexOf(".") !== -1
+          ? file.name.slice(0, file.name.lastIndexOf("."))
+          : file.name,
+      pathname:file.pathname,
+      size:file.size?.toString(),
+      type: file.type.toUpperCase() as "FILE" | "FOLDER",
+      mimeType:file.mimeType,
+    }))
+
     // ✅ Create migration
     const migration = await prisma.migration.create({
       data: {
@@ -73,13 +98,7 @@ async function handler(req: NextRequest, session: any) {
         destinationAdapterId: body.destAdapterId,
         userId: session.user.id,
         selections: {
-          create: body.selectedFiles.map((file: InputFile) => ({
-            sourceId: file.id,
-            name: file.name || 'Unknown', // Fallback name
-            type: findResouceType(sourceAdapter.adapter_type, file),
-            mimeType: file.mimeType,
-            size: file.size,
-          })),
+          create: selections,
         },
         totalFiles: body.selectedFiles.length,
       },

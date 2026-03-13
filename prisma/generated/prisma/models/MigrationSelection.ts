@@ -31,6 +31,7 @@ export type MigrationSelectionMinAggregateOutputType = {
   type: $Enums.MigrationSelectionType | null
   mimeType: string | null
   size: string | null
+  pathname: string | null
   migrationId: string | null
 }
 
@@ -41,6 +42,7 @@ export type MigrationSelectionMaxAggregateOutputType = {
   type: $Enums.MigrationSelectionType | null
   mimeType: string | null
   size: string | null
+  pathname: string | null
   migrationId: string | null
 }
 
@@ -51,6 +53,7 @@ export type MigrationSelectionCountAggregateOutputType = {
   type: number
   mimeType: number
   size: number
+  pathname: number
   migrationId: number
   _all: number
 }
@@ -63,6 +66,7 @@ export type MigrationSelectionMinAggregateInputType = {
   type?: true
   mimeType?: true
   size?: true
+  pathname?: true
   migrationId?: true
 }
 
@@ -73,6 +77,7 @@ export type MigrationSelectionMaxAggregateInputType = {
   type?: true
   mimeType?: true
   size?: true
+  pathname?: true
   migrationId?: true
 }
 
@@ -83,6 +88,7 @@ export type MigrationSelectionCountAggregateInputType = {
   type?: true
   mimeType?: true
   size?: true
+  pathname?: true
   migrationId?: true
   _all?: true
 }
@@ -166,6 +172,7 @@ export type MigrationSelectionGroupByOutputType = {
   type: $Enums.MigrationSelectionType
   mimeType: string | null
   size: string | null
+  pathname: string | null
   migrationId: string
   _count: MigrationSelectionCountAggregateOutputType | null
   _min: MigrationSelectionMinAggregateOutputType | null
@@ -197,6 +204,7 @@ export type MigrationSelectionWhereInput = {
   type?: Prisma.EnumMigrationSelectionTypeFilter<"MigrationSelection"> | $Enums.MigrationSelectionType
   mimeType?: Prisma.StringNullableFilter<"MigrationSelection"> | string | null
   size?: Prisma.StringNullableFilter<"MigrationSelection"> | string | null
+  pathname?: Prisma.StringNullableFilter<"MigrationSelection"> | string | null
   migrationId?: Prisma.StringFilter<"MigrationSelection"> | string
   migration?: Prisma.XOR<Prisma.MigrationScalarRelationFilter, Prisma.MigrationWhereInput>
 }
@@ -208,6 +216,7 @@ export type MigrationSelectionOrderByWithRelationInput = {
   type?: Prisma.SortOrder
   mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
   size?: Prisma.SortOrderInput | Prisma.SortOrder
+  pathname?: Prisma.SortOrderInput | Prisma.SortOrder
   migrationId?: Prisma.SortOrder
   migration?: Prisma.MigrationOrderByWithRelationInput
 }
@@ -222,6 +231,7 @@ export type MigrationSelectionWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.EnumMigrationSelectionTypeFilter<"MigrationSelection"> | $Enums.MigrationSelectionType
   mimeType?: Prisma.StringNullableFilter<"MigrationSelection"> | string | null
   size?: Prisma.StringNullableFilter<"MigrationSelection"> | string | null
+  pathname?: Prisma.StringNullableFilter<"MigrationSelection"> | string | null
   migrationId?: Prisma.StringFilter<"MigrationSelection"> | string
   migration?: Prisma.XOR<Prisma.MigrationScalarRelationFilter, Prisma.MigrationWhereInput>
 }, "id">
@@ -233,6 +243,7 @@ export type MigrationSelectionOrderByWithAggregationInput = {
   type?: Prisma.SortOrder
   mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
   size?: Prisma.SortOrderInput | Prisma.SortOrder
+  pathname?: Prisma.SortOrderInput | Prisma.SortOrder
   migrationId?: Prisma.SortOrder
   _count?: Prisma.MigrationSelectionCountOrderByAggregateInput
   _max?: Prisma.MigrationSelectionMaxOrderByAggregateInput
@@ -249,6 +260,7 @@ export type MigrationSelectionScalarWhereWithAggregatesInput = {
   type?: Prisma.EnumMigrationSelectionTypeWithAggregatesFilter<"MigrationSelection"> | $Enums.MigrationSelectionType
   mimeType?: Prisma.StringNullableWithAggregatesFilter<"MigrationSelection"> | string | null
   size?: Prisma.StringNullableWithAggregatesFilter<"MigrationSelection"> | string | null
+  pathname?: Prisma.StringNullableWithAggregatesFilter<"MigrationSelection"> | string | null
   migrationId?: Prisma.StringWithAggregatesFilter<"MigrationSelection"> | string
 }
 
@@ -259,6 +271,7 @@ export type MigrationSelectionCreateInput = {
   type: $Enums.MigrationSelectionType
   mimeType?: string | null
   size?: string | null
+  pathname?: string | null
   migration: Prisma.MigrationCreateNestedOneWithoutSelectionsInput
 }
 
@@ -269,6 +282,7 @@ export type MigrationSelectionUncheckedCreateInput = {
   type: $Enums.MigrationSelectionType
   mimeType?: string | null
   size?: string | null
+  pathname?: string | null
   migrationId: string
 }
 
@@ -279,6 +293,7 @@ export type MigrationSelectionUpdateInput = {
   type?: Prisma.EnumMigrationSelectionTypeFieldUpdateOperationsInput | $Enums.MigrationSelectionType
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   migration?: Prisma.MigrationUpdateOneRequiredWithoutSelectionsNestedInput
 }
 
@@ -289,6 +304,7 @@ export type MigrationSelectionUncheckedUpdateInput = {
   type?: Prisma.EnumMigrationSelectionTypeFieldUpdateOperationsInput | $Enums.MigrationSelectionType
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   migrationId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -299,6 +315,7 @@ export type MigrationSelectionCreateManyInput = {
   type: $Enums.MigrationSelectionType
   mimeType?: string | null
   size?: string | null
+  pathname?: string | null
   migrationId: string
 }
 
@@ -309,6 +326,7 @@ export type MigrationSelectionUpdateManyMutationInput = {
   type?: Prisma.EnumMigrationSelectionTypeFieldUpdateOperationsInput | $Enums.MigrationSelectionType
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type MigrationSelectionUncheckedUpdateManyInput = {
@@ -318,6 +336,7 @@ export type MigrationSelectionUncheckedUpdateManyInput = {
   type?: Prisma.EnumMigrationSelectionTypeFieldUpdateOperationsInput | $Enums.MigrationSelectionType
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   migrationId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -338,6 +357,7 @@ export type MigrationSelectionCountOrderByAggregateInput = {
   type?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   size?: Prisma.SortOrder
+  pathname?: Prisma.SortOrder
   migrationId?: Prisma.SortOrder
 }
 
@@ -348,6 +368,7 @@ export type MigrationSelectionMaxOrderByAggregateInput = {
   type?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   size?: Prisma.SortOrder
+  pathname?: Prisma.SortOrder
   migrationId?: Prisma.SortOrder
 }
 
@@ -358,6 +379,7 @@ export type MigrationSelectionMinOrderByAggregateInput = {
   type?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   size?: Prisma.SortOrder
+  pathname?: Prisma.SortOrder
   migrationId?: Prisma.SortOrder
 }
 
@@ -414,6 +436,7 @@ export type MigrationSelectionCreateWithoutMigrationInput = {
   type: $Enums.MigrationSelectionType
   mimeType?: string | null
   size?: string | null
+  pathname?: string | null
 }
 
 export type MigrationSelectionUncheckedCreateWithoutMigrationInput = {
@@ -423,6 +446,7 @@ export type MigrationSelectionUncheckedCreateWithoutMigrationInput = {
   type: $Enums.MigrationSelectionType
   mimeType?: string | null
   size?: string | null
+  pathname?: string | null
 }
 
 export type MigrationSelectionCreateOrConnectWithoutMigrationInput = {
@@ -461,6 +485,7 @@ export type MigrationSelectionScalarWhereInput = {
   type?: Prisma.EnumMigrationSelectionTypeFilter<"MigrationSelection"> | $Enums.MigrationSelectionType
   mimeType?: Prisma.StringNullableFilter<"MigrationSelection"> | string | null
   size?: Prisma.StringNullableFilter<"MigrationSelection"> | string | null
+  pathname?: Prisma.StringNullableFilter<"MigrationSelection"> | string | null
   migrationId?: Prisma.StringFilter<"MigrationSelection"> | string
 }
 
@@ -471,6 +496,7 @@ export type MigrationSelectionCreateManyMigrationInput = {
   type: $Enums.MigrationSelectionType
   mimeType?: string | null
   size?: string | null
+  pathname?: string | null
 }
 
 export type MigrationSelectionUpdateWithoutMigrationInput = {
@@ -480,6 +506,7 @@ export type MigrationSelectionUpdateWithoutMigrationInput = {
   type?: Prisma.EnumMigrationSelectionTypeFieldUpdateOperationsInput | $Enums.MigrationSelectionType
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type MigrationSelectionUncheckedUpdateWithoutMigrationInput = {
@@ -489,6 +516,7 @@ export type MigrationSelectionUncheckedUpdateWithoutMigrationInput = {
   type?: Prisma.EnumMigrationSelectionTypeFieldUpdateOperationsInput | $Enums.MigrationSelectionType
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type MigrationSelectionUncheckedUpdateManyWithoutMigrationInput = {
@@ -498,6 +526,7 @@ export type MigrationSelectionUncheckedUpdateManyWithoutMigrationInput = {
   type?: Prisma.EnumMigrationSelectionTypeFieldUpdateOperationsInput | $Enums.MigrationSelectionType
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pathname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -509,6 +538,7 @@ export type MigrationSelectionSelect<ExtArgs extends runtime.Types.Extensions.In
   type?: boolean
   mimeType?: boolean
   size?: boolean
+  pathname?: boolean
   migrationId?: boolean
   migration?: boolean | Prisma.MigrationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["migrationSelection"]>
@@ -520,6 +550,7 @@ export type MigrationSelectionSelectCreateManyAndReturn<ExtArgs extends runtime.
   type?: boolean
   mimeType?: boolean
   size?: boolean
+  pathname?: boolean
   migrationId?: boolean
   migration?: boolean | Prisma.MigrationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["migrationSelection"]>
@@ -531,6 +562,7 @@ export type MigrationSelectionSelectUpdateManyAndReturn<ExtArgs extends runtime.
   type?: boolean
   mimeType?: boolean
   size?: boolean
+  pathname?: boolean
   migrationId?: boolean
   migration?: boolean | Prisma.MigrationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["migrationSelection"]>
@@ -542,10 +574,11 @@ export type MigrationSelectionSelectScalar = {
   type?: boolean
   mimeType?: boolean
   size?: boolean
+  pathname?: boolean
   migrationId?: boolean
 }
 
-export type MigrationSelectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sourceId" | "name" | "type" | "mimeType" | "size" | "migrationId", ExtArgs["result"]["migrationSelection"]>
+export type MigrationSelectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "sourceId" | "name" | "type" | "mimeType" | "size" | "pathname" | "migrationId", ExtArgs["result"]["migrationSelection"]>
 export type MigrationSelectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   migration?: boolean | Prisma.MigrationDefaultArgs<ExtArgs>
 }
@@ -568,6 +601,7 @@ export type $MigrationSelectionPayload<ExtArgs extends runtime.Types.Extensions.
     type: $Enums.MigrationSelectionType
     mimeType: string | null
     size: string | null
+    pathname: string | null
     migrationId: string
   }, ExtArgs["result"]["migrationSelection"]>
   composites: {}
@@ -999,6 +1033,7 @@ export interface MigrationSelectionFieldRefs {
   readonly type: Prisma.FieldRef<"MigrationSelection", 'MigrationSelectionType'>
   readonly mimeType: Prisma.FieldRef<"MigrationSelection", 'String'>
   readonly size: Prisma.FieldRef<"MigrationSelection", 'String'>
+  readonly pathname: Prisma.FieldRef<"MigrationSelection", 'String'>
   readonly migrationId: Prisma.FieldRef<"MigrationSelection", 'String'>
 }
     

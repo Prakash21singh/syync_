@@ -32,18 +32,42 @@ export interface DriveFile {
   size: number;
 }
 
+export interface BaseFile {
+  id: string;
+  name: string;
+  mimeType?:string;
+  preview?:string;
+  type: "folder" | "file",
+  size : string | number | null;
+  pathname?:string;
+}
+export interface DropboxFile {
+  id: string;
+  ".tag" : "folder" | "file";
+  name:string;
+  path_display:string;
+  path_lower: string;
+  size?:number;
+}
+
+
 export interface StatusMessage {
   type: MessageType;
   message: string;
 }
 
 export interface MigrationResponse {
-  files: DriveFile[];
+  files: BaseFile[];
   adapter_type: AdapterType;
-  incompleteSearch?: boolean;
-  kind: string;
-  nextPageToken?: string;
   error?: ApiError;
+}
+
+
+export interface StandardResponse {
+  files: any[];
+  adapter_type:AdapterType;
+  token?: string;
+  has_more:boolean;
 }
 
 export interface ApiError {

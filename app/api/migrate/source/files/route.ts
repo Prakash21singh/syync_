@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma';
 import { withAuth } from '@/lib/with-auth';
+import { AdapterType, BaseFile, DriveFile, DropboxFile } from '@/types';
 import { GOOGLE_DRIVE_APIS } from '@/utils/config/google-drive-endpoints';
 import { GOOGLE_API_ENDPOINTS } from '@/utils/config/google-endpoint';
 import { NextRequest, NextResponse } from 'next/server';
@@ -110,7 +111,7 @@ async function handler(req: NextRequest, session: any) {
     const files = await getFilesFromAdapter(sourceAdapterExist);
 
     return NextResponse.json(
-      { ...files, adapter_type: sourceAdapterExist.adapter_type },
+      { files, adapter_type: sourceAdapterExist.adapter_type },
       { status: 200 },
     );
   } catch (error) {
@@ -138,7 +139,6 @@ async function getFilesFromAdapter(
         'nextPageToken, files(id,name,mimeType,size,createdTime,modifiedTime,parents,webViewLink,iconLink,hasThumbnail,thumbnailLink)',
     }).toString();
 
-    // Implement logic to get files from Google Drive using adapter.access_token
     const response = await fetch(GOOGLE_DRIVE_APIS['google_drive_list_files'].url + `?${params}`, {
       method: GOOGLE_DRIVE_APIS['google_drive_list_files'].method,
       headers: {
@@ -146,11 +146,75 @@ async function getFilesFromAdapter(
       },
     });
     const data = await response.json();
-    return data;
+
+    const files = dataMapping(adapter.adapter_type, data)
+
+    return files;
   } else if (adapter.adapter_type === 'DROPBOX') {
-    // Implement logic to get files from Dropbox using adapter.access_token
+
+    const response = await fetch(`${process.env.DROPBOX_FILES_URL}`,{
+      method: "POST",
+      headers : {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${adapter.access_token}`
+      },
+      body: JSON.stringify({
+        include_deleted: false,
+        include_has_explicit_shared_members: false,
+        include_media_info: false,
+        include_mounted_folders: true,
+        include_non_downloadable_files: true,
+        path: "",
+        recursive: false
+      })
+    });
+
+    const data = await response.json()
+
+    const files = dataMapping(adapter.adapter_type, data);
+
+    return files;
   }
 }
+
+
+async function dataMapping(adapterType:AdapterType, data:any){
+
+
+  let files:BaseFile[] = [];
+
+  if(adapterType === "GOOGLE_DRIVE"){
+    files = data.files.map((file:DriveFile)=> {
+        let data = {
+          id: file.id,
+          name:file.name,
+          mimeType: file.mimeType,
+          preview: file.iconLink || file.thumbailLink,
+          type: file.mimeType === "application/vnd.google-apps.folder" ? "folder" : "file",
+          size: file.size ? Number(file.size) : null
+        }
+        return data;
+    })
+  }
+
+  if(adapterType === "DROPBOX"){
+    files = data.entries.map((entry:DropboxFile)=> {
+      let data:BaseFile = {
+        id: entry.id,
+        name: entry.name,
+        size: entry.size ? Number(entry.size) : null,
+        type: entry['.tag'] === "folder" ? "folder" : "file",
+        preview: entry['.tag'] === "folder" ? "/dropbox/folder.png" : "/file.svg",
+        pathname: entry.path_display
+      }
+      return data;
+    })
+  }
+
+
+  return files;
+}
+
 
 async function removeAdapterAndAdapterInfo(adapterId: string, email: string | null) {
   await prisma.adapterAccountInfo.deleteMany({
