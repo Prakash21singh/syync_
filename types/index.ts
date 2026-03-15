@@ -81,3 +81,25 @@ export interface ApiError {
   message: string;
   status: string;
 }
+
+
+export  interface GoogleTokenExchangeResponse {
+  access_token:string;
+  expires_in:number;
+  refresh_token:string;
+  scope:string;
+  token_type:string;
+  id_token:string;
+  refresh_token_expires_in:number
+}
+
+
+export interface DecodedGoogleAuthIDToken {
+  iss: string;
+  sub: string;
+  email: string;
+  name: string;
+  picture:string;
+  given_name:string;
+  family_name:string;
+}

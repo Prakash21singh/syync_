@@ -1,26 +1,33 @@
 import prisma from '@/lib/prisma';
 
-interface CreateAdapterAccountInfoParams {
+interface CreateAndUpdateAdapterAccountInfoParams {
   adapterId: string;
   email?: string;
   name?: string;
   avatar?: string;
 }
 
-export const createAdapterAccountInfo = async ({
+
+export const createAndUpdateAdapterAccountInfo = async ({
   adapterId,
-  email,
-  name,
   avatar,
-}: CreateAdapterAccountInfoParams) => {
-  return await prisma.adapterAccountInfo.create({
-    data: {
+  email,
+  name
+}:CreateAndUpdateAdapterAccountInfoParams) => {
+  return await prisma.adapterAccountInfo.upsert({
+    where:{
       adapterId,
+    },
+    update:{
+      avatar,
       email,
       name,
-      avatar,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     },
-  });
-};
+    create:{
+      adapterId,
+      avatar,
+      email,
+      name
+    }
+  })
+}

@@ -108,8 +108,8 @@ async function rotateToken(adapter: Partial<Adapter>) {
         });
 
         if (!res.ok) {
-          const errorText = await res.text(); // Dropbox usually sends useful error
-          throw new Error(`Dropbox token refresh failed: ${res.status} ${errorText}`);
+          const errorText = await res.json(); 
+          throw new Error(errorText.error_description ?? `Google Drive token refresh failed`);
         }
 
         const data = await res.json();
@@ -119,7 +119,7 @@ async function rotateToken(adapter: Partial<Adapter>) {
           expires_in: data.expires_in,
         };
       } catch (error: any) {
-        console.log('Google Token Refresh Error: ', error.message);
+        console.log(error.message);
         return null;
       }
     }
@@ -153,7 +153,7 @@ async function rotateToken(adapter: Partial<Adapter>) {
         };
       } catch (error: any) {
         console.error('❌ Token refresh error:', error.message);
-        return null; // always return something predictable
+        return null;
       }
     }
     return null;

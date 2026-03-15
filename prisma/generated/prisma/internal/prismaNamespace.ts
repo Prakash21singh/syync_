@@ -1178,6 +1178,7 @@ export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[k
 export const AdapterScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  providerId: 'providerId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   access_token: 'access_token',

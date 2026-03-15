@@ -1,4 +1,5 @@
-import { createAdapter } from '@/lib/api/adapter/create-adapter';
+import { createAndUpdateAdapter } from '@/lib/api/adapter/create-adapter';
+import { createAndUpdateAdapterAccountInfo } from '@/lib/api/adapter/create-adapter-account-info';
 import prisma from '@/lib/prisma';
 import { withAuth } from '@/lib/with-auth';
 import {
@@ -6,6 +7,28 @@ import {
   getDropboxOAuthTokenURL,
 } from '@/utils/functions/dropbox-connect';
 import { NextRequest } from 'next/server';
+
+interface DropboxTokenExchangeResponseData {
+  access_token: string;
+  token_type:string;
+  expires_in:number;
+  refresh_token:string;
+  scope:string;
+  uid:string;
+  account_id:string;
+}
+
+interface DropboxAccountInfoResponse {
+  account_id:string;
+  name: {
+    given_name:string;
+    surname:string;
+    familian_name:string;
+    display_name:string;
+  }
+  email:string;
+  profile_photo_url?:string;
+}
 
 async function handler(req: NextRequest, session: any) {
   const { searchParamsObj } = parse(req);
@@ -35,7 +58,7 @@ async function handler(req: NextRequest, session: any) {
     if (!tokenResponse.ok) {
       return new Response('Failed to exchange code for token', { status: 500 });
     }
-    const tokenData = await tokenResponse.json();
+    const tokenData = await tokenResponse.json() as DropboxTokenExchangeResponseData;
 
     const userInfoUrl = getDropbboxUserAccountInfoURL();
     const option = {
@@ -44,50 +67,34 @@ async function handler(req: NextRequest, session: any) {
         Authorization: `Bearer ${tokenData.access_token}`,
       },
     };
+
     const userInfoResponse = await fetch(userInfoUrl, option);
+
     if (!userInfoResponse.ok) {
       return new Response('Failed to fetch user info from Dropbox', { status: 500 });
     }
-    const userInfo = await userInfoResponse.json();
 
-    const adapterAccountExistingCheck = await prisma.adapter.findFirst({
-      where: {
-        adapter_type: 'DROPBOX',
-        userId: session.user.id,
-        adapterAccountInfo: {
-          email: userInfo.email,
-        },
-      },
-      include: {
-        adapterAccountInfo: true,
-      },
+    const userInfo = await userInfoResponse.json() as DropboxAccountInfoResponse;
+
+    const adapter = await createAndUpdateAdapter({
+      adapter_type: "DROPBOX",
+      userId:session.user.id,
+      access_token:tokenData.access_token,
+      name:`${userInfo?.name.given_name}`,
+      providerId:tokenData.account_id,
+      expires_in:tokenData.expires_in,
+      refresh_token:tokenData.refresh_token,
+      scope:tokenData.scope,
+      token_type:tokenData.token_type,
+      refresh_token_expires_in:undefined
     });
 
-    if (adapterAccountExistingCheck) {
-      return Response.redirect(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/error?message=Dropbox account already connected`,
-      );
-    }
-
-    const adapter = await createAdapter({
-      adapter_type: 'DROPBOX',
-      userId: session.user.id,
-      access_token: tokenData.access_token,
-      refresh_token: tokenData.refresh_token,
-      expires_in: tokenData.expires_in,
-      token_type: tokenData.token_type,
-      scope: tokenData.scope,
-      name: `${userInfo.name.given_name || userInfo.name.display_name}'s Dropbox`,
-    });
-
-    await prisma.adapterAccountInfo.create({
-      data: {
-        adapterId: adapter.id,
-        email: userInfo.email,
-        name: userInfo.name.given_name || userInfo.name.display_name,
-        avatar: userInfo.profile_photo_url || undefined,
-      },
-    });
+    await createAndUpdateAdapterAccountInfo({
+      adapterId:adapter.id,
+      avatar:userInfo.profile_photo_url,
+      email:userInfo.email,
+      name:userInfo.name.given_name
+    })
 
     return Response.redirect(
       `${process.env.NEXT_PUBLIC_BASE_URL}?sync=dropbox&status=connected&message=Dropbox account connected successfully`,

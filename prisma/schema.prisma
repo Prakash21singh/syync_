@@ -84,6 +84,7 @@
   model Adapter {
     id        String   @id @default(uuid())
     name      String   @unique
+    providerId String @unique
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     access_token String?

@@ -88,7 +88,6 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
     }
   };
 
-  console.log(selectedFiles)
   // ─── Start migration ──────────────────────────────────────────────────────
   const handleMigrate = async () => {
     if (!canMigrate) return;

@@ -1,10 +1,10 @@
-import { createAdapter } from '@/lib/api/adapter/create-adapter';
-import { createAdapterAccountInfo } from '@/lib/api/adapter/create-adapter-account-info';
-import { auth } from '@/lib/auth';
-import prisma from '@/lib/prisma';
+import { createAndUpdateAdapter } from '@/lib/api/adapter/create-adapter';
+import { createAndUpdateAdapterAccountInfo } from '@/lib/api/adapter/create-adapter-account-info';
 import { withAuth } from '@/lib/with-auth';
+import { Prisma } from '@/prisma/generated/prisma/client';
+import { DecodedGoogleAuthIDToken, GoogleTokenExchangeResponse } from '@/types';
 import { getGoogleOAuthTokenURL } from '@/utils/functions/google-connect';
-import { headers } from 'next/headers';
+import {jwtDecode} from "jwt-decode"
 import { NextRequest, NextResponse } from 'next/server';
 
 async function handler(request: NextRequest, session: any) {
@@ -40,47 +40,65 @@ async function handler(request: NextRequest, session: any) {
       );
     }
 
-    const tokenData = await tokenResponse.json();
+    const tokenData = await tokenResponse.json() as GoogleTokenExchangeResponse;
 
-    const userInfoRsponse = await fetch(process.env.GOOGLE_USERINFO_URL!, {
-      headers: {
-        Authorization: `Bearer ${tokenData.access_token}`,
-      },
-    });
+    const decodedToken = jwtDecode(tokenData.id_token) as DecodedGoogleAuthIDToken | null
 
-    if (!userInfoRsponse.ok) {
-      return NextResponse.redirect(
-        new URL('/?sync=google-drive&status=failed&error=user_info_fetch_failed', request.url),
-      );
-    }
+    if(!decodedToken) throw new Error("Invalid token returned by Google Provider")
 
-    const userInfo = await userInfoRsponse.json();
+    const adapter = await createAndUpdateAdapter({
+      adapter_type:"GOOGLE_DRIVE",
+      name: `${decodedToken.given_name}'s Google Drive`,
+      providerId:decodedToken.sub,
+      access_token:tokenData.access_token,
+      expires_in:tokenData.expires_in,
+      refresh_token:tokenData.refresh_token,
+      refresh_token_expires_in:tokenData.refresh_token_expires_in,
+      scope:tokenData.scope,
+      userId:session.user.id,
+    })
 
-    const adapter = await createAdapter({
-      adapter_type: 'GOOGLE_DRIVE',
-      userId: session.user.id,
-      access_token: tokenData.access_token,
-      refresh_token: tokenData.refresh_token,
-      expires_in: tokenData.expires_in,
-      token_type: tokenData.token_type,
-      scope: tokenData.scope,
-      refresh_token_expires_in: tokenData.refresh_token_expires_in,
-      name: `${userInfo.name}'s Google Drive`,
-    });
-
-    const adapterAccountInfo = await createAdapterAccountInfo({
+    await createAndUpdateAdapterAccountInfo({
       adapterId: adapter.id,
-      avatar: userInfo.picture,
-      email: userInfo.email,
-      name: userInfo.name,
+      avatar: decodedToken.picture,
+      email: decodedToken.email,
+      name: decodedToken.name,
     });
 
     return NextResponse.redirect(new URL('/?sync=google-drive&status=connected', request.url));
   } catch (error) {
-    console.error('Error exchanging code for token:', error);
-    return NextResponse.redirect(
-      new URL('/?sync=google-drive&status=failed&error=unexpected_error', request.url),
-    );
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      console.error("Prisma Known Error:", {
+        code: error.code,
+        message: error.message,
+        meta: error.meta
+      });
+    }
+
+    else if (error instanceof Prisma.PrismaClientValidationError) {
+      console.error("Prisma Validation Error:", error.message);
+    }
+
+    else if (error instanceof Prisma.PrismaClientInitializationError) {
+      console.error("Prisma Initialization Error:", error.message);
+    }
+
+    else if (error instanceof Prisma.PrismaClientRustPanicError) {
+      console.error("Prisma Engine Panic:", error.message);
+    }
+
+    else if (error instanceof Error) {
+      console.error("Generic Error:", error.message);
+    }
+
+    else {
+      console.error("Unknown Error:", error);
+    }
+
+  throw error;
+    // return NextResponse.redirect(
+    //   new URL('/?sync=google-drive&status=failed&error=unexpected_error', request.url),
+    // );
   }
 }
 
