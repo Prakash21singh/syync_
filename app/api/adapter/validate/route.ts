@@ -65,12 +65,12 @@ async function handler(req: NextRequest, session: any) {
         data: rotated.refresh_token
           ? {
               access_token: rotated.access_token,
-              expires_in: new Date(Date.now() + rotated.expires_in),
+              expires_in: new Date(Date.now() + rotated.expires_in * 1000),
               refresh_token: rotated.refresh_token,
             }
           : {
               access_token: rotated.access_token,
-              expires_in: new Date(Date.now() + rotated.expires_in),
+              expires_in: new Date(Date.now() + rotated.expires_in * 1000),
             },
       });
 

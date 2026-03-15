@@ -3,7 +3,7 @@ import { discoveryQueue } from '@/lib/queues/discovery-queue';
 import { migrationQueue } from '@/lib/queues/migration-queue';
 import { withAuth } from '@/lib/with-auth';
 import { NextRequest, NextResponse } from 'next/server';
-import { findResouceType } from '@/utils/functions/find-resourcetype';
+
 type InputFile = {
   id: string;
   mimeType: string;
@@ -84,11 +84,11 @@ async function handler(req: NextRequest, session: any) {
         file.name.lastIndexOf(".") !== -1
           ? file.name.slice(0, file.name.lastIndexOf("."))
           : file.name,
-      pathname:file.pathname,
-      size:file.size?.toString(),
-      type: file.type.toUpperCase() as "FILE" | "FOLDER",
-      mimeType:file.mimeType,
-    }))
+        path:file.pathname,
+        size:file.size?.toString(),
+        type: file.type.toUpperCase() as "FILE" | "FOLDER",
+        mimeType:file.mimeType,
+    }));
 
     // ✅ Create migration
     const migration = await prisma.migration.create({

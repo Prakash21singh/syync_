@@ -149,7 +149,7 @@
     type MigrationSelectionType
     mimeType String?
     size String?
-    pathname String?
+    path String?
     
     migrationId String
     migration Migration @relation(fields: [migrationId], references: [id])
