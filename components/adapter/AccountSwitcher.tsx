@@ -44,7 +44,7 @@ export function AccountSwitcher({
             />
           )}
           <span className="text-xs text-foreground">
-            {selectedAdapter?.adapterAccountInfo?.email?.slice(0, 10) + '...' ?? 'Account'}
+            {selectedAdapter?.adapterAccountInfo.email && selectedAdapter.adapterAccountInfo?.email?.slice(0, 10)  + '...'}
           </span>
           <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
         </div>

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from './auth';
 
 type RouteContext = {
-  params?: Record<string, string>;
+  params?: Promise<{}>;
 };
 
 export const withAuth = (
