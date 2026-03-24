@@ -6,7 +6,7 @@ type Props = {
 
 export default function AuthLayout({ children }: Props) {
   return (
-    <div className="w-full min-h-screen flex font-sans">
+    <div className="w-full min-h-screen flex font-sarabun">
       {/* Left branding panel */}
       <div className="hidden md:flex w-1/2 lg:w-3/5 bg-primary flex-col justify-end p-12">
         <div className="max-w-md">
