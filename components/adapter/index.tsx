@@ -170,7 +170,7 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
     <div className="w-full h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-4xl">
         {/* ── Adapter row ── */}
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-start justify-center gap-2">
           <AdapterSelector
             role="source"
             adapter={{ ...source, selectAdapter: (name) => handleAdapterSelect(name, 'source') }}

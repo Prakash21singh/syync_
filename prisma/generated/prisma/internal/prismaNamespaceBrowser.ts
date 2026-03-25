@@ -144,6 +144,9 @@ export const AdapterScalarFieldEnum = {
   updatedAt: 'updatedAt',
   access_token: 'access_token',
   refresh_token: 'refresh_token',
+  accessKeyId: 'accessKeyId',
+  accessKeySecret: 'accessKeySecret',
+  region: 'region',
   expires_in: 'expires_in',
   refresh_token_expires_in: 'refresh_token_expires_in',
   scope: 'scope',
@@ -160,6 +163,7 @@ export const AdapterAccountInfoScalarFieldEnum = {
   email: 'email',
   name: 'name',
   avatar: 'avatar',
+  arn: 'arn',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   adapterId: 'adapterId'

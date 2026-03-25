@@ -11,7 +11,8 @@
 
 export const AdapterName = {
   GOOGLE_DRIVE: 'GOOGLE_DRIVE',
-  DROPBOX: 'DROPBOX'
+  DROPBOX: 'DROPBOX',
+  AWS_S3: 'AWS_S3'
 } as const
 
 export type AdapterName = (typeof AdapterName)[keyof typeof AdapterName]

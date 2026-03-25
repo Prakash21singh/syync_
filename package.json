@@ -10,6 +10,9 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@aws-sdk/client-iam": "^3.1016.0",
+    "@aws-sdk/client-organizations": "^3.1016.0",
+    "@aws-sdk/client-sts": "^3.1016.0",
     "@prisma/adapter-pg": "^7.4.0",
     "@prisma/client": "^7.4.0",
     "better-auth": "^1.4.18",

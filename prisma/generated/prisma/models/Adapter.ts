@@ -32,6 +32,9 @@ export type AdapterMinAggregateOutputType = {
   updatedAt: Date | null
   access_token: string | null
   refresh_token: string | null
+  accessKeyId: string | null
+  accessKeySecret: string | null
+  region: string | null
   expires_in: Date | null
   refresh_token_expires_in: Date | null
   scope: string | null
@@ -48,6 +51,9 @@ export type AdapterMaxAggregateOutputType = {
   updatedAt: Date | null
   access_token: string | null
   refresh_token: string | null
+  accessKeyId: string | null
+  accessKeySecret: string | null
+  region: string | null
   expires_in: Date | null
   refresh_token_expires_in: Date | null
   scope: string | null
@@ -64,6 +70,9 @@ export type AdapterCountAggregateOutputType = {
   updatedAt: number
   access_token: number
   refresh_token: number
+  accessKeyId: number
+  accessKeySecret: number
+  region: number
   expires_in: number
   refresh_token_expires_in: number
   scope: number
@@ -82,6 +91,9 @@ export type AdapterMinAggregateInputType = {
   updatedAt?: true
   access_token?: true
   refresh_token?: true
+  accessKeyId?: true
+  accessKeySecret?: true
+  region?: true
   expires_in?: true
   refresh_token_expires_in?: true
   scope?: true
@@ -98,6 +110,9 @@ export type AdapterMaxAggregateInputType = {
   updatedAt?: true
   access_token?: true
   refresh_token?: true
+  accessKeyId?: true
+  accessKeySecret?: true
+  region?: true
   expires_in?: true
   refresh_token_expires_in?: true
   scope?: true
@@ -114,6 +129,9 @@ export type AdapterCountAggregateInputType = {
   updatedAt?: true
   access_token?: true
   refresh_token?: true
+  accessKeyId?: true
+  accessKeySecret?: true
+  region?: true
   expires_in?: true
   refresh_token_expires_in?: true
   scope?: true
@@ -203,6 +221,9 @@ export type AdapterGroupByOutputType = {
   updatedAt: Date
   access_token: string | null
   refresh_token: string | null
+  accessKeyId: string | null
+  accessKeySecret: string | null
+  region: string | null
   expires_in: Date | null
   refresh_token_expires_in: Date | null
   scope: string | null
@@ -240,6 +261,9 @@ export type AdapterWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Adapter"> | Date | string
   access_token?: Prisma.StringNullableFilter<"Adapter"> | string | null
   refresh_token?: Prisma.StringNullableFilter<"Adapter"> | string | null
+  accessKeyId?: Prisma.StringNullableFilter<"Adapter"> | string | null
+  accessKeySecret?: Prisma.StringNullableFilter<"Adapter"> | string | null
+  region?: Prisma.StringNullableFilter<"Adapter"> | string | null
   expires_in?: Prisma.DateTimeNullableFilter<"Adapter"> | Date | string | null
   refresh_token_expires_in?: Prisma.DateTimeNullableFilter<"Adapter"> | Date | string | null
   scope?: Prisma.StringNullableFilter<"Adapter"> | string | null
@@ -260,6 +284,9 @@ export type AdapterOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   access_token?: Prisma.SortOrderInput | Prisma.SortOrder
   refresh_token?: Prisma.SortOrderInput | Prisma.SortOrder
+  accessKeyId?: Prisma.SortOrderInput | Prisma.SortOrder
+  accessKeySecret?: Prisma.SortOrderInput | Prisma.SortOrder
+  region?: Prisma.SortOrderInput | Prisma.SortOrder
   expires_in?: Prisma.SortOrderInput | Prisma.SortOrder
   refresh_token_expires_in?: Prisma.SortOrderInput | Prisma.SortOrder
   scope?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -283,6 +310,9 @@ export type AdapterWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Adapter"> | Date | string
   access_token?: Prisma.StringNullableFilter<"Adapter"> | string | null
   refresh_token?: Prisma.StringNullableFilter<"Adapter"> | string | null
+  accessKeyId?: Prisma.StringNullableFilter<"Adapter"> | string | null
+  accessKeySecret?: Prisma.StringNullableFilter<"Adapter"> | string | null
+  region?: Prisma.StringNullableFilter<"Adapter"> | string | null
   expires_in?: Prisma.DateTimeNullableFilter<"Adapter"> | Date | string | null
   refresh_token_expires_in?: Prisma.DateTimeNullableFilter<"Adapter"> | Date | string | null
   scope?: Prisma.StringNullableFilter<"Adapter"> | string | null
@@ -303,6 +333,9 @@ export type AdapterOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   access_token?: Prisma.SortOrderInput | Prisma.SortOrder
   refresh_token?: Prisma.SortOrderInput | Prisma.SortOrder
+  accessKeyId?: Prisma.SortOrderInput | Prisma.SortOrder
+  accessKeySecret?: Prisma.SortOrderInput | Prisma.SortOrder
+  region?: Prisma.SortOrderInput | Prisma.SortOrder
   expires_in?: Prisma.SortOrderInput | Prisma.SortOrder
   refresh_token_expires_in?: Prisma.SortOrderInput | Prisma.SortOrder
   scope?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -325,6 +358,9 @@ export type AdapterScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Adapter"> | Date | string
   access_token?: Prisma.StringNullableWithAggregatesFilter<"Adapter"> | string | null
   refresh_token?: Prisma.StringNullableWithAggregatesFilter<"Adapter"> | string | null
+  accessKeyId?: Prisma.StringNullableWithAggregatesFilter<"Adapter"> | string | null
+  accessKeySecret?: Prisma.StringNullableWithAggregatesFilter<"Adapter"> | string | null
+  region?: Prisma.StringNullableWithAggregatesFilter<"Adapter"> | string | null
   expires_in?: Prisma.DateTimeNullableWithAggregatesFilter<"Adapter"> | Date | string | null
   refresh_token_expires_in?: Prisma.DateTimeNullableWithAggregatesFilter<"Adapter"> | Date | string | null
   scope?: Prisma.StringNullableWithAggregatesFilter<"Adapter"> | string | null
@@ -341,6 +377,9 @@ export type AdapterCreateInput = {
   updatedAt?: Date | string
   access_token?: string | null
   refresh_token?: string | null
+  accessKeyId?: string | null
+  accessKeySecret?: string | null
+  region?: string | null
   expires_in?: Date | string | null
   refresh_token_expires_in?: Date | string | null
   scope?: string | null
@@ -360,6 +399,9 @@ export type AdapterUncheckedCreateInput = {
   updatedAt?: Date | string
   access_token?: string | null
   refresh_token?: string | null
+  accessKeyId?: string | null
+  accessKeySecret?: string | null
+  region?: string | null
   expires_in?: Date | string | null
   refresh_token_expires_in?: Date | string | null
   scope?: string | null
@@ -379,6 +421,9 @@ export type AdapterUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   access_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeySecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   refresh_token_expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -398,6 +443,9 @@ export type AdapterUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   access_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeySecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   refresh_token_expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -417,6 +465,9 @@ export type AdapterCreateManyInput = {
   updatedAt?: Date | string
   access_token?: string | null
   refresh_token?: string | null
+  accessKeyId?: string | null
+  accessKeySecret?: string | null
+  region?: string | null
   expires_in?: Date | string | null
   refresh_token_expires_in?: Date | string | null
   scope?: string | null
@@ -433,6 +484,9 @@ export type AdapterUpdateManyMutationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   access_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeySecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   refresh_token_expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -448,6 +502,9 @@ export type AdapterUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   access_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeySecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   refresh_token_expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -474,6 +531,9 @@ export type AdapterCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   access_token?: Prisma.SortOrder
   refresh_token?: Prisma.SortOrder
+  accessKeyId?: Prisma.SortOrder
+  accessKeySecret?: Prisma.SortOrder
+  region?: Prisma.SortOrder
   expires_in?: Prisma.SortOrder
   refresh_token_expires_in?: Prisma.SortOrder
   scope?: Prisma.SortOrder
@@ -490,6 +550,9 @@ export type AdapterMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   access_token?: Prisma.SortOrder
   refresh_token?: Prisma.SortOrder
+  accessKeyId?: Prisma.SortOrder
+  accessKeySecret?: Prisma.SortOrder
+  region?: Prisma.SortOrder
   expires_in?: Prisma.SortOrder
   refresh_token_expires_in?: Prisma.SortOrder
   scope?: Prisma.SortOrder
@@ -506,6 +569,9 @@ export type AdapterMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   access_token?: Prisma.SortOrder
   refresh_token?: Prisma.SortOrder
+  accessKeyId?: Prisma.SortOrder
+  accessKeySecret?: Prisma.SortOrder
+  region?: Prisma.SortOrder
   expires_in?: Prisma.SortOrder
   refresh_token_expires_in?: Prisma.SortOrder
   scope?: Prisma.SortOrder
@@ -615,6 +681,9 @@ export type AdapterCreateWithoutUserInput = {
   updatedAt?: Date | string
   access_token?: string | null
   refresh_token?: string | null
+  accessKeyId?: string | null
+  accessKeySecret?: string | null
+  region?: string | null
   expires_in?: Date | string | null
   refresh_token_expires_in?: Date | string | null
   scope?: string | null
@@ -633,6 +702,9 @@ export type AdapterUncheckedCreateWithoutUserInput = {
   updatedAt?: Date | string
   access_token?: string | null
   refresh_token?: string | null
+  accessKeyId?: string | null
+  accessKeySecret?: string | null
+  region?: string | null
   expires_in?: Date | string | null
   refresh_token_expires_in?: Date | string | null
   scope?: string | null
@@ -680,6 +752,9 @@ export type AdapterScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Adapter"> | Date | string
   access_token?: Prisma.StringNullableFilter<"Adapter"> | string | null
   refresh_token?: Prisma.StringNullableFilter<"Adapter"> | string | null
+  accessKeyId?: Prisma.StringNullableFilter<"Adapter"> | string | null
+  accessKeySecret?: Prisma.StringNullableFilter<"Adapter"> | string | null
+  region?: Prisma.StringNullableFilter<"Adapter"> | string | null
   expires_in?: Prisma.DateTimeNullableFilter<"Adapter"> | Date | string | null
   refresh_token_expires_in?: Prisma.DateTimeNullableFilter<"Adapter"> | Date | string | null
   scope?: Prisma.StringNullableFilter<"Adapter"> | string | null
@@ -696,6 +771,9 @@ export type AdapterCreateWithoutAdapterAccountInfoInput = {
   updatedAt?: Date | string
   access_token?: string | null
   refresh_token?: string | null
+  accessKeyId?: string | null
+  accessKeySecret?: string | null
+  region?: string | null
   expires_in?: Date | string | null
   refresh_token_expires_in?: Date | string | null
   scope?: string | null
@@ -714,6 +792,9 @@ export type AdapterUncheckedCreateWithoutAdapterAccountInfoInput = {
   updatedAt?: Date | string
   access_token?: string | null
   refresh_token?: string | null
+  accessKeyId?: string | null
+  accessKeySecret?: string | null
+  region?: string | null
   expires_in?: Date | string | null
   refresh_token_expires_in?: Date | string | null
   scope?: string | null
@@ -748,6 +829,9 @@ export type AdapterUpdateWithoutAdapterAccountInfoInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   access_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeySecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   refresh_token_expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -766,6 +850,9 @@ export type AdapterUncheckedUpdateWithoutAdapterAccountInfoInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   access_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeySecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   refresh_token_expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -784,6 +871,9 @@ export type AdapterCreateWithoutSourceMigrationsInput = {
   updatedAt?: Date | string
   access_token?: string | null
   refresh_token?: string | null
+  accessKeyId?: string | null
+  accessKeySecret?: string | null
+  region?: string | null
   expires_in?: Date | string | null
   refresh_token_expires_in?: Date | string | null
   scope?: string | null
@@ -802,6 +892,9 @@ export type AdapterUncheckedCreateWithoutSourceMigrationsInput = {
   updatedAt?: Date | string
   access_token?: string | null
   refresh_token?: string | null
+  accessKeyId?: string | null
+  accessKeySecret?: string | null
+  region?: string | null
   expires_in?: Date | string | null
   refresh_token_expires_in?: Date | string | null
   scope?: string | null
@@ -825,6 +918,9 @@ export type AdapterCreateWithoutDestinationMigrationsInput = {
   updatedAt?: Date | string
   access_token?: string | null
   refresh_token?: string | null
+  accessKeyId?: string | null
+  accessKeySecret?: string | null
+  region?: string | null
   expires_in?: Date | string | null
   refresh_token_expires_in?: Date | string | null
   scope?: string | null
@@ -843,6 +939,9 @@ export type AdapterUncheckedCreateWithoutDestinationMigrationsInput = {
   updatedAt?: Date | string
   access_token?: string | null
   refresh_token?: string | null
+  accessKeyId?: string | null
+  accessKeySecret?: string | null
+  region?: string | null
   expires_in?: Date | string | null
   refresh_token_expires_in?: Date | string | null
   scope?: string | null
@@ -877,6 +976,9 @@ export type AdapterUpdateWithoutSourceMigrationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   access_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeySecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   refresh_token_expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -895,6 +997,9 @@ export type AdapterUncheckedUpdateWithoutSourceMigrationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   access_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeySecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   refresh_token_expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -924,6 +1029,9 @@ export type AdapterUpdateWithoutDestinationMigrationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   access_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeySecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   refresh_token_expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -942,6 +1050,9 @@ export type AdapterUncheckedUpdateWithoutDestinationMigrationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   access_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeySecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   refresh_token_expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -960,6 +1071,9 @@ export type AdapterCreateManyUserInput = {
   updatedAt?: Date | string
   access_token?: string | null
   refresh_token?: string | null
+  accessKeyId?: string | null
+  accessKeySecret?: string | null
+  region?: string | null
   expires_in?: Date | string | null
   refresh_token_expires_in?: Date | string | null
   scope?: string | null
@@ -975,6 +1089,9 @@ export type AdapterUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   access_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeySecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   refresh_token_expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -993,6 +1110,9 @@ export type AdapterUncheckedUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   access_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeySecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   refresh_token_expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1011,6 +1131,9 @@ export type AdapterUncheckedUpdateManyWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   access_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refresh_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessKeySecret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   refresh_token_expires_in?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   scope?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1066,6 +1189,9 @@ export type AdapterSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   updatedAt?: boolean
   access_token?: boolean
   refresh_token?: boolean
+  accessKeyId?: boolean
+  accessKeySecret?: boolean
+  region?: boolean
   expires_in?: boolean
   refresh_token_expires_in?: boolean
   scope?: boolean
@@ -1087,6 +1213,9 @@ export type AdapterSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   updatedAt?: boolean
   access_token?: boolean
   refresh_token?: boolean
+  accessKeyId?: boolean
+  accessKeySecret?: boolean
+  region?: boolean
   expires_in?: boolean
   refresh_token_expires_in?: boolean
   scope?: boolean
@@ -1104,6 +1233,9 @@ export type AdapterSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   updatedAt?: boolean
   access_token?: boolean
   refresh_token?: boolean
+  accessKeyId?: boolean
+  accessKeySecret?: boolean
+  region?: boolean
   expires_in?: boolean
   refresh_token_expires_in?: boolean
   scope?: boolean
@@ -1121,6 +1253,9 @@ export type AdapterSelectScalar = {
   updatedAt?: boolean
   access_token?: boolean
   refresh_token?: boolean
+  accessKeyId?: boolean
+  accessKeySecret?: boolean
+  region?: boolean
   expires_in?: boolean
   refresh_token_expires_in?: boolean
   scope?: boolean
@@ -1129,7 +1264,7 @@ export type AdapterSelectScalar = {
   userId?: boolean
 }
 
-export type AdapterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "providerId" | "createdAt" | "updatedAt" | "access_token" | "refresh_token" | "expires_in" | "refresh_token_expires_in" | "scope" | "token_type" | "adapter_type" | "userId", ExtArgs["result"]["adapter"]>
+export type AdapterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "providerId" | "createdAt" | "updatedAt" | "access_token" | "refresh_token" | "accessKeyId" | "accessKeySecret" | "region" | "expires_in" | "refresh_token_expires_in" | "scope" | "token_type" | "adapter_type" | "userId", ExtArgs["result"]["adapter"]>
 export type AdapterInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   adapterAccountInfo?: boolean | Prisma.Adapter$adapterAccountInfoArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1160,6 +1295,9 @@ export type $AdapterPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     updatedAt: Date
     access_token: string | null
     refresh_token: string | null
+    accessKeyId: string | null
+    accessKeySecret: string | null
+    region: string | null
     expires_in: Date | null
     refresh_token_expires_in: Date | null
     scope: string | null
@@ -1600,6 +1738,9 @@ export interface AdapterFieldRefs {
   readonly updatedAt: Prisma.FieldRef<"Adapter", 'DateTime'>
   readonly access_token: Prisma.FieldRef<"Adapter", 'String'>
   readonly refresh_token: Prisma.FieldRef<"Adapter", 'String'>
+  readonly accessKeyId: Prisma.FieldRef<"Adapter", 'String'>
+  readonly accessKeySecret: Prisma.FieldRef<"Adapter", 'String'>
+  readonly region: Prisma.FieldRef<"Adapter", 'String'>
   readonly expires_in: Prisma.FieldRef<"Adapter", 'DateTime'>
   readonly refresh_token_expires_in: Prisma.FieldRef<"Adapter", 'DateTime'>
   readonly scope: Prisma.FieldRef<"Adapter", 'String'>

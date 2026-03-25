@@ -16,6 +16,7 @@ import { ADAPTERS } from '@/utils/config/adapter-config';
 import { AccountSwitcher } from './AccountSwitcher';
 import type { UseAdapterReturn } from '@/hooks/use-adap';
 import type { AdapterRole, AdapterStatus } from '@/types/index';
+import S3CredentialForm from './S3CredentialForm';
 
 // ─── Status Indicator ────────────────────────────────────────────────────────
 
@@ -53,6 +54,9 @@ export function AdapterSelector({ role, adapter, disabledAdapter }: Props) {
 
   const selectedMeta = ADAPTERS.find((a) => a.name === adapter.selectedAdapter);
   const hasAccounts = adapter.existingAdapters.length > 0;
+
+  const isCredentialRequired = adapter.isS3CredentialRequired;
+  
 
   return (
     <div className="w-96 flex-shrink-0">
@@ -168,6 +172,8 @@ export function AdapterSelector({ role, adapter, disabledAdapter }: Props) {
           Session expired — click to re-authenticate
         </p>
       )}
+
+      { isCredentialRequired && <S3CredentialForm  adapter={adapter}/>}
 
       {/* Description */}
       <div className="h-12 mt-2">

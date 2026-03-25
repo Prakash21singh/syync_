@@ -1,6 +1,6 @@
 // ─── Adapter Types ────────────────────────────────────────────────────────────
 
-export type AdapterType = 'GOOGLE_DRIVE' | 'DROPBOX';
+export type AdapterType = 'GOOGLE_DRIVE' | 'DROPBOX' | "AWS_S3";
 export type AdapterRole = 'source' | 'destination';
 export type AdapterStatus = 'idle' | 'validating' | 'valid' | 'requires_reauth' | 'error';
 export type EntityView = 'list' | 'grid';
@@ -102,4 +102,10 @@ export interface DecodedGoogleAuthIDToken {
   picture:string;
   given_name:string;
   family_name:string;
+}
+
+export type AWSCredentials = { 
+  accessKeyId:string;
+  secretAccessKey:string;
+  region?:string
 }

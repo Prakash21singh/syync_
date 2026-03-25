@@ -89,6 +89,11 @@
     updatedAt DateTime @updatedAt
     access_token String?
     refresh_token String?
+    // S3 based keys
+    accessKeyId String?
+    accessKeySecret String? 
+    region String?
+    
     expires_in DateTime?
     refresh_token_expires_in DateTime?
     scope String?
@@ -107,6 +112,7 @@
     email String?
     name String?
     avatar String?
+    arn  String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     adapter Adapter @relation(fields: [adapterId], references: [id])
@@ -178,6 +184,7 @@
   enum AdapterName {
     GOOGLE_DRIVE
     DROPBOX
+    AWS_S3
   }
 
   enum MigrationFileStatus {

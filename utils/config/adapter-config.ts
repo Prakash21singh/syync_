@@ -30,6 +30,15 @@ export const ADAPTERS: AdapterConfig[] = [
   },
   {
     type: 'cloud_storage',
+    name: 'Amazon S3',
+    icon: '/icons/s3.svg',
+    description: 'Integrate with Amazon S3 for scalable cloud storage and synchronization.',
+    connectionUrl: '/connect/amazon-s3',
+    documentationUrl: 'https://docs.sync.com/integrations/amazon-s3',
+    adapterName: 'AMAZON_S3',
+  },
+  {
+    type: 'cloud_storage',
     name: 'OneDrive',
     icon: '/icons/onedrive.svg',
     description: 'Integrate with OneDrive for easy file synchronization and access.',
@@ -47,16 +56,6 @@ export const ADAPTERS: AdapterConfig[] = [
     documentationUrl: 'https://docs.sync.com/integrations/icloud',
     isActive: false,
     adapterName: 'ICLOUD',
-  },
-  {
-    type: 'cloud_storage',
-    name: 'Amazon S3',
-    icon: '/icons/s3.svg',
-    description: 'Integrate with Amazon S3 for scalable cloud storage and synchronization.',
-    connectionUrl: '/connect/amazon-s3',
-    documentationUrl: 'https://docs.sync.com/integrations/amazon-s3',
-    isActive: false,
-    adapterName: 'AMAZON_S3',
   },
   {
     type: 'cloud_storage',

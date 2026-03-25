@@ -4,6 +4,7 @@ import { Check, ChevronsUpDown } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import type { ExistingAdapter } from '@/types/index';
+import { email } from 'better-auth';
 
 interface Props {
   adapters: ExistingAdapter[];
@@ -24,6 +25,10 @@ export function AccountSwitcher({
   onSelect,
   onAddAccount,
 }: Props) {
+
+  const userIdentity = selectedAdapter?.adapterAccountInfo?.email 
+  ? selectedAdapter.adapterAccountInfo.email
+  : selectedAdapter?.adapterAccountInfo.name 
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
@@ -44,7 +49,7 @@ export function AccountSwitcher({
             />
           )}
           <span className="text-xs text-foreground">
-            {selectedAdapter?.adapterAccountInfo.email && selectedAdapter.adapterAccountInfo?.email?.slice(0, 10)  + '...'}
+            {userIdentity + '...'}
           </span>
           <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
         </div>

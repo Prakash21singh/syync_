@@ -29,6 +29,7 @@ export type AdapterAccountInfoMinAggregateOutputType = {
   email: string | null
   name: string | null
   avatar: string | null
+  arn: string | null
   createdAt: Date | null
   updatedAt: Date | null
   adapterId: string | null
@@ -39,6 +40,7 @@ export type AdapterAccountInfoMaxAggregateOutputType = {
   email: string | null
   name: string | null
   avatar: string | null
+  arn: string | null
   createdAt: Date | null
   updatedAt: Date | null
   adapterId: string | null
@@ -49,6 +51,7 @@ export type AdapterAccountInfoCountAggregateOutputType = {
   email: number
   name: number
   avatar: number
+  arn: number
   createdAt: number
   updatedAt: number
   adapterId: number
@@ -61,6 +64,7 @@ export type AdapterAccountInfoMinAggregateInputType = {
   email?: true
   name?: true
   avatar?: true
+  arn?: true
   createdAt?: true
   updatedAt?: true
   adapterId?: true
@@ -71,6 +75,7 @@ export type AdapterAccountInfoMaxAggregateInputType = {
   email?: true
   name?: true
   avatar?: true
+  arn?: true
   createdAt?: true
   updatedAt?: true
   adapterId?: true
@@ -81,6 +86,7 @@ export type AdapterAccountInfoCountAggregateInputType = {
   email?: true
   name?: true
   avatar?: true
+  arn?: true
   createdAt?: true
   updatedAt?: true
   adapterId?: true
@@ -164,6 +170,7 @@ export type AdapterAccountInfoGroupByOutputType = {
   email: string | null
   name: string | null
   avatar: string | null
+  arn: string | null
   createdAt: Date
   updatedAt: Date
   adapterId: string
@@ -195,6 +202,7 @@ export type AdapterAccountInfoWhereInput = {
   email?: Prisma.StringNullableFilter<"AdapterAccountInfo"> | string | null
   name?: Prisma.StringNullableFilter<"AdapterAccountInfo"> | string | null
   avatar?: Prisma.StringNullableFilter<"AdapterAccountInfo"> | string | null
+  arn?: Prisma.StringNullableFilter<"AdapterAccountInfo"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AdapterAccountInfo"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AdapterAccountInfo"> | Date | string
   adapterId?: Prisma.StringFilter<"AdapterAccountInfo"> | string
@@ -206,6 +214,7 @@ export type AdapterAccountInfoOrderByWithRelationInput = {
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   avatar?: Prisma.SortOrderInput | Prisma.SortOrder
+  arn?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   adapterId?: Prisma.SortOrder
@@ -221,6 +230,7 @@ export type AdapterAccountInfoWhereUniqueInput = Prisma.AtLeast<{
   email?: Prisma.StringNullableFilter<"AdapterAccountInfo"> | string | null
   name?: Prisma.StringNullableFilter<"AdapterAccountInfo"> | string | null
   avatar?: Prisma.StringNullableFilter<"AdapterAccountInfo"> | string | null
+  arn?: Prisma.StringNullableFilter<"AdapterAccountInfo"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AdapterAccountInfo"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AdapterAccountInfo"> | Date | string
   adapter?: Prisma.XOR<Prisma.AdapterScalarRelationFilter, Prisma.AdapterWhereInput>
@@ -231,6 +241,7 @@ export type AdapterAccountInfoOrderByWithAggregationInput = {
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   avatar?: Prisma.SortOrderInput | Prisma.SortOrder
+  arn?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   adapterId?: Prisma.SortOrder
@@ -247,6 +258,7 @@ export type AdapterAccountInfoScalarWhereWithAggregatesInput = {
   email?: Prisma.StringNullableWithAggregatesFilter<"AdapterAccountInfo"> | string | null
   name?: Prisma.StringNullableWithAggregatesFilter<"AdapterAccountInfo"> | string | null
   avatar?: Prisma.StringNullableWithAggregatesFilter<"AdapterAccountInfo"> | string | null
+  arn?: Prisma.StringNullableWithAggregatesFilter<"AdapterAccountInfo"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AdapterAccountInfo"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AdapterAccountInfo"> | Date | string
   adapterId?: Prisma.StringWithAggregatesFilter<"AdapterAccountInfo"> | string
@@ -257,6 +269,7 @@ export type AdapterAccountInfoCreateInput = {
   email?: string | null
   name?: string | null
   avatar?: string | null
+  arn?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adapter: Prisma.AdapterCreateNestedOneWithoutAdapterAccountInfoInput
@@ -267,6 +280,7 @@ export type AdapterAccountInfoUncheckedCreateInput = {
   email?: string | null
   name?: string | null
   avatar?: string | null
+  arn?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adapterId: string
@@ -277,6 +291,7 @@ export type AdapterAccountInfoUpdateInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adapter?: Prisma.AdapterUpdateOneRequiredWithoutAdapterAccountInfoNestedInput
@@ -287,6 +302,7 @@ export type AdapterAccountInfoUncheckedUpdateInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adapterId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -297,6 +313,7 @@ export type AdapterAccountInfoCreateManyInput = {
   email?: string | null
   name?: string | null
   avatar?: string | null
+  arn?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adapterId: string
@@ -307,6 +324,7 @@ export type AdapterAccountInfoUpdateManyMutationInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -316,6 +334,7 @@ export type AdapterAccountInfoUncheckedUpdateManyInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adapterId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -331,6 +350,7 @@ export type AdapterAccountInfoCountOrderByAggregateInput = {
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   avatar?: Prisma.SortOrder
+  arn?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   adapterId?: Prisma.SortOrder
@@ -341,6 +361,7 @@ export type AdapterAccountInfoMaxOrderByAggregateInput = {
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   avatar?: Prisma.SortOrder
+  arn?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   adapterId?: Prisma.SortOrder
@@ -351,6 +372,7 @@ export type AdapterAccountInfoMinOrderByAggregateInput = {
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   avatar?: Prisma.SortOrder
+  arn?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   adapterId?: Prisma.SortOrder
@@ -393,6 +415,7 @@ export type AdapterAccountInfoCreateWithoutAdapterInput = {
   email?: string | null
   name?: string | null
   avatar?: string | null
+  arn?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -402,6 +425,7 @@ export type AdapterAccountInfoUncheckedCreateWithoutAdapterInput = {
   email?: string | null
   name?: string | null
   avatar?: string | null
+  arn?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -427,6 +451,7 @@ export type AdapterAccountInfoUpdateWithoutAdapterInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -436,6 +461,7 @@ export type AdapterAccountInfoUncheckedUpdateWithoutAdapterInput = {
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -447,6 +473,7 @@ export type AdapterAccountInfoSelect<ExtArgs extends runtime.Types.Extensions.In
   email?: boolean
   name?: boolean
   avatar?: boolean
+  arn?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   adapterId?: boolean
@@ -458,6 +485,7 @@ export type AdapterAccountInfoSelectCreateManyAndReturn<ExtArgs extends runtime.
   email?: boolean
   name?: boolean
   avatar?: boolean
+  arn?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   adapterId?: boolean
@@ -469,6 +497,7 @@ export type AdapterAccountInfoSelectUpdateManyAndReturn<ExtArgs extends runtime.
   email?: boolean
   name?: boolean
   avatar?: boolean
+  arn?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   adapterId?: boolean
@@ -480,12 +509,13 @@ export type AdapterAccountInfoSelectScalar = {
   email?: boolean
   name?: boolean
   avatar?: boolean
+  arn?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   adapterId?: boolean
 }
 
-export type AdapterAccountInfoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "avatar" | "createdAt" | "updatedAt" | "adapterId", ExtArgs["result"]["adapterAccountInfo"]>
+export type AdapterAccountInfoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "avatar" | "arn" | "createdAt" | "updatedAt" | "adapterId", ExtArgs["result"]["adapterAccountInfo"]>
 export type AdapterAccountInfoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   adapter?: boolean | Prisma.AdapterDefaultArgs<ExtArgs>
 }
@@ -506,6 +536,7 @@ export type $AdapterAccountInfoPayload<ExtArgs extends runtime.Types.Extensions.
     email: string | null
     name: string | null
     avatar: string | null
+    arn: string | null
     createdAt: Date
     updatedAt: Date
     adapterId: string
@@ -937,6 +968,7 @@ export interface AdapterAccountInfoFieldRefs {
   readonly email: Prisma.FieldRef<"AdapterAccountInfo", 'String'>
   readonly name: Prisma.FieldRef<"AdapterAccountInfo", 'String'>
   readonly avatar: Prisma.FieldRef<"AdapterAccountInfo", 'String'>
+  readonly arn: Prisma.FieldRef<"AdapterAccountInfo", 'String'>
   readonly createdAt: Prisma.FieldRef<"AdapterAccountInfo", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"AdapterAccountInfo", 'DateTime'>
   readonly adapterId: Prisma.FieldRef<"AdapterAccountInfo", 'String'>

@@ -31,30 +31,53 @@ export function MigrationSummary({
         )}
       >
         <div className="pt-6 border-t border-border">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="font-semibold text-foreground mb-1">Ready to Migrate</h3>
-              <p className="text-sm text-muted-foreground">Review your migration path</p>
-            </div>
+
+          {/* Header */}
+          <div className="mb-4">
+            <h3 className="font-semibold text-foreground mb-0.5">Ready to Migrate</h3>
+            <p className="text-sm text-muted-foreground">Review your migration path</p>
           </div>
 
           {/* Path visualiser */}
-          <div className="flex items-center gap-4 p-4 bg-muted/50 rounded-lg mb-4 justify-center">
-            <span className="font-medium text-foreground">{sourceAdapter}</span>
-            <ArrowRight className="w-5 h-5 text-primary" />
-            <span className="font-medium text-foreground">{destinationAdapter}</span>
+          <div className="flex items-center justify-center gap-3 px-6 py-4 bg-muted/40 border border-border/60 rounded-sm mb-3">
+            <span className="text-sm font-medium text-foreground">{sourceAdapter}</span>
+            <div className="flex items-center justify-center w-7 h-7 rounded-full bg-primary/10">
+              <ArrowRight className="w-3.5 h-3.5 text-primary" />
+            </div>
+            <span className="text-sm font-medium text-foreground">{destinationAdapter}</span>
           </div>
 
           {/* CTA */}
           {!hasFiles ? (
-            <Button onClick={onFetchFiles} disabled={isMigrating} className="w-full" size="lg">
-              {isMigrating ? 'Fetching files...' : 'Fetch Files from Source'}
-            </Button>
+            <button
+              onClick={onFetchFiles}
+              disabled={isMigrating}
+              className={cn(
+                'w-full h-11 rounded-sm text-sm font-semibold text-white tracking-wide',
+                'bg-primary hover:bg-primary/90 active:scale-[0.99]',
+                'transition-all duration-150',
+                'disabled:opacity-60 disabled:cursor-not-allowed',
+                'focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2',
+              )}
+            >
+              {isMigrating ? 'Fetching files…' : 'Fetch Files from Source'}
+            </button>
           ) : (
-            <Button onClick={onMigrate} disabled={isMigrating} className="w-full" size="lg">
-              {isMigrating ? 'Starting Migration...' : 'Start Migration'}
-            </Button>
+            <button
+              onClick={onMigrate}
+              disabled={isMigrating}
+              className={cn(
+                'w-full h-11 rounded-sm text-sm font-semibold text-white tracking-wide',
+                'bg-primary hover:bg-primary/90 active:scale-[0.99]',
+                'transition-all duration-150',
+                'disabled:opacity-60 disabled:cursor-not-allowed',
+                'focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2',
+              )}
+            >
+              {isMigrating ? 'Starting Migration…' : 'Start Migration'}
+            </button>
           )}
+
         </div>
       </div>
     </div>
