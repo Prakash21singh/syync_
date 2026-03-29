@@ -13,6 +13,12 @@ export interface AdapterAccountInfo {
   avatar: string;
 }
 
+export interface SessionInterface {
+  user:{
+    id:string
+  }
+}
+
 export interface Adapter {
   id: string;
   name: string;

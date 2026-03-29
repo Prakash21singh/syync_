@@ -59,7 +59,6 @@ async function getS3Files(
   queryParams = {},
   ctx?: Record<string, string>,
 ): Promise<BaseFile[]> {
-  console.log('Request came for this s3');
   const client = new S3Client({
     credentials: {
       accessKeyId: adapter?.accessKeyId!,

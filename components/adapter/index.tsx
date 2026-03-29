@@ -30,7 +30,7 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
   const [isMigrating, setIsMigrating] = useState(false);
   const [files, setFiles] = useState<BaseFile[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<BaseFile[]>([]);
-  const [entityView, setEntityView] = useState<EntityView>('list');
+  const [entityView, setEntityView] = useState<EntityView>('grid');
   const [message, setMessage] = useState<StatusMessageType | null>(null);
 
   // Bucket state grouped to avoid separate re-renders
@@ -140,7 +140,6 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
         ...prev,
         bucket: bucketName,
         dialogOpen: false,
-        flowStarted: false,
       }));
       fetchFiles(bucketName); // pass directly to avoid stale closure
     },
@@ -156,7 +155,7 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
     if (!canMigrate) return;
 
     if (source.selectedAdapter === 'Amazon S3' && !bucketState.bucket) {
-      setBucketState((prev) => ({ ...prev, flowStarted: true }));
+      setBucketState((prev) => ({ ...prev }));
       try {
         const res = await fetch('/api/s3/buckets', {
           method: 'POST',
@@ -172,7 +171,7 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
         }));
       } catch (error) {
         console.error(error);
-        setBucketState((prev) => ({ ...prev, flowStarted: false }));
+        setBucketState((prev) => ({ ...prev }));
       }
       return;
     }

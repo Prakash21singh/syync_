@@ -48,6 +48,7 @@ export async function dataMapping(adapterType: AdapterType, data: any) {
         size: 0,
         type: 'folder',
         preview: '/dropbox/folder.png',
+        pathname: prefix.Prefix
       } as BaseFile;
     });
 

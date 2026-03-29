@@ -1,4 +1,5 @@
 import prisma from './prisma';
+import { MigrationSelection } from '@/prisma/generated/prisma/client';
 
 interface FindAdapterConditionInterface {
   id: string;
@@ -32,4 +33,45 @@ export async function findAdapter({ id, userId }: FindAdapterConditionInterface)
       },
     },
   });
+}
+
+
+interface File {
+  sourceId: any;
+  name: string;
+  path: any;
+  size: any;
+  type: "FILE" | "FOLDER";
+  mimeType: any
+}
+interface CreateMigrationInterface {
+  sourceAdapterId:string;
+  destinationAdapterId:string;
+  userId:string;
+  selections: File[];
+  totalFiles:number;
+}
+
+
+
+export async function createMigration({
+  userId,
+  totalFiles,
+  selections,
+  sourceAdapterId,
+  destinationAdapterId,
+}: CreateMigrationInterface){
+
+  return await prisma.migration.create({
+    data:{
+      status: "PENDING",
+      sourceAdapterId,
+      destinationAdapterId,
+      userId,
+      selections:{
+        create: selections
+      },
+      totalFiles
+    }
+  })
 }

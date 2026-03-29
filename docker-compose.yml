@@ -1,0 +1,71 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sync_postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=prakash
+      - POSTGRES_PASSWORD=prakash
+      - POSTGRES_DB=test
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - sync-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prakash -d test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: sync_redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    networks:
+      - sync-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    build: .
+    command: ["npx", "prisma", "migrate", "deploy"]
+    environment:
+      - DATABASE_URL=postgresql://prakash:prakash@postgres:5432/test?schema=public
+    networks:
+      - sync-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  app:
+    build: .
+    container_name: sync_web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://prakash:prakash@postgres:5432/test?schema=public
+      REDIS_URL: redis://redis:6379
+      NODE_ENV: production
+    networks:
+      - sync-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+
+volumes:
+  postgres-data:
+  redis-data:
+
+networks:
+  sync-network:
+    driver: bridge
