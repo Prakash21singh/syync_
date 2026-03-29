@@ -1,4 +1,4 @@
-import  AdapterSelection from '@/components/adapter';
+import AdapterSelection from '@/components/adapter';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 
@@ -11,10 +11,7 @@ const RootPage = async (props: Props) => {
 
   return (
     <div className="font-sarabun">
-      <AdapterSelection 
-        isLoggedIn={!!session?.user} 
-        userId={session?.user.id!} 
-      />
+      <AdapterSelection isLoggedIn={!!session?.user} userId={session?.user.id!} />
     </div>
   );
 };

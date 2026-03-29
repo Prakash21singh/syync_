@@ -14,9 +14,9 @@ export interface AdapterAccountInfo {
 }
 
 export interface SessionInterface {
-  user:{
-    id:string
-  }
+  user: {
+    id: string;
+  };
 }
 
 export interface Adapter {

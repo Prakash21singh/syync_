@@ -35,24 +35,21 @@ export async function findAdapter({ id, userId }: FindAdapterConditionInterface)
   });
 }
 
-
 interface File {
   sourceId: any;
   name: string;
   path: any;
   size: any;
-  type: "FILE" | "FOLDER";
-  mimeType: any
+  type: 'FILE' | 'FOLDER';
+  mimeType: any;
 }
 interface CreateMigrationInterface {
-  sourceAdapterId:string;
-  destinationAdapterId:string;
-  userId:string;
+  sourceAdapterId: string;
+  destinationAdapterId: string;
+  userId: string;
   selections: File[];
-  totalFiles:number;
+  totalFiles: number;
 }
-
-
 
 export async function createMigration({
   userId,
@@ -60,18 +57,17 @@ export async function createMigration({
   selections,
   sourceAdapterId,
   destinationAdapterId,
-}: CreateMigrationInterface){
-
+}: CreateMigrationInterface) {
   return await prisma.migration.create({
-    data:{
-      status: "PENDING",
+    data: {
+      status: 'PENDING',
       sourceAdapterId,
       destinationAdapterId,
       userId,
-      selections:{
-        create: selections
+      selections: {
+        create: selections,
       },
-      totalFiles
-    }
-  })
+      totalFiles,
+    },
+  });
 }

@@ -12,7 +12,7 @@ services:
     networks:
       - sync-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U prakash -d test"]
+      test: ['CMD-SHELL', 'pg_isready -U prakash -d test']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -26,14 +26,14 @@ services:
     networks:
       - sync-network
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ['CMD', 'redis-cli', 'ping']
       interval: 5s
       timeout: 5s
       retries: 5
 
   migrate:
     build: .
-    command: ["npx", "prisma", "migrate", "deploy"]
+    command: ['npx', 'prisma', 'migrate', 'deploy']
     environment:
       - DATABASE_URL=postgresql://prakash:prakash@postgres:5432/test?schema=public
     networks:
@@ -47,7 +47,7 @@ services:
     container_name: sync_web
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       DATABASE_URL: postgresql://prakash:prakash@postgres:5432/test?schema=public
       REDIS_URL: redis://redis:6379

@@ -3,15 +3,14 @@ import { AdapterType } from '@/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-
-export function getAdapterImage(adapter_type: AdapterType){
-  switch(adapter_type){
-    case "AWS_S3":
-      return "/icons/s3.svg";
-    case "DROPBOX":
-      return "/icons/dropbox.svg";
-    case "GOOGLE_DRIVE":
-      return "/icons/drive.svg"
+export function getAdapterImage(adapter_type: AdapterType) {
+  switch (adapter_type) {
+    case 'AWS_S3':
+      return '/icons/s3.svg';
+    case 'DROPBOX':
+      return '/icons/dropbox.svg';
+    case 'GOOGLE_DRIVE':
+      return '/icons/drive.svg';
   }
 }
 
@@ -37,23 +36,23 @@ export async function doesRequireTokenRotation(adapter: Partial<Adapter>): Promi
   return isTokenExpiringSoon(adapter.expires_in);
 }
 
-export function normalizeName(name:string){
-  if(name.lastIndexOf(".") !== -1){
-      return name.slice(0, name.lastIndexOf("."))
-  }else if(name.endsWith("/")){
-      return name.slice(0, -1)
-  } else{
-      return name;
+export function normalizeName(name: string) {
+  if (name.lastIndexOf('.') !== -1) {
+    return name.slice(0, name.lastIndexOf('.'));
+  } else if (name.endsWith('/')) {
+    return name.slice(0, -1);
+  } else {
+    return name;
   }
 }
 
-export function normalizeFileSelection(files:any[]){
-  return files.map((file)=> ({
-    sourceId:file.id,
+export function normalizeFileSelection(files: any[]) {
+  return files.map((file) => ({
+    sourceId: file.id,
     name: normalizeName(file.name),
     path: file.pathname,
-    size:file.size?.toString(),
-    type: file.type.toUpperCase() as "FILE" | "FOLDER",
-    mimeType: file.mimeType
-  }))
+    size: file.size?.toString(),
+    type: file.type.toUpperCase() as 'FILE' | 'FOLDER',
+    mimeType: file.mimeType,
+  }));
 }

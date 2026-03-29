@@ -6,7 +6,6 @@ import { SessionInterface } from '@/types';
 import { PrismaClientValidationError } from '@prisma/client/runtime/client';
 import { NextRequest, NextResponse } from 'next/server';
 
-
 const DISCOVERY_JOB_NAME = 'start-discovery' as const;
 
 const DISCOVERY_JOB_OPTIONS = {
@@ -14,7 +13,6 @@ const DISCOVERY_JOB_OPTIONS = {
   removeOnComplete: true,
   backoff: { type: 'exponential', delay: 3_000 },
 } as const;
-
 
 type SelectedFile = {
   id: string;
@@ -30,7 +28,6 @@ type RequestBody = {
   destAdapterId: string;
   selectedFiles: SelectedFile[];
 };
-
 
 function validateRequestBody(
   body: unknown,
@@ -61,7 +58,6 @@ function validateRequestBody(
   return { valid: true, data: body as RequestBody };
 }
 
-
 async function handler(req: NextRequest, session: SessionInterface) {
   try {
     const rawBody: unknown = await req.json();
@@ -79,7 +75,7 @@ async function handler(req: NextRequest, session: SessionInterface) {
 
     const [sourceAdapter, destinationAdapter] = await Promise.all([
       findAdapter({ id: sourceAdapterId, userId }),
-      findAdapter({ id: destAdapterId, userId }),  
+      findAdapter({ id: destAdapterId, userId }),
     ]);
 
     if (!sourceAdapter || !destinationAdapter) {
@@ -102,7 +98,7 @@ async function handler(req: NextRequest, session: SessionInterface) {
       destinationAdapterId: destAdapterId,
       userId,
       selections,
-      totalFiles: selections.length,  
+      totalFiles: selections.length,
     });
 
     await discoveryQueue.add(
@@ -122,13 +118,14 @@ async function handler(req: NextRequest, session: SessionInterface) {
       { status: 201 },
     );
   } catch (error) {
-    console.error('[POST /migrations] Unexpected error:', error); 
+    console.error('[POST /migrations] Unexpected error:', error);
 
-    let errorMessage = error instanceof PrismaClientValidationError 
-    ? "Database validation failed" 
-    : error instanceof Error 
-    ? error.message 
-    : "An Unexpected error occured";
+    let errorMessage =
+      error instanceof PrismaClientValidationError
+        ? 'Database validation failed'
+        : error instanceof Error
+          ? error.message
+          : 'An Unexpected error occured';
 
     return NextResponse.json(
       {

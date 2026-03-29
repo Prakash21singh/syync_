@@ -10,12 +10,11 @@ export function Adapter({
   status,
   type,
 }: {
-  type: "SOURCE" | "DESTINATION";
+  type: 'SOURCE' | 'DESTINATION';
   name: string;
   adapter_type: AdapterType;
   status: MigrationStatus;
 }) {
-
   return (
     <div className={`flex flex-col w-full items-center`}>
       <div
@@ -23,12 +22,12 @@ export function Adapter({
             w-16 h-16 bg-secondary rounded-lg flex items-center justify-center border border-border
           `}
       >
-        <Image 
-          src={getAdapterImage(adapter_type)} 
-          alt={adapter_type} 
-          width={100} 
-          height={100} 
-          className="w-9" 
+        <Image
+          src={getAdapterImage(adapter_type)}
+          alt={adapter_type}
+          width={100}
+          height={100}
+          className="w-9"
         />
       </div>
       <div className="text-center">
