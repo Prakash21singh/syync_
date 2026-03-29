@@ -1,24 +1,34 @@
-import { useState } from "react";
-import { Input } from "../ui/input";
-import { cn } from "@/lib/utils";
-import { AWSCredentials } from "@/types";
-import { UseAdapterReturn } from "@/hooks/use-adap";
-import { Loader2 } from "lucide-react";
+import { useState } from 'react';
+import { Input } from '../ui/input';
+import { cn } from '@/lib/utils';
+import { AWSCredentials } from '@/types';
+import { UseAdapterReturn } from '@/hooks/use-adap';
+import { Loader2 } from 'lucide-react';
 
 const AWS_REGIONS = [
-  "us-east-1","us-east-2","us-west-1","us-west-2",
-  "ap-south-1","ap-southeast-1","ap-southeast-2",
-  "ap-northeast-1","ap-northeast-2",
-  "ca-central-1",
-  "eu-central-1","eu-west-1","eu-west-2","eu-west-3","eu-north-1",
-  "sa-east-1",
+  'us-east-1',
+  'us-east-2',
+  'us-west-1',
+  'us-west-2',
+  'ap-south-1',
+  'ap-southeast-1',
+  'ap-southeast-2',
+  'ap-northeast-1',
+  'ap-northeast-2',
+  'ca-central-1',
+  'eu-central-1',
+  'eu-west-1',
+  'eu-west-2',
+  'eu-west-3',
+  'eu-north-1',
+  'sa-east-1',
 ];
 
 function S3CredentialForm({ adapter }: { adapter: UseAdapterReturn }) {
   const [form, setForm] = useState({
-    accessKeyId: "",
-    secretAccessKey: "",
-    region: "",
+    accessKeyId: '',
+    secretAccessKey: '',
+    region: '',
   });
 
   const [showSecret, setShowSecret] = useState(false);
@@ -30,18 +40,14 @@ function S3CredentialForm({ adapter }: { adapter: UseAdapterReturn }) {
   const validate = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!form.accessKeyId.trim())
-      newErrors.accessKeyId = "Access Key ID is required.";
+    if (!form.accessKeyId.trim()) newErrors.accessKeyId = 'Access Key ID is required.';
     else if (!/^[A-Z0-9]{16,}$/.test(form.accessKeyId.trim()))
-      newErrors.accessKeyId = "Invalid format.";
+      newErrors.accessKeyId = 'Invalid format.';
 
-    if (!form.secretAccessKey.trim())
-      newErrors.secretAccessKey = "Secret Access Key is required.";
-    else if (form.secretAccessKey.length < 20)
-      newErrors.secretAccessKey = "Too short.";
+    if (!form.secretAccessKey.trim()) newErrors.secretAccessKey = 'Secret Access Key is required.';
+    else if (form.secretAccessKey.length < 20) newErrors.secretAccessKey = 'Too short.';
 
-    if (!form.region)
-      newErrors.region = "Select a region.";
+    if (!form.region) newErrors.region = 'Select a region.';
 
     return newErrors;
   };
@@ -53,7 +59,7 @@ function S3CredentialForm({ adapter }: { adapter: UseAdapterReturn }) {
     setForm((prev) => ({ ...prev, [name]: value }));
 
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
+      setErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
 
@@ -63,31 +69,30 @@ function S3CredentialForm({ adapter }: { adapter: UseAdapterReturn }) {
     // If already validated → now linking stage
     if (isValidated) {
       // 👉 call your link API here
-      const response = await fetch("/api/adapter/create/manual",{
-        method:"POST",
+      const response = await fetch('/api/adapter/create/manual', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
-          adapter_type: "AWS_S3",
+          adapter_type: 'AWS_S3',
           accessKeyId: form.accessKeyId,
-          accessKeySecret:form.secretAccessKey,
-          region:form.region,
+          accessKeySecret: form.secretAccessKey,
+          region: form.region,
           username: adapter.awsUser?.username,
           arn: adapter.awsUser?.arn,
-          userId: adapter.awsUser?.userId
-        })
+          userId: adapter.awsUser?.userId,
+        }),
       });
 
-      const result = await response.json()
+      const result = await response.json();
 
-      console.log(result)
+      console.log(result);
 
-      if(result.success){
-        adapter.reset()
-      }else{
-        adapter.setError(result.error)
+      if (result.success) {
+        adapter.reset();
+      } else {
+        adapter.setError(result.error);
       }
-
     }
 
     const newErrors = validate();
@@ -120,45 +125,32 @@ function S3CredentialForm({ adapter }: { adapter: UseAdapterReturn }) {
     >
       {/* FORM FIELDS */}
       <div className="space-y-4">
-
         {/* ACCESS KEY */}
         <div className="space-y-1.5">
-          <label className="text-muted-foreground text-xs uppercase">
-            Access Key ID
-          </label>
+          <label className="text-muted-foreground text-xs uppercase">Access Key ID</label>
           <Input
             name="accessKeyId"
             value={form.accessKeyId}
             onChange={handleChange}
             disabled={isValidated}
             placeholder="AKIA..."
-            className={cn(
-              "pr-8",
-              errors.accessKeyId && "border-destructive"
-            )}
+            className={cn('pr-8', errors.accessKeyId && 'border-destructive')}
           />
-          {errors.accessKeyId && (
-            <p className="text-destructive text-xs">{errors.accessKeyId}</p>
-          )}
+          {errors.accessKeyId && <p className="text-destructive text-xs">{errors.accessKeyId}</p>}
         </div>
 
         {/* SECRET KEY */}
         <div className="space-y-1.5">
-          <label className="text-muted-foreground text-xs uppercase">
-            Secret Access Key
-          </label>
+          <label className="text-muted-foreground text-xs uppercase">Secret Access Key</label>
 
           <div className="relative">
             <Input
               name="secretAccessKey"
-              type={showSecret ? "text" : "password"}
+              type={showSecret ? 'text' : 'password'}
               value={form.secretAccessKey}
               onChange={handleChange}
               disabled={isValidated}
-              className={cn(
-                "pr-8",
-                errors.secretAccessKey && "border-destructive"
-              )}
+              className={cn('pr-8', errors.secretAccessKey && 'border-destructive')}
             />
 
             <button
@@ -177,9 +169,7 @@ function S3CredentialForm({ adapter }: { adapter: UseAdapterReturn }) {
 
         {/* REGION */}
         <div className="space-y-1.5">
-          <label className="text-muted-foreground text-xs uppercase">
-            Region
-          </label>
+          <label className="text-muted-foreground text-xs uppercase">Region</label>
 
           <select
             name="region"
@@ -187,36 +177,30 @@ function S3CredentialForm({ adapter }: { adapter: UseAdapterReturn }) {
             onChange={handleChange}
             disabled={isValidated}
             className={cn(
-              "w-full h-10 px-3 border rounded-sm",
-              errors.region && "border-destructive"
+              'w-full h-10 px-3 border rounded-sm',
+              errors.region && 'border-destructive',
             )}
           >
             <option value="">Select region</option>
             {AWS_REGIONS.map((r) => (
-              <option key={r} value={r}>{r}</option>
+              <option key={r} value={r}>
+                {r}
+              </option>
             ))}
           </select>
 
-          {errors.region && (
-            <p className="text-destructive text-xs">{errors.region}</p>
-          )}
+          {errors.region && <p className="text-destructive text-xs">{errors.region}</p>}
         </div>
       </div>
 
       {/* ERROR MESSAGE */}
-      {adapter.error && (
-        <p className="text-destructive text-xs text-center">
-          {adapter.error}
-        </p>
-      )}
+      {adapter.error && <p className="text-destructive text-xs text-center">{adapter.error}</p>}
 
       {/* SUCCESS INFO */}
       {isValidated && adapter.awsUser && (
         <div className="text-xs text-center space-y-1 text-muted-foreground">
           <p>Connected as:</p>
-          <p className="text-foreground font-medium">
-            {adapter.awsUser.username}
-          </p>
+          <p className="text-foreground font-medium">{adapter.awsUser.username}</p>
           <p className="truncate">{adapter.awsUser.arn}</p>
 
           <button
@@ -238,7 +222,7 @@ function S3CredentialForm({ adapter }: { adapter: UseAdapterReturn }) {
           hover:bg-primary/90 transition
         "
       >
-        {isValidated ? "Link Adapter →" : "Validate Credentials"}
+        {isValidated ? 'Link Adapter →' : 'Validate Credentials'}
       </button>
 
       {/* FOOTER */}

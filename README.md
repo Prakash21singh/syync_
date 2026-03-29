@@ -17,13 +17,13 @@ For the actual migration engine that runs the pipelines behind the scenes, see [
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 16 + React 19 |
-| Database | PostgreSQL + Prisma ORM |
-| Auth | Better Auth (email/password + OAuth) |
-| Styling | Tailwind CSS v4 + shadcn/ui |
-| Language | TypeScript |
+| Layer     | Technology                           |
+| --------- | ------------------------------------ |
+| Framework | Next.js 16 + React 19                |
+| Database  | PostgreSQL + Prisma ORM              |
+| Auth      | Better Auth (email/password + OAuth) |
+| Styling   | Tailwind CSS v4 + shadcn/ui          |
+| Language  | TypeScript                           |
 
 ---
 
@@ -71,12 +71,12 @@ GOOGLE_USERINFO_URL="https://www.googleapis.com/oauth2/v2/userinfo"
 
 ## Supported Providers
 
-| Provider | Status |
-|---|---|
-| Google Drive | ✅ Available |
-| Dropbox | 🚧 In Progress |
-| OneDrive | 📋 Planned |
-| Amazon S3 | 📋 Planned |
+| Provider     | Status         |
+| ------------ | -------------- |
+| Google Drive | ✅ Available   |
+| Dropbox      | 🚧 In Progress |
+| OneDrive     | 📋 Planned     |
+| Amazon S3    | 📋 Planned     |
 
 ---
 

@@ -1,29 +1,17 @@
 import prisma from '@/lib/prisma';
+import { Adapter } from '@/types';
 import { withAuth } from '@/lib/with-auth';
-import { AdapterType, BaseFile, DriveFile, DropboxFile } from '@/types';
-import { GOOGLE_DRIVE_APIS } from '@/utils/config/google-drive-endpoints';
-import { GOOGLE_API_ENDPOINTS } from '@/utils/config/google-endpoint';
+import { findAdapter } from '@/lib/queries';
+import { TokenRotationError } from '@/lib/error';
+import { rotateGoogleDriveToken } from '@/lib/token';
+import { doesRequireTokenRotation } from '@/lib/utils';
 import { NextRequest, NextResponse } from 'next/server';
+import { getFilesFromAdapter } from '@/lib/adapters/get-files';
 
 interface RequestBody {
   sourceAdapterId: string;
   destinationAdapterId: string;
-}
-
-interface Adapter {
-  id: string;
-  name: string;
-  access_token: string | null;
-  refresh_token: string | null;
-  expires_in: Date | null;
-  refresh_token_expires_in: Date | null;
-  token_type: string | null;
-  adapter_type: 'GOOGLE_DRIVE' | 'DROPBOX';
-  adapterAccountInfo: {
-    id: string;
-    name: string | null;
-    email: string | null;
-  } | null;
+  bucket?: string;
 }
 
 async function handler(req: NextRequest, session: any) {
@@ -34,86 +22,40 @@ async function handler(req: NextRequest, session: any) {
       return new Response('Please choose Source Adapter and Destination Adapter', { status: 400 });
     }
 
-    const sourceAdapterExist = await prisma.adapter.findFirst({
-      where: {
+    const [sourceAdapter, destinationAdapter] = await Promise.all([
+      findAdapter({
         id: body.sourceAdapterId,
         userId: session.user.id,
-      },
-      select: {
-        id: true,
-        name: true,
-        access_token: true,
-        refresh_token: true,
-        expires_in: true,
-        refresh_token_expires_in: true,
-        token_type: true,
-        adapter_type: true,
-        adapterAccountInfo: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-          },
-        },
-      },
-    });
+      }),
+      findAdapter({
+        id: body.destinationAdapterId,
+        userId: session.user.id,
+      }),
+    ]);
 
-    if (!sourceAdapterExist) {
+    if (!sourceAdapter) {
       return new Response('Source Adapter not found', { status: 404 });
     }
 
-    const destinationAdapterExist = await prisma.adapter.findFirst({
-      where: {
-        id: body.destinationAdapterId,
-        userId: session.user.id,
-      },
-      select: {
-        id: true,
-        name: true,
-        access_token: true,
-        refresh_token: true,
-        expires_in: true,
-        refresh_token_expires_in: true,
-        token_type: true,
-        adapter_type: true,
-        adapterAccountInfo: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-          },
-        },
-      },
-    });
-
-    if (!destinationAdapterExist) {
+    if (!destinationAdapter) {
       return new Response('Destination Adapter not found', { status: 404 });
     }
 
-    const checkSourceAdapterTokenStatus = await validateAndRotateToken(sourceAdapterExist);
-
-    if (!checkSourceAdapterTokenStatus) {
-      return new Response("Try to re-authenticate the source adapter, For now we're removing it.", {
-        status: 401,
-      });
+    try {
+      await Promise.all([
+        validateAndRotateToken(sourceAdapter),
+        validateAndRotateToken(destinationAdapter),
+      ]);
+    } catch (error) {
+      if (error instanceof TokenRotationError) {
+        return new Response(error.message, { status: 401 });
+      }
+      throw error;
     }
 
-    const checkDestinationAdapterTokenStatus =
-      await validateAndRotateToken(destinationAdapterExist);
+    const files = await getFilesFromAdapter(sourceAdapter as any, {}, { bucket: body.bucket! });
 
-    if (!checkDestinationAdapterTokenStatus) {
-      return new Response(
-        "Try to re-authenticate the destination adapter, For now we're removing it.",
-        { status: 401 },
-      );
-    }
-
-    const files = await getFilesFromAdapter(sourceAdapterExist);
-
-    return NextResponse.json(
-      { files, adapter_type: sourceAdapterExist.adapter_type },
-      { status: 200 },
-    );
+    return NextResponse.json({ files, adapter_type: sourceAdapter.adapter_type }, { status: 200 });
   } catch (error) {
     console.log('Migrate Error', error);
     return new Response(
@@ -123,201 +65,39 @@ async function handler(req: NextRequest, session: any) {
   }
 }
 
-async function getFilesFromAdapter(
-  adapter: Adapter,
-  queryParams: Record<string, string | number> = {},
-) {
-  if (adapter.adapter_type === 'GOOGLE_DRIVE') {
-    const params = new URLSearchParams({
-      corpora: (queryParams.corpora as string) || 'user',
-      driveId: (queryParams.driveId as string) || '',
-      includeItemsFromAllDrives: false.toString(),
-      supportsAllDrives: 'false',
-      q: "'root' in parents and trashed=false",
-      orderBy: (queryParams.orderBy as string) || 'createdTime desc',
-      fields:
-        'nextPageToken, files(id,name,mimeType,size,createdTime,modifiedTime,parents,webViewLink,iconLink,hasThumbnail,thumbnailLink)',
-    }).toString();
-
-    const response = await fetch(GOOGLE_DRIVE_APIS['google_drive_list_files'].url + `?${params}`, {
-      method: GOOGLE_DRIVE_APIS['google_drive_list_files'].method,
-      headers: {
-        Authorization: `Bearer ${adapter.access_token}`,
-      },
-    });
-    const data = await response.json();
-
-    const files = dataMapping(adapter.adapter_type, data)
-
-    return files;
-  } else if (adapter.adapter_type === 'DROPBOX') {
-
-    const response = await fetch(`${process.env.DROPBOX_FILES_URL}`,{
-      method: "POST",
-      headers : {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${adapter.access_token}`
-      },
-      body: JSON.stringify({
-        include_deleted: false,
-        include_has_explicit_shared_members: false,
-        include_media_info: false,
-        include_mounted_folders: true,
-        include_non_downloadable_files: true,
-        path: "",
-        recursive: false
-      })
-    });
-
-    const data = await response.json()
-
-    const files = dataMapping(adapter.adapter_type, data);
-
-    return files;
-  }
-}
-
-
-async function dataMapping(adapterType:AdapterType, data:any){
-
-
-  let files:BaseFile[] = [];
-
-  if(adapterType === "GOOGLE_DRIVE"){
-    files = data.files.map((file:DriveFile)=> {
-        let data = {
-          id: file.id,
-          name:file.name,
-          mimeType: file.mimeType,
-          preview: file.iconLink || file.thumbailLink,
-          type: file.mimeType === "application/vnd.google-apps.folder" ? "folder" : "file",
-          size: file.size ? Number(file.size) : null
-        }
-        return data;
-    })
-  }
-
-  if(adapterType === "DROPBOX"){
-    files = data.entries.map((entry:DropboxFile)=> {
-      let data:BaseFile = {
-        id: entry.id,
-        name: entry.name,
-        size: entry.size ? Number(entry.size) : null,
-        type: entry['.tag'] === "folder" ? "folder" : "file",
-        preview: entry['.tag'] === "folder" ? "/dropbox/folder.png" : "/file.svg",
-        pathname: entry.path_display
-      }
-      return data;
-    })
-  }
-
-
-  return files;
-}
-
-
-async function removeAdapterAndAdapterInfo(adapterId: string, email: string | null) {
-  await prisma.adapterAccountInfo.deleteMany({
-    where: {
-      adapterId: adapterId,
-      email: email || undefined,
-    },
-  });
-
-  await prisma.adapter.delete({
-    where: {
-      id: adapterId,
-    },
-  });
-}
-
 async function validateAndRotateToken(adapter: Adapter): Promise<boolean> {
-  let isValidTokens = true;
-  let shouldRemoveAdapterAndAdapterInfo = false; // (if no tokens are valid let user re-authenticate.)
+  const requiresRotation = await doesRequireTokenRotation(adapter);
+  if (!requiresRotation) return true;
 
   if (adapter.adapter_type === 'GOOGLE_DRIVE') {
-    const tokenValid = await validateGoogleDriveToken(adapter.access_token!);
-
-    if (!tokenValid) {
-      const tokenRotated = await rotateGoogleDriveToken(adapter.refresh_token!);
-
-      if (tokenRotated) {
-        await prisma.adapter.update({
-          where: { id: adapter.id },
-          data: {
-            access_token: tokenRotated.access_token,
-            expires_in: new Date(Date.now() + tokenRotated.expires_in * 1000),
-            token_type: tokenRotated.token_type,
-            scope: tokenRotated.scope,
-          },
-        });
-        isValidTokens = true;
-      } else {
-        isValidTokens = false;
-        shouldRemoveAdapterAndAdapterInfo = true;
-      }
-    }
-  } else if (adapter.adapter_type === 'DROPBOX') {
-    // Implement Dropbox token validation and rotation logic here
-    // For now, we'll assume the tokens are valid. You can replace this with actual validation and rotation logic.
-    isValidTokens = true;
+    return rotateAndPersistGoogleDriveToken(adapter);
   }
 
-  // if(shouldRemoveAdapterAndAdapterInfo) {
-  //     await removeAdapterAndAdapterInfo(adapter.id, adapter.adapterAccountInfo?.email || null);
-  // }
+  if (adapter.adapter_type === 'DROPBOX') {
+    return true;
+  }
 
-  return isValidTokens;
+  return true;
 }
 
-async function validateGoogleDriveToken(accessToken: string): Promise<boolean> {
-  try {
-    const response = await fetch(`${GOOGLE_API_ENDPOINTS['validate_token']}${accessToken}`);
-    const data = await response.json();
-    return !data.error;
-  } catch (error) {
-    console.error('Error validating Google Drive token:', error);
-    return false;
+async function rotateAndPersistGoogleDriveToken(adapter: Adapter): Promise<boolean> {
+  const rotated = await rotateGoogleDriveToken(adapter.refresh_token!);
+
+  if (!rotated) {
+    throw new TokenRotationError(adapter.adapter_type, adapter.id);
   }
-}
 
-async function rotateGoogleDriveToken(refreshToken: string): Promise<{
-  access_token: string;
-  scope: string;
-  expires_in: number;
-  token_type: string;
-} | null> {
-  try {
-    const response = await fetch(GOOGLE_API_ENDPOINTS.refresh_token, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-        client_secret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET!,
-        refresh_token: refreshToken,
-        grant_type: 'refresh_token',
-      }),
-    });
+  await prisma.adapter.update({
+    where: { id: adapter.id },
+    data: {
+      access_token: rotated.access_token,
+      expires_in: new Date(Date.now() + rotated.expires_in * 1000),
+      token_type: rotated.token_type,
+      scope: rotated.scope,
+    },
+  });
 
-    if (!response.ok) {
-      console.log(response);
-      console.error('Failed to rotate Google Drive token:', await response.text());
-      return null;
-    }
-
-    const data = await response.json();
-    return {
-      access_token: data.access_token,
-      expires_in: data.expires_in,
-      token_type: data.token_type,
-      scope: data.scope,
-    };
-  } catch (error) {
-    console.error('Error rotating Google Drive token:', error);
-    return null;
-  }
+  return true;
 }
 
 export const POST = withAuth(handler);

@@ -11,22 +11,22 @@ type InputFile = {
   name: string;
 };
 
-type RequestBody = { 
-  sourceAdapterId:string;
-  destAdapterId:string;
-  selectedFiles:{
-    id:string;
-    name:string;
-    pathname:string | null;
+type RequestBody = {
+  sourceAdapterId: string;
+  destAdapterId: string;
+  selectedFiles: {
+    id: string;
+    name: string;
+    pathname: string | null;
     size: string | null;
-    type: "folder" | "file",
-    mimeType:string | null;
-  }[]
-}
+    type: 'folder' | 'file';
+    mimeType: string | null;
+  }[];
+};
 
 async function handler(req: NextRequest, session: any) {
   try {
-    const body:RequestBody = await req.json();
+    const body: RequestBody = await req.json();
 
     // ✅ Strong validation
     if (
@@ -78,16 +78,16 @@ async function handler(req: NextRequest, session: any) {
       );
     }
 
-    const selections = body.selectedFiles.map((file)=>({
-      sourceId:file.id,
-      name :
-        file.name.lastIndexOf(".") !== -1
-          ? file.name.slice(0, file.name.lastIndexOf("."))
+    const selections = body.selectedFiles.map((file) => ({
+      sourceId: file.id,
+      name:
+        file.name.lastIndexOf('.') !== -1
+          ? file.name.slice(0, file.name.lastIndexOf('.'))
           : file.name,
-        path:file.pathname,
-        size:file.size?.toString(),
-        type: file.type.toUpperCase() as "FILE" | "FOLDER",
-        mimeType:file.mimeType,
+      path: file.pathname,
+      size: file.size?.toString(),
+      type: file.type.toUpperCase() as 'FILE' | 'FOLDER',
+      mimeType: file.mimeType,
     }));
 
     // ✅ Create migration

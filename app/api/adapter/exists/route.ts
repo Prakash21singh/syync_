@@ -10,7 +10,7 @@ async function handler(req: NextRequest, session: any) {
   const { searchParams } = new URL(req.url);
   const adapterType = searchParams.get('adapterType') as QueryParams['adapterType'];
 
-  console.log({adapterType})
+  console.log({ adapterType });
   const userId = session.user.id;
 
   if (adapterType) {

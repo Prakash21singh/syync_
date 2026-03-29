@@ -70,8 +70,8 @@ export function EntityPicker({ files, view, onViewChange, isSelected, onSelect }
             >
               <div className="flex items-center gap-x-3">
                 <Image
-                  src={file.preview || ""}
-                  alt={file.type || "Thumbnail"}
+                  src={file.preview || ''}
+                  alt={file.type || 'Thumbnail'}
                   width={20}
                   height={20}
                   className="object-cover"

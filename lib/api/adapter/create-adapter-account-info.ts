@@ -7,27 +7,26 @@ interface CreateAndUpdateAdapterAccountInfoParams {
   avatar?: string;
 }
 
-
 export const createAndUpdateAdapterAccountInfo = async ({
   adapterId,
   avatar,
   email,
-  name
-}:CreateAndUpdateAdapterAccountInfoParams) => {
+  name,
+}: CreateAndUpdateAdapterAccountInfoParams) => {
   return await prisma.adapterAccountInfo.upsert({
-    where:{
+    where: {
       adapterId,
     },
-    update:{
+    update: {
       avatar,
       email,
       name,
     },
-    create:{
+    create: {
       adapterId,
       avatar,
       email,
-      name
-    }
-  })
-}
+      name,
+    },
+  });
+};

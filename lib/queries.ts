@@ -1,0 +1,35 @@
+import prisma from './prisma';
+
+interface FindAdapterConditionInterface {
+  id: string;
+  userId: string;
+}
+
+export async function findAdapter({ id, userId }: FindAdapterConditionInterface) {
+  return await prisma.adapter.findFirst({
+    where: {
+      id,
+      userId,
+    },
+    select: {
+      id: true,
+      name: true,
+      access_token: true,
+      refresh_token: true,
+      expires_in: true,
+      refresh_token_expires_in: true,
+      token_type: true,
+      adapter_type: true,
+      accessKeyId: true,
+      accessKeySecret: true,
+      region: true,
+      adapterAccountInfo: {
+        select: {
+          id: true,
+          email: true,
+          name: true,
+        },
+      },
+    },
+  });
+}

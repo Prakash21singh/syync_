@@ -108,7 +108,7 @@ async function rotateToken(adapter: Partial<Adapter>) {
         });
 
         if (!res.ok) {
-          const errorText = await res.json(); 
+          const errorText = await res.json();
           throw new Error(errorText.error_description ?? `Google Drive token refresh failed`);
         }
 

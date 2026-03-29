@@ -10,24 +10,24 @@ import { NextRequest } from 'next/server';
 
 interface DropboxTokenExchangeResponseData {
   access_token: string;
-  token_type:string;
-  expires_in:number;
-  refresh_token:string;
-  scope:string;
-  uid:string;
-  account_id:string;
+  token_type: string;
+  expires_in: number;
+  refresh_token: string;
+  scope: string;
+  uid: string;
+  account_id: string;
 }
 
 interface DropboxAccountInfoResponse {
-  account_id:string;
+  account_id: string;
   name: {
-    given_name:string;
-    surname:string;
-    familian_name:string;
-    display_name:string;
-  }
-  email:string;
-  profile_photo_url?:string;
+    given_name: string;
+    surname: string;
+    familian_name: string;
+    display_name: string;
+  };
+  email: string;
+  profile_photo_url?: string;
 }
 
 async function handler(req: NextRequest, session: any) {
@@ -58,7 +58,7 @@ async function handler(req: NextRequest, session: any) {
     if (!tokenResponse.ok) {
       return new Response('Failed to exchange code for token', { status: 500 });
     }
-    const tokenData = await tokenResponse.json() as DropboxTokenExchangeResponseData;
+    const tokenData = (await tokenResponse.json()) as DropboxTokenExchangeResponseData;
 
     const userInfoUrl = getDropbboxUserAccountInfoURL();
     const option = {
@@ -74,27 +74,27 @@ async function handler(req: NextRequest, session: any) {
       return new Response('Failed to fetch user info from Dropbox', { status: 500 });
     }
 
-    const userInfo = await userInfoResponse.json() as DropboxAccountInfoResponse;
+    const userInfo = (await userInfoResponse.json()) as DropboxAccountInfoResponse;
 
     const adapter = await createAndUpdateAdapter({
-      adapter_type: "DROPBOX",
-      userId:session.user.id,
-      access_token:tokenData.access_token,
-      name:`${userInfo?.name.given_name}`,
-      providerId:tokenData.account_id,
-      expires_in:tokenData.expires_in,
-      refresh_token:tokenData.refresh_token,
-      scope:tokenData.scope,
-      token_type:tokenData.token_type,
-      refresh_token_expires_in:undefined
+      adapter_type: 'DROPBOX',
+      userId: session.user.id,
+      access_token: tokenData.access_token,
+      name: `${userInfo?.name.given_name}`,
+      providerId: tokenData.account_id,
+      expires_in: tokenData.expires_in,
+      refresh_token: tokenData.refresh_token,
+      scope: tokenData.scope,
+      token_type: tokenData.token_type,
+      refresh_token_expires_in: undefined,
     });
 
     await createAndUpdateAdapterAccountInfo({
-      adapterId:adapter.id,
-      avatar:userInfo.profile_photo_url,
-      email:userInfo.email,
-      name:userInfo.name.given_name
-    })
+      adapterId: adapter.id,
+      avatar: userInfo.profile_photo_url,
+      email: userInfo.email,
+      name: userInfo.name.given_name,
+    });
 
     return Response.redirect(
       `${process.env.NEXT_PUBLIC_BASE_URL}?sync=dropbox&status=connected&message=Dropbox account connected successfully`,

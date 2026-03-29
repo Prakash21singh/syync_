@@ -1,6 +1,5 @@
 'use client';
-import { useState } from 'react';
-import Image from 'next/image';
+import { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAdapter } from '@/hooks/use-adap';
 import { AdapterSelector } from './AdapterSelector';
@@ -10,11 +9,11 @@ import { StatusMessage } from './StatusMessage';
 import RequireLogin from '../auth/require-login';
 import type {
   BaseFile,
-  DriveFile,
   EntityView,
   MigrationResponse,
   StatusMessage as StatusMessageType,
 } from '@/types/index';
+import { BucketSelection } from './BucketSelection';
 
 interface Props {
   isLoggedIn: boolean;
@@ -24,11 +23,9 @@ interface Props {
 export default function AdapterSelection({ isLoggedIn }: Props) {
   const router = useRouter();
 
-  // ─── One hook per role ──────────────────────────────────────────────────────
   const source = useAdapter('source');
   const dest = useAdapter('destination');
 
-  // ─── Migration state ────────────────────────────────────────────────────────
   const [showLogin, setShowLogin] = useState(false);
   const [isMigrating, setIsMigrating] = useState(false);
   const [files, setFiles] = useState<BaseFile[]>([]);
@@ -36,60 +33,155 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
   const [entityView, setEntityView] = useState<EntityView>('list');
   const [message, setMessage] = useState<StatusMessageType | null>(null);
 
-  // ─── Derived ─────────────────────────────────────────────────────────────────
-  const canMigrate =
-    !!source.selectedAdapter &&
-    !!dest.selectedAdapter &&
-    source.selectedAdapter !== dest.selectedAdapter &&
-    source.status === 'valid' &&
-    dest.status === 'valid';
+  // Bucket state grouped to avoid separate re-renders
+  const [bucketState, setBucketState] = useState({
+    bucket: null as string | null,
+    buckets: [] as { name: string }[],
+    dialogOpen: false,
+  });
 
-  // ─── Entity selection ────────────────────────────────────────────────────────
-  const handleEntitySelect = (file: BaseFile) => {
+  // ─── Derived ──────────────────────────────────────────────────────────────
+  const canMigrate = useMemo(
+    () =>
+      !!source.selectedAdapter &&
+      !!dest.selectedAdapter &&
+      source.selectedAdapter !== dest.selectedAdapter &&
+      source.status === 'valid' &&
+      dest.status === 'valid',
+    [source.selectedAdapter, source.status, dest.selectedAdapter, dest.status],
+  );
+
+  const hasFiles = useMemo(() => files.length > 0, [files]);
+
+  // ─── Entity selection ─────────────────────────────────────────────────────
+  const handleEntitySelect = useCallback((file: BaseFile) => {
     setSelectedFiles((prev) =>
       prev.some((f) => f.id === file.id) ? prev.filter((f) => f.id !== file.id) : [...prev, file],
     );
-  };
+  }, []);
 
-  const isSelected = (id: string) => selectedFiles.some((f) => f.id === id);
+  const isSelected = useCallback(
+    (id: string) => selectedFiles.some((f) => f.id === id),
+    [selectedFiles],
+  );
 
-  // ─── Fetch source files ───────────────────────────────────────────────────
-  const handleFetchFiles = async () => {
-    if (!canMigrate) return;
-    setIsMigrating(true);
-    try {
-      const res = await fetch('/api/migrate/source/files', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          sourceAdapterId: source.selectedExistingId,
-          destinationAdapterId: dest.selectedExistingId,
-        }),
-      });
-
-      if (!res.ok) throw new Error('Failed to fetch files');
-
-      const data: MigrationResponse = await res.json();
-
-      if (data.error) {
-        await handleApiError(data.error);
-        return;
+  // ─── API error handler ────────────────────────────────────────────────────
+  const handleApiError = useCallback(
+    async (error: MigrationResponse['error']) => {
+      if (!error) return;
+      if (error.status === 'PERMISSION_DENIED') {
+        setMessage({
+          type: 'error',
+          message: 'Insufficient permissions. Removing adapter — please re-authenticate.',
+        });
+        try {
+          const res = await fetch('/api/migrate/source/adapter', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ adapterId: source.selectedExistingId }),
+          });
+          const result = await res.json();
+          setMessage({
+            type: res.ok ? 'success' : 'error',
+            message: result.message ?? 'Failed to remove adapter.',
+          });
+          source.reset();
+        } catch {
+          setMessage({ type: 'error', message: 'Failed to remove adapter.' });
+        }
       }
+    },
+    [source],
+  );
 
-      setFiles(data.files);
-    } catch (err) {
-      setMessage({
-        type: 'error',
-        message: err instanceof Error ? err.message : 'Failed to fetch files.',
-      });
-    } finally {
-      setIsMigrating(false);
+  // ─── Fetch files (extracted so bucket confirm can call it) ────────────────
+  const fetchFiles = useCallback(
+    async (bucketOverride?: string) => {
+      setIsMigrating(true);
+      try {
+        const res = await fetch('/api/migrate/source/files', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            sourceAdapterId: source.selectedExistingId,
+            destinationAdapterId: dest.selectedExistingId,
+            bucket: bucketOverride ?? bucketState.bucket,
+          }),
+        });
+
+        if (!res.ok) throw new Error('Failed to fetch files');
+
+        const data: MigrationResponse = await res.json();
+
+        if (data.error) {
+          await handleApiError(data.error);
+          return;
+        }
+
+        setFiles(data.files);
+      } catch (err) {
+        setMessage({
+          type: 'error',
+          message: err instanceof Error ? err.message : 'Failed to fetch files.',
+        });
+      } finally {
+        setIsMigrating(false);
+      }
+    },
+    [source.selectedExistingId, dest.selectedExistingId, bucketState.bucket, handleApiError],
+  );
+
+  // ─── Bucket confirm ───────────────────────────────────────────────────────
+  const handleBucketConfirm = useCallback(
+    (bucketName: string) => {
+      setBucketState((prev) => ({
+        ...prev,
+        bucket: bucketName,
+        dialogOpen: false,
+        flowStarted: false,
+      }));
+      fetchFiles(bucketName); // pass directly to avoid stale closure
+    },
+    [fetchFiles],
+  );
+
+  const handleBucketClose = useCallback(() => {
+    setBucketState((prev) => ({ ...prev, dialogOpen: false }));
+  }, []);
+
+  // ─── Fetch files (public, with S3 bucket guard) ───────────────────────────
+  const handleFetchFiles = useCallback(async () => {
+    if (!canMigrate) return;
+
+    if (source.selectedAdapter === 'Amazon S3' && !bucketState.bucket) {
+      setBucketState((prev) => ({ ...prev, flowStarted: true }));
+      try {
+        const res = await fetch('/api/s3/buckets', {
+          method: 'POST',
+          credentials: 'include',
+          body: JSON.stringify({ sourceAdapterId: source.selectedExistingId }),
+        });
+        if (!res.ok) throw new Error('Failed to fetch buckets');
+        const result = await res.json();
+        setBucketState((prev) => ({
+          ...prev,
+          buckets: result.buckets,
+          dialogOpen: true,
+        }));
+      } catch (error) {
+        console.error(error);
+        setBucketState((prev) => ({ ...prev, flowStarted: false }));
+      }
+      return;
     }
-  };
+
+    await fetchFiles();
+  }, [canMigrate, source.selectedAdapter, source.selectedExistingId, bucketState, fetchFiles]);
 
   // ─── Start migration ──────────────────────────────────────────────────────
-  const handleMigrate = async () => {
+  const handleMigrate = useCallback(async () => {
     if (!canMigrate) return;
     setIsMigrating(true);
     try {
@@ -117,115 +209,100 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
     } finally {
       setIsMigrating(false);
     }
-  };
-
-  // ─── API error handler ────────────────────────────────────────────────────
-  const handleApiError = async (error: MigrationResponse['error']) => {
-    if (!error) return;
-    if (error.status === 'PERMISSION_DENIED') {
-      setMessage({
-        type: 'error',
-        message: 'Insufficient permissions. Removing adapter — please re-authenticate.',
-      });
-      try {
-        const res = await fetch('/api/migrate/source/adapter', {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ adapterId: source.selectedExistingId }),
-        });
-        const result = await res.json();
-        setMessage({
-          type: res.ok ? 'success' : 'error',
-          message: result.message ?? 'Failed to remove adapter.',
-        });
-        source.reset();
-      } catch {
-        setMessage({ type: 'error', message: 'Failed to remove adapter.' });
-      }
-    }
-  };
+  }, [canMigrate, source.selectedExistingId, dest.selectedExistingId, selectedFiles, router]);
 
   // ─── Guard: require login ─────────────────────────────────────────────────
-  const handleAdapterSelect = async (adapterName: string, role: 'source' | 'destination') => {
-    if (!isLoggedIn) {
-      setShowLogin(true);
-      return;
-    }
-    role === 'source' ? source.selectAdapter(adapterName) : dest.selectAdapter(adapterName);
-  };
+  const handleAdapterSelect = useCallback(
+    (adapterName: string, role: 'source' | 'destination') => {
+      if (!isLoggedIn) {
+        setShowLogin(true);
+        return;
+      }
+      role === 'source' ? source.selectAdapter(adapterName) : dest.selectAdapter(adapterName);
+    },
+    [isLoggedIn, source, dest],
+  );
+
+  const handleSourceSelect = useCallback(
+    async (name: string) => handleAdapterSelect(name, 'source'),
+    [handleAdapterSelect],
+  );
+
+  const handleDestSelect = useCallback(
+    async (name: string) => await handleAdapterSelect(name, 'destination'),
+    [handleAdapterSelect],
+  );
+
+  const handleBack = useCallback(() => setShowLogin(false), []);
 
   // ─── Render ───────────────────────────────────────────────────────────────
   if (showLogin) {
     return (
       <div className="w-full h-screen flex items-center justify-center px-4">
         <div className="w-full max-w-4xl p-6">
-          <RequireLogin onBack={() => setShowLogin(false)} />
+          <RequireLogin onBack={handleBack} />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-4xl">
-        {/* ── Adapter row ── */}
-        <div className="flex items-start justify-center gap-2">
-          <AdapterSelector
-            role="source"
-            adapter={{ ...source, selectAdapter: (name) => handleAdapterSelect(name, 'source') }}
-            disabledAdapter={dest.selectedAdapter}
-          />
+    <>
+      <BucketSelection
+        open={bucketState.dialogOpen}
+        buckets={bucketState.buckets}
+        onConfirm={handleBucketConfirm}
+        onClose={handleBucketClose}
+      />
+      <div className="w-full h-screen flex items-center justify-center px-4">
+        <div className="w-full max-w-4xl">
+          {/* ── Adapter row ── */}
+          <div className="flex items-start justify-between gap-2">
+            <AdapterSelector
+              role="source"
+              adapter={{ ...source, selectAdapter: handleSourceSelect }}
+              disabledAdapter={dest.selectedAdapter}
+            />
 
-          <div className="flex items-center justify-center flex-shrink-0">
-            <Image
-              src="/logo.svg"
-              alt="Sync Logo"
-              width={50}
-              height={50}
-              className="w-24 animate-out text-primary"
+            <div className="flex items-center justify-center flex-shrink-0" />
+
+            <AdapterSelector
+              role="destination"
+              adapter={{ ...dest, selectAdapter: handleDestSelect }}
+              disabledAdapter={source.selectedAdapter}
             />
           </div>
 
-          <AdapterSelector
-            role="destination"
-            adapter={{ ...dest, selectAdapter: (name) => handleAdapterSelect(name, 'destination') }}
-            disabledAdapter={source.selectedAdapter}
+          {/* ── Notice when both selected but no files yet ── */}
+          {source.selectedAdapter && dest.selectedAdapter && !hasFiles && (
+            <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+              <p className="text-sm text-yellow-800">
+                Ensure the source and destination adapters are correct before proceeding.
+              </p>
+            </div>
+          )}
+
+          <StatusMessage message={message} />
+
+          <EntityPicker
+            files={files}
+            view={entityView}
+            onViewChange={setEntityView}
+            isSelected={isSelected}
+            onSelect={handleEntitySelect}
+          />
+
+          <MigrationSummary
+            sourceAdapter={source.selectedAdapter}
+            destinationAdapter={dest.selectedAdapter}
+            canMigrate={canMigrate}
+            isMigrating={isMigrating}
+            hasFiles={hasFiles}
+            onFetchFiles={handleFetchFiles}
+            onMigrate={handleMigrate}
           />
         </div>
-
-        {/* ── Notice when both selected but no files yet ── */}
-        {source.selectedAdapter && dest.selectedAdapter && !files.length && (
-          <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-            <p className="text-sm text-yellow-800">
-              Ensure the source and destination adapters are correct before proceeding.
-            </p>
-          </div>
-        )}
-
-        {/* ── Status message ── */}
-        <StatusMessage message={message} />
-
-        {/* ── Entity picker ── */}
-        <EntityPicker
-          files={files}
-          view={entityView}
-          onViewChange={setEntityView}
-          isSelected={isSelected}
-          onSelect={handleEntitySelect}
-        />
-
-        {/* ── Migration summary + CTA ── */}
-        <MigrationSummary
-          sourceAdapter={source.selectedAdapter}
-          destinationAdapter={dest.selectedAdapter}
-          canMigrate={canMigrate}
-          isMigrating={isMigrating}
-          hasFiles={files.length > 0}
-          onFetchFiles={handleFetchFiles}
-          onMigrate={handleMigrate}
-        />
       </div>
-    </div>
+    </>
   );
 }

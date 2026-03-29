@@ -56,7 +56,6 @@ export function AdapterSelector({ role, adapter, disabledAdapter }: Props) {
   const hasAccounts = adapter.existingAdapters.length > 0;
 
   const isCredentialRequired = adapter.isS3CredentialRequired;
-  
 
   return (
     <div className="w-96 flex-shrink-0">
@@ -173,7 +172,7 @@ export function AdapterSelector({ role, adapter, disabledAdapter }: Props) {
         </p>
       )}
 
-      { isCredentialRequired && <S3CredentialForm  adapter={adapter}/>}
+      {isCredentialRequired && <S3CredentialForm adapter={adapter} />}
 
       {/* Description */}
       <div className="h-12 mt-2">

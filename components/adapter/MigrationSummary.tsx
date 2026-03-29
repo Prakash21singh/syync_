@@ -2,6 +2,7 @@
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { memo } from 'react';
 
 interface Props {
   sourceAdapter: string;
@@ -31,7 +32,6 @@ export function MigrationSummary({
         )}
       >
         <div className="pt-6 border-t border-border">
-
           {/* Header */}
           <div className="mb-4">
             <h3 className="font-semibold text-foreground mb-0.5">Ready to Migrate</h3>
@@ -77,7 +77,6 @@ export function MigrationSummary({
               {isMigrating ? 'Starting Migration…' : 'Start Migration'}
             </button>
           )}
-
         </div>
       </div>
     </div>

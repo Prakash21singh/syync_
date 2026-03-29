@@ -4,7 +4,7 @@ import { withAuth } from '@/lib/with-auth';
 import { Prisma } from '@/prisma/generated/prisma/client';
 import { DecodedGoogleAuthIDToken, GoogleTokenExchangeResponse } from '@/types';
 import { getGoogleOAuthTokenURL } from '@/utils/functions/google-connect';
-import {jwtDecode} from "jwt-decode"
+import { jwtDecode } from 'jwt-decode';
 import { NextRequest, NextResponse } from 'next/server';
 
 async function handler(request: NextRequest, session: any) {
@@ -40,23 +40,23 @@ async function handler(request: NextRequest, session: any) {
       );
     }
 
-    const tokenData = await tokenResponse.json() as GoogleTokenExchangeResponse;
+    const tokenData = (await tokenResponse.json()) as GoogleTokenExchangeResponse;
 
-    const decodedToken = jwtDecode(tokenData.id_token) as DecodedGoogleAuthIDToken | null
+    const decodedToken = jwtDecode(tokenData.id_token) as DecodedGoogleAuthIDToken | null;
 
-    if(!decodedToken) throw new Error("Invalid token returned by Google Provider")
+    if (!decodedToken) throw new Error('Invalid token returned by Google Provider');
 
     const adapter = await createAndUpdateAdapter({
-      adapter_type:"GOOGLE_DRIVE",
+      adapter_type: 'GOOGLE_DRIVE',
       name: `${decodedToken.given_name}'s Google Drive`,
-      providerId:decodedToken.sub,
-      access_token:tokenData.access_token,
-      expires_in:tokenData.expires_in,
-      refresh_token:tokenData.refresh_token,
-      refresh_token_expires_in:tokenData.refresh_token_expires_in,
-      scope:tokenData.scope,
-      userId:session.user.id,
-    })
+      providerId: decodedToken.sub,
+      access_token: tokenData.access_token,
+      expires_in: tokenData.expires_in,
+      refresh_token: tokenData.refresh_token,
+      refresh_token_expires_in: tokenData.refresh_token_expires_in,
+      scope: tokenData.scope,
+      userId: session.user.id,
+    });
 
     await createAndUpdateAdapterAccountInfo({
       adapterId: adapter.id,
@@ -68,34 +68,24 @@ async function handler(request: NextRequest, session: any) {
     return NextResponse.redirect(new URL('/?sync=google-drive&status=connected', request.url));
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      console.error("Prisma Known Error:", {
+      console.error('Prisma Known Error:', {
         code: error.code,
         message: error.message,
-        meta: error.meta
+        meta: error.meta,
       });
+    } else if (error instanceof Prisma.PrismaClientValidationError) {
+      console.error('Prisma Validation Error:', error.message);
+    } else if (error instanceof Prisma.PrismaClientInitializationError) {
+      console.error('Prisma Initialization Error:', error.message);
+    } else if (error instanceof Prisma.PrismaClientRustPanicError) {
+      console.error('Prisma Engine Panic:', error.message);
+    } else if (error instanceof Error) {
+      console.error('Generic Error:', error.message);
+    } else {
+      console.error('Unknown Error:', error);
     }
 
-    else if (error instanceof Prisma.PrismaClientValidationError) {
-      console.error("Prisma Validation Error:", error.message);
-    }
-
-    else if (error instanceof Prisma.PrismaClientInitializationError) {
-      console.error("Prisma Initialization Error:", error.message);
-    }
-
-    else if (error instanceof Prisma.PrismaClientRustPanicError) {
-      console.error("Prisma Engine Panic:", error.message);
-    }
-
-    else if (error instanceof Error) {
-      console.error("Generic Error:", error.message);
-    }
-
-    else {
-      console.error("Unknown Error:", error);
-    }
-
-  throw error;
+    throw error;
     // return NextResponse.redirect(
     //   new URL('/?sync=google-drive&status=failed&error=unexpected_error', request.url),
     // );

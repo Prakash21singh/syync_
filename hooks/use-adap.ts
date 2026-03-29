@@ -1,5 +1,11 @@
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
-import type { AdapterRole, AdapterStatus, AdapterType, AWSCredentials, ExistingAdapter } from '@/types/index';
+import type {
+  AdapterRole,
+  AdapterStatus,
+  AdapterType,
+  AWSCredentials,
+  ExistingAdapter,
+} from '@/types/index';
 import { getGoogleOAuthURL } from '@/utils/functions/google-connect';
 import { getDropboxAuthUrl } from '@/utils/functions/dropbox-connect';
 import { getAWSUserInfo } from '@/lib/s3';
@@ -8,7 +14,7 @@ import { getAWSUserInfo } from '@/lib/s3';
 const ADAPTER_TYPE_MAP: Record<string, AdapterType> = {
   'Google Drive': 'GOOGLE_DRIVE',
   Dropbox: 'DROPBOX',
-  'Amazon S3': "AWS_S3"
+  'Amazon S3': 'AWS_S3',
 };
 
 // Map adapter display name → OAuth redirect
@@ -29,14 +35,14 @@ export interface UseAdapterReturn {
 
   // Derived
   selectedExisting: ExistingAdapter | null;
-  isS3CredentialRequired:boolean;
-  isLoading:boolean;
+  isS3CredentialRequired: boolean;
+  isLoading: boolean;
   error: string | null;
   awsUser: null | {
     username: string;
-    arn:string;
-    userId:string
-  }
+    arn: string;
+    userId: string;
+  };
   // Setters
   setOpen: (v: boolean) => void;
   setExtAdapOpen: (v: boolean) => void;
@@ -46,10 +52,10 @@ export interface UseAdapterReturn {
   // Actions
   selectAdapter: (adapterName: string) => Promise<void>;
   addAccount: () => void;
-  setIsS3CredentialRequired: Dispatch<SetStateAction<boolean>>
-  validateAWSCredentials: ({accessKeyId, secretAccessKey, region} : AWSCredentials) => void
-  setIsLoading: Dispatch<SetStateAction<boolean>>
-  setError: Dispatch<SetStateAction<string | null>>
+  setIsS3CredentialRequired: Dispatch<SetStateAction<boolean>>;
+  validateAWSCredentials: ({ accessKeyId, secretAccessKey, region }: AWSCredentials) => void;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setError: Dispatch<SetStateAction<string | null>>;
 }
 
 export function useAdapter(role: AdapterRole): UseAdapterReturn {
@@ -61,12 +67,12 @@ export function useAdapter(role: AdapterRole): UseAdapterReturn {
   const [extAdapOpen, setExtAdapOpen] = useState(false);
   const [isS3CredentialRequired, setIsS3CredentialRequired] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null);
   const [awsUser, setAWSUser] = useState<null | {
-    username:string;
-    arn:string;
-    userId:string;
-  } >(null)
+    username: string;
+    arn: string;
+    userId: string;
+  }>(null);
 
   // Auto-select first adapter when list loads
   useEffect(() => {
@@ -78,9 +84,9 @@ export function useAdapter(role: AdapterRole): UseAdapterReturn {
   // Validate token whenever selected account changes
   useEffect(() => {
     if (!selectedExistingId) return;
-    if(selectedAdapter === "Amazon S3") {
-      setStatus("idle")
-      return
+    if (selectedAdapter === 'Amazon S3') {
+      setStatus('valid');
+      return;
     }
     validateAdapter(selectedExistingId);
   }, [selectedExistingId]);
@@ -132,29 +138,26 @@ export function useAdapter(role: AdapterRole): UseAdapterReturn {
   );
 
   const validateAWSCredentials = useCallback(
-    async ({
-      accessKeyId,
-      secretAccessKey,
-      region
-    }:AWSCredentials) => {
-        setIsLoading(true)
-        setError(null)
+    async ({ accessKeyId, secretAccessKey, region }: AWSCredentials) => {
+      setIsLoading(true);
+      setError(null);
 
-        const res = await getAWSUserInfo({
-          accessKeyId, 
-          secretAccessKey,
-          region
-        })
+      const res = await getAWSUserInfo({
+        accessKeyId,
+        secretAccessKey,
+        region,
+      });
 
-        if(res.success){
-          setAWSUser(res.data)
-        }else{
-          setError(res.error)
-        }
-        
-        setIsLoading(false);
-    },[]
-  )
+      if (res.success) {
+        setAWSUser(res.data);
+      } else {
+        setError(res.error);
+      }
+
+      setIsLoading(false);
+    },
+    [],
+  );
 
   const selectAdapter = useCallback(
     async (adapterName: string) => {
@@ -169,16 +172,14 @@ export function useAdapter(role: AdapterRole): UseAdapterReturn {
       setSelectedExistingId('');
       setStatus('idle');
       setOpen(false);
-      setIsS3CredentialRequired(false)
+      setIsS3CredentialRequired(false);
 
       const adapters = await fetchExistingAdapters(adapterName);
 
-      console.log(adapters)
-
       if (adapters.length === 0) {
-        if(adapterName === "Amazon S3"){
+        if (adapterName === 'Amazon S3') {
           setIsS3CredentialRequired(true);
-        }else{
+        } else {
           // Handing dropbox or google drive.
           const authUrl = ADAPTER_AUTH_MAP[adapterName]?.();
           if (authUrl) window.location.href = authUrl;
@@ -203,15 +204,14 @@ export function useAdapter(role: AdapterRole): UseAdapterReturn {
     setStatus('idle');
     setOpen(false);
     setExtAdapOpen(false);
-    setIsS3CredentialRequired(false)
-    setAWSUser(null)
-    setIsLoading(false)
-    setError(null)
+    setIsS3CredentialRequired(false);
+    setAWSUser(null);
+    setIsLoading(false);
+    setError(null);
   }, []);
 
   const selectedExisting =
     existingAdapters.find((a) => a.id === selectedExistingId) ?? existingAdapters[0] ?? null;
-  
 
   return {
     role,
@@ -235,6 +235,6 @@ export function useAdapter(role: AdapterRole): UseAdapterReturn {
     selectAdapter,
     addAccount,
     setIsS3CredentialRequired,
-    validateAWSCredentials
+    validateAWSCredentials,
   };
 }
