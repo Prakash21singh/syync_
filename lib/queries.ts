@@ -49,10 +49,12 @@ interface CreateMigrationInterface {
   userId: string;
   selections: File[];
   totalFiles: number;
+  bucket?: string;
 }
 
 export async function createMigration({
   userId,
+  bucket,
   totalFiles,
   selections,
   sourceAdapterId,
@@ -68,6 +70,7 @@ export async function createMigration({
         create: selections,
       },
       totalFiles,
+      bucket,
     },
   });
 }

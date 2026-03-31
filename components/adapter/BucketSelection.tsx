@@ -52,7 +52,7 @@ export function BucketSelection({ open, buckets, onConfirm, onClose }: BucketSel
               key={bucket.name}
               onClick={() => setSelected(bucket.name)}
               className={`
-                w-full text-left px-4 py-3 rounded-md border text-sm font-medium transition-colors
+                w-full text-left px-4 py-3 rounded-sm border text-sm font-medium transition-colors
                 ${
                   selected === bucket.name
                     ? 'border-primary bg-primary/5 text-primary'

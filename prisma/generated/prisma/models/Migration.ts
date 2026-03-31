@@ -43,6 +43,7 @@ export type MigrationMinAggregateOutputType = {
   status: $Enums.MigrationStatus | null
   sourceAdapterId: string | null
   destinationAdapterId: string | null
+  bucket: string | null
   totalFiles: number | null
   completedFiles: number | null
   failedFiles: number | null
@@ -56,6 +57,7 @@ export type MigrationMaxAggregateOutputType = {
   status: $Enums.MigrationStatus | null
   sourceAdapterId: string | null
   destinationAdapterId: string | null
+  bucket: string | null
   totalFiles: number | null
   completedFiles: number | null
   failedFiles: number | null
@@ -69,6 +71,7 @@ export type MigrationCountAggregateOutputType = {
   status: number
   sourceAdapterId: number
   destinationAdapterId: number
+  bucket: number
   totalFiles: number
   completedFiles: number
   failedFiles: number
@@ -96,6 +99,7 @@ export type MigrationMinAggregateInputType = {
   status?: true
   sourceAdapterId?: true
   destinationAdapterId?: true
+  bucket?: true
   totalFiles?: true
   completedFiles?: true
   failedFiles?: true
@@ -109,6 +113,7 @@ export type MigrationMaxAggregateInputType = {
   status?: true
   sourceAdapterId?: true
   destinationAdapterId?: true
+  bucket?: true
   totalFiles?: true
   completedFiles?: true
   failedFiles?: true
@@ -122,6 +127,7 @@ export type MigrationCountAggregateInputType = {
   status?: true
   sourceAdapterId?: true
   destinationAdapterId?: true
+  bucket?: true
   totalFiles?: true
   completedFiles?: true
   failedFiles?: true
@@ -222,6 +228,7 @@ export type MigrationGroupByOutputType = {
   status: $Enums.MigrationStatus
   sourceAdapterId: string
   destinationAdapterId: string
+  bucket: string | null
   totalFiles: number
   completedFiles: number
   failedFiles: number
@@ -258,6 +265,7 @@ export type MigrationWhereInput = {
   status?: Prisma.EnumMigrationStatusFilter<"Migration"> | $Enums.MigrationStatus
   sourceAdapterId?: Prisma.StringFilter<"Migration"> | string
   destinationAdapterId?: Prisma.StringFilter<"Migration"> | string
+  bucket?: Prisma.StringNullableFilter<"Migration"> | string | null
   totalFiles?: Prisma.IntFilter<"Migration"> | number
   completedFiles?: Prisma.IntFilter<"Migration"> | number
   failedFiles?: Prisma.IntFilter<"Migration"> | number
@@ -276,6 +284,7 @@ export type MigrationOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   sourceAdapterId?: Prisma.SortOrder
   destinationAdapterId?: Prisma.SortOrder
+  bucket?: Prisma.SortOrderInput | Prisma.SortOrder
   totalFiles?: Prisma.SortOrder
   completedFiles?: Prisma.SortOrder
   failedFiles?: Prisma.SortOrder
@@ -297,6 +306,7 @@ export type MigrationWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumMigrationStatusFilter<"Migration"> | $Enums.MigrationStatus
   sourceAdapterId?: Prisma.StringFilter<"Migration"> | string
   destinationAdapterId?: Prisma.StringFilter<"Migration"> | string
+  bucket?: Prisma.StringNullableFilter<"Migration"> | string | null
   totalFiles?: Prisma.IntFilter<"Migration"> | number
   completedFiles?: Prisma.IntFilter<"Migration"> | number
   failedFiles?: Prisma.IntFilter<"Migration"> | number
@@ -315,6 +325,7 @@ export type MigrationOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   sourceAdapterId?: Prisma.SortOrder
   destinationAdapterId?: Prisma.SortOrder
+  bucket?: Prisma.SortOrderInput | Prisma.SortOrder
   totalFiles?: Prisma.SortOrder
   completedFiles?: Prisma.SortOrder
   failedFiles?: Prisma.SortOrder
@@ -336,6 +347,7 @@ export type MigrationScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumMigrationStatusWithAggregatesFilter<"Migration"> | $Enums.MigrationStatus
   sourceAdapterId?: Prisma.StringWithAggregatesFilter<"Migration"> | string
   destinationAdapterId?: Prisma.StringWithAggregatesFilter<"Migration"> | string
+  bucket?: Prisma.StringNullableWithAggregatesFilter<"Migration"> | string | null
   totalFiles?: Prisma.IntWithAggregatesFilter<"Migration"> | number
   completedFiles?: Prisma.IntWithAggregatesFilter<"Migration"> | number
   failedFiles?: Prisma.IntWithAggregatesFilter<"Migration"> | number
@@ -347,6 +359,7 @@ export type MigrationScalarWhereWithAggregatesInput = {
 export type MigrationCreateInput = {
   id?: string
   status: $Enums.MigrationStatus
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -364,6 +377,7 @@ export type MigrationUncheckedCreateInput = {
   status: $Enums.MigrationStatus
   sourceAdapterId: string
   destinationAdapterId: string
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -377,6 +391,7 @@ export type MigrationUncheckedCreateInput = {
 export type MigrationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -394,6 +409,7 @@ export type MigrationUncheckedUpdateInput = {
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
   sourceAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
   destinationAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -409,6 +425,7 @@ export type MigrationCreateManyInput = {
   status: $Enums.MigrationStatus
   sourceAdapterId: string
   destinationAdapterId: string
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -420,6 +437,7 @@ export type MigrationCreateManyInput = {
 export type MigrationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -432,6 +450,7 @@ export type MigrationUncheckedUpdateManyInput = {
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
   sourceAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
   destinationAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -455,6 +474,7 @@ export type MigrationCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   sourceAdapterId?: Prisma.SortOrder
   destinationAdapterId?: Prisma.SortOrder
+  bucket?: Prisma.SortOrder
   totalFiles?: Prisma.SortOrder
   completedFiles?: Prisma.SortOrder
   failedFiles?: Prisma.SortOrder
@@ -474,6 +494,7 @@ export type MigrationMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   sourceAdapterId?: Prisma.SortOrder
   destinationAdapterId?: Prisma.SortOrder
+  bucket?: Prisma.SortOrder
   totalFiles?: Prisma.SortOrder
   completedFiles?: Prisma.SortOrder
   failedFiles?: Prisma.SortOrder
@@ -487,6 +508,7 @@ export type MigrationMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   sourceAdapterId?: Prisma.SortOrder
   destinationAdapterId?: Prisma.SortOrder
+  bucket?: Prisma.SortOrder
   totalFiles?: Prisma.SortOrder
   completedFiles?: Prisma.SortOrder
   failedFiles?: Prisma.SortOrder
@@ -675,6 +697,7 @@ export type MigrationUpdateOneRequiredWithoutFilesNestedInput = {
 export type MigrationCreateWithoutUserInput = {
   id?: string
   status: $Enums.MigrationStatus
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -691,6 +714,7 @@ export type MigrationUncheckedCreateWithoutUserInput = {
   status: $Enums.MigrationStatus
   sourceAdapterId: string
   destinationAdapterId: string
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -734,6 +758,7 @@ export type MigrationScalarWhereInput = {
   status?: Prisma.EnumMigrationStatusFilter<"Migration"> | $Enums.MigrationStatus
   sourceAdapterId?: Prisma.StringFilter<"Migration"> | string
   destinationAdapterId?: Prisma.StringFilter<"Migration"> | string
+  bucket?: Prisma.StringNullableFilter<"Migration"> | string | null
   totalFiles?: Prisma.IntFilter<"Migration"> | number
   completedFiles?: Prisma.IntFilter<"Migration"> | number
   failedFiles?: Prisma.IntFilter<"Migration"> | number
@@ -745,6 +770,7 @@ export type MigrationScalarWhereInput = {
 export type MigrationCreateWithoutSourceAdapterInput = {
   id?: string
   status: $Enums.MigrationStatus
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -760,6 +786,7 @@ export type MigrationUncheckedCreateWithoutSourceAdapterInput = {
   id?: string
   status: $Enums.MigrationStatus
   destinationAdapterId: string
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -783,6 +810,7 @@ export type MigrationCreateManySourceAdapterInputEnvelope = {
 export type MigrationCreateWithoutDestinationAdapterInput = {
   id?: string
   status: $Enums.MigrationStatus
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -798,6 +826,7 @@ export type MigrationUncheckedCreateWithoutDestinationAdapterInput = {
   id?: string
   status: $Enums.MigrationStatus
   sourceAdapterId: string
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -853,6 +882,7 @@ export type MigrationUpdateManyWithWhereWithoutDestinationAdapterInput = {
 export type MigrationCreateWithoutSelectionsInput = {
   id?: string
   status: $Enums.MigrationStatus
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -869,6 +899,7 @@ export type MigrationUncheckedCreateWithoutSelectionsInput = {
   status: $Enums.MigrationStatus
   sourceAdapterId: string
   destinationAdapterId: string
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -897,6 +928,7 @@ export type MigrationUpdateToOneWithWhereWithoutSelectionsInput = {
 export type MigrationUpdateWithoutSelectionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -913,6 +945,7 @@ export type MigrationUncheckedUpdateWithoutSelectionsInput = {
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
   sourceAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
   destinationAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -925,6 +958,7 @@ export type MigrationUncheckedUpdateWithoutSelectionsInput = {
 export type MigrationCreateWithoutFilesInput = {
   id?: string
   status: $Enums.MigrationStatus
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -941,6 +975,7 @@ export type MigrationUncheckedCreateWithoutFilesInput = {
   status: $Enums.MigrationStatus
   sourceAdapterId: string
   destinationAdapterId: string
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -969,6 +1004,7 @@ export type MigrationUpdateToOneWithWhereWithoutFilesInput = {
 export type MigrationUpdateWithoutFilesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -985,6 +1021,7 @@ export type MigrationUncheckedUpdateWithoutFilesInput = {
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
   sourceAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
   destinationAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -999,6 +1036,7 @@ export type MigrationCreateManyUserInput = {
   status: $Enums.MigrationStatus
   sourceAdapterId: string
   destinationAdapterId: string
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -1009,6 +1047,7 @@ export type MigrationCreateManyUserInput = {
 export type MigrationUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1025,6 +1064,7 @@ export type MigrationUncheckedUpdateWithoutUserInput = {
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
   sourceAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
   destinationAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1039,6 +1079,7 @@ export type MigrationUncheckedUpdateManyWithoutUserInput = {
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
   sourceAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
   destinationAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1050,6 +1091,7 @@ export type MigrationCreateManySourceAdapterInput = {
   id?: string
   status: $Enums.MigrationStatus
   destinationAdapterId: string
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -1062,6 +1104,7 @@ export type MigrationCreateManyDestinationAdapterInput = {
   id?: string
   status: $Enums.MigrationStatus
   sourceAdapterId: string
+  bucket?: string | null
   totalFiles?: number
   completedFiles?: number
   failedFiles?: number
@@ -1073,6 +1116,7 @@ export type MigrationCreateManyDestinationAdapterInput = {
 export type MigrationUpdateWithoutSourceAdapterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1088,6 +1132,7 @@ export type MigrationUncheckedUpdateWithoutSourceAdapterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
   destinationAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1102,6 +1147,7 @@ export type MigrationUncheckedUpdateManyWithoutSourceAdapterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
   destinationAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1113,6 +1159,7 @@ export type MigrationUncheckedUpdateManyWithoutSourceAdapterInput = {
 export type MigrationUpdateWithoutDestinationAdapterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1128,6 +1175,7 @@ export type MigrationUncheckedUpdateWithoutDestinationAdapterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
   sourceAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1142,6 +1190,7 @@ export type MigrationUncheckedUpdateManyWithoutDestinationAdapterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumMigrationStatusFieldUpdateOperationsInput | $Enums.MigrationStatus
   sourceAdapterId?: Prisma.StringFieldUpdateOperationsInput | string
+  bucket?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   totalFiles?: Prisma.IntFieldUpdateOperationsInput | number
   completedFiles?: Prisma.IntFieldUpdateOperationsInput | number
   failedFiles?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1195,6 +1244,7 @@ export type MigrationSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   status?: boolean
   sourceAdapterId?: boolean
   destinationAdapterId?: boolean
+  bucket?: boolean
   totalFiles?: boolean
   completedFiles?: boolean
   failedFiles?: boolean
@@ -1214,6 +1264,7 @@ export type MigrationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   status?: boolean
   sourceAdapterId?: boolean
   destinationAdapterId?: boolean
+  bucket?: boolean
   totalFiles?: boolean
   completedFiles?: boolean
   failedFiles?: boolean
@@ -1230,6 +1281,7 @@ export type MigrationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   status?: boolean
   sourceAdapterId?: boolean
   destinationAdapterId?: boolean
+  bucket?: boolean
   totalFiles?: boolean
   completedFiles?: boolean
   failedFiles?: boolean
@@ -1246,6 +1298,7 @@ export type MigrationSelectScalar = {
   status?: boolean
   sourceAdapterId?: boolean
   destinationAdapterId?: boolean
+  bucket?: boolean
   totalFiles?: boolean
   completedFiles?: boolean
   failedFiles?: boolean
@@ -1254,7 +1307,7 @@ export type MigrationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type MigrationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "sourceAdapterId" | "destinationAdapterId" | "totalFiles" | "completedFiles" | "failedFiles" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["migration"]>
+export type MigrationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "status" | "sourceAdapterId" | "destinationAdapterId" | "bucket" | "totalFiles" | "completedFiles" | "failedFiles" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["migration"]>
 export type MigrationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   selections?: boolean | Prisma.Migration$selectionsArgs<ExtArgs>
   files?: boolean | Prisma.Migration$filesArgs<ExtArgs>
@@ -1288,6 +1341,7 @@ export type $MigrationPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     status: $Enums.MigrationStatus
     sourceAdapterId: string
     destinationAdapterId: string
+    bucket: string | null
     totalFiles: number
     completedFiles: number
     failedFiles: number
@@ -1726,6 +1780,7 @@ export interface MigrationFieldRefs {
   readonly status: Prisma.FieldRef<"Migration", 'MigrationStatus'>
   readonly sourceAdapterId: Prisma.FieldRef<"Migration", 'String'>
   readonly destinationAdapterId: Prisma.FieldRef<"Migration", 'String'>
+  readonly bucket: Prisma.FieldRef<"Migration", 'String'>
   readonly totalFiles: Prisma.FieldRef<"Migration", 'Int'>
   readonly completedFiles: Prisma.FieldRef<"Migration", 'Int'>
   readonly failedFiles: Prisma.FieldRef<"Migration", 'Int'>

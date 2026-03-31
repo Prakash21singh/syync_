@@ -177,6 +177,7 @@ export const MigrationScalarFieldEnum = {
   status: 'status',
   sourceAdapterId: 'sourceAdapterId',
   destinationAdapterId: 'destinationAdapterId',
+  bucket: 'bucket',
   totalFiles: 'totalFiles',
   completedFiles: 'completedFiles',
   failedFiles: 'failedFiles',

@@ -46,9 +46,9 @@ export function normalizeName(name: string) {
   }
 }
 
-export function normalizeFileSelection(files: any[]) {
+export function normalizeFileSelection(files: any[], ctx?: { isS3File: boolean }) {
   return files.map((file) => ({
-    sourceId: file.id,
+    sourceId: ctx?.isS3File ? file.pathname : file.id,
     name: normalizeName(file.name),
     path: file.pathname,
     size: file.size?.toString(),

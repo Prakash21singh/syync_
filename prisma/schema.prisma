@@ -130,6 +130,8 @@
     sourceAdapterId String
     destinationAdapterId String
 
+    bucket String?
+
     totalFiles Int @default(0)
     completedFiles Int @default(0)
     failedFiles Int @default(0)
@@ -169,7 +171,7 @@
     sourceFileId String
     size Int?
     mimeType String?
-    path String
+    path String?
     name String
 
     status MigrationFileStatus

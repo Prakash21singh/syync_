@@ -192,6 +192,7 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
           sourceAdapterId: source.selectedExistingId,
           destAdapterId: dest.selectedExistingId,
           selectedFiles,
+          bucket: bucketState.bucket,
         }),
       });
 

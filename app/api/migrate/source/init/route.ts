@@ -27,6 +27,7 @@ type RequestBody = {
   sourceAdapterId: string;
   destAdapterId: string;
   selectedFiles: SelectedFile[];
+  bucket?: string;
 };
 
 function validateRequestBody(
@@ -70,7 +71,7 @@ async function handler(req: NextRequest, session: SessionInterface) {
       );
     }
 
-    const { sourceAdapterId, destAdapterId, selectedFiles } = validation.data;
+    const { sourceAdapterId, destAdapterId, selectedFiles, bucket } = validation.data;
     const userId = session.user.id;
 
     const [sourceAdapter, destinationAdapter] = await Promise.all([
@@ -91,7 +92,9 @@ async function handler(req: NextRequest, session: SessionInterface) {
       );
     }
 
-    const selections = normalizeFileSelection(selectedFiles);
+    const selections = normalizeFileSelection(selectedFiles, {
+      isS3File: sourceAdapter.adapter_type === 'AWS_S3',
+    });
 
     const migration = await createMigration({
       sourceAdapterId,
@@ -99,6 +102,7 @@ async function handler(req: NextRequest, session: SessionInterface) {
       userId,
       selections,
       totalFiles: selections.length,
+      bucket,
     });
 
     await discoveryQueue.add(
