@@ -2,7 +2,6 @@ import { Montserrat, Poppins, Sarabun } from 'next/font/google';
 import './globals.css';
 import { constructMetadata } from '@/utils/functions/construct-metadata';
 import { ThemeProvider } from '@/provider/theme-provider';
-import FloatingSidebar from '@/components/layout/app/floating-sidebar';
 
 const montserrat = Montserrat({
   variable: '--font-montserrat',
@@ -32,10 +31,7 @@ export default async function RootLayout({
       <body
         className={`${montserrat.variable} ${sarabun.variable} antialiased bg-background text-foreground font-poppins`}
       >
-        <ThemeProvider defaultTheme="light">
-          <FloatingSidebar isLoggedIn={false} />
-          {children}
-        </ThemeProvider>
+        <ThemeProvider defaultTheme="light">{children}</ThemeProvider>
       </body>
     </html>
   );

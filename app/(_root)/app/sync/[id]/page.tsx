@@ -41,6 +41,8 @@ export default async function SyncPageById({ params }: Props) {
         },
       },
       totalFiles: true,
+      completedFiles: true,
+      failedFiles: true,
       destinationAdapter: {
         select: {
           id: true,
@@ -101,6 +103,11 @@ export default async function SyncPageById({ params }: Props) {
             <p className="text-sm text-center text-muted-foreground mt-2">
               Total files: {migration.totalFiles}
             </p>
+            {migration.status === 'COMPLETED' || migration.status === 'FAILED' ? (
+              <p className="text-sm text-center text-muted-foreground mt-1">
+                Completed: {migration.completedFiles} / Failed: {migration.failedFiles}
+              </p>
+            ) : null}
           </div>
         </div>
       </div>

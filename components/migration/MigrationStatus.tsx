@@ -30,6 +30,17 @@ function MigrationStatus({ status }: Props) {
     return <FileSerializationAnimation title="Transferring" description="Transferring all files" />;
 
   if (status === 'COMPLETED') return <MigrationCompleted />;
+
+  if (status === 'FAILED')
+    return (
+      <div className="flex flex-col items-center">
+        <div className="w-10 h-10 rounded-full  border-red-600 border-2 flex items-center justify-center">
+          <span className="w-3 h-3 rounded-full bg-red-600 block animate-pulse" />
+        </div>
+        <h1 className="text-xl mt-3 font-bold text-gray-600">Failed</h1>
+        <p className="text-xs font-thin text-shadow-muted">An error occurred during migration</p>
+      </div>
+    );
   return <div>MigrationStatus</div>;
 }
 

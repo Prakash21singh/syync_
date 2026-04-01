@@ -35,6 +35,27 @@ export async function findAdapter({ id, userId }: FindAdapterConditionInterface)
   });
 }
 
+export async function getUserAdapters(userId: string) {
+  return await prisma.adapter.findMany({
+    where: {
+      userId,
+    },
+    select: {
+      id: true,
+      name: true,
+      adapter_type: true,
+      adapterAccountInfo: {
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          avatar: true,
+        },
+      },
+    },
+  });
+}
+
 interface File {
   sourceId: any;
   name: string;

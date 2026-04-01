@@ -18,13 +18,21 @@ import { BucketSelection } from './BucketSelection';
 interface Props {
   isLoggedIn: boolean;
   userId: string;
+  initialAdapters?: any[];
 }
 
-export default function AdapterSelection({ isLoggedIn }: Props) {
+export default function AdapterSelection({ isLoggedIn, initialAdapters = [], userId }: Props) {
   const router = useRouter();
 
   const source = useAdapter('source');
   const dest = useAdapter('destination');
+
+  // Initialize adapters from server data
+  useState(() => {
+    if (initialAdapters.length > 0) {
+      // Could pre-populate adapter state here if needed
+    }
+  });
 
   const [showLogin, setShowLogin] = useState(false);
   const [isMigrating, setIsMigrating] = useState(false);
@@ -184,23 +192,24 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
     if (!canMigrate) return;
     setIsMigrating(true);
     try {
-      const res = await fetch('/api/migrate/source/init', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          sourceAdapterId: source.selectedExistingId,
-          destAdapterId: dest.selectedExistingId,
-          selectedFiles,
-          bucket: bucketState.bucket,
-        }),
-      });
+      const formData = new FormData();
+      formData.append('sourceAdapterId', source.selectedExistingId!);
+      formData.append('destAdapterId', dest.selectedExistingId!);
+      formData.append('userId', userId);
+      formData.append('selectedFiles', JSON.stringify(selectedFiles));
+      if (bucketState.bucket) {
+        formData.append('bucket', bucketState.bucket);
+      }
 
-      const result = await res.json();
-      if (!res.ok) throw new Error(result?.message ?? 'Failed to migrate');
+      const { startMigration } = await import('@/app/actions');
+      const result = await startMigration(formData);
 
-      setMessage({ type: 'success', message: 'Migration started! Redirecting in 3 seconds...' });
-      setTimeout(() => router.push(`/sync/${result.migration.id}`), 3000);
+      if (result.success) {
+        setMessage({ type: 'success', message: 'Migration started! Redirecting in 3 seconds...' });
+        setTimeout(() => router.push(`/sync/${result.migrationId}`), 3000);
+      } else {
+        throw new Error(result.error);
+      }
     } catch (err) {
       setMessage({
         type: 'error',
@@ -209,7 +218,15 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
     } finally {
       setIsMigrating(false);
     }
-  }, [canMigrate, source.selectedExistingId, dest.selectedExistingId, selectedFiles, router]);
+  }, [
+    canMigrate,
+    source.selectedExistingId,
+    dest.selectedExistingId,
+    selectedFiles,
+    userId,
+    bucketState.bucket,
+    router,
+  ]);
 
   // ─── Guard: require login ─────────────────────────────────────────────────
   const handleAdapterSelect = useCallback(
@@ -272,15 +289,6 @@ export default function AdapterSelection({ isLoggedIn }: Props) {
               disabledAdapter={source.selectedAdapter}
             />
           </div>
-
-          {/* ── Notice when both selected but no files yet ── */}
-          {source.selectedAdapter && dest.selectedAdapter && !hasFiles && (
-            <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-              <p className="text-sm text-yellow-800">
-                Ensure the source and destination adapters are correct before proceeding.
-              </p>
-            </div>
-          )}
 
           <StatusMessage message={message} />
 

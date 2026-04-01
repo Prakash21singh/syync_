@@ -17,6 +17,7 @@ import { AccountSwitcher } from './AccountSwitcher';
 import type { UseAdapterReturn } from '@/hooks/use-adap';
 import type { AdapterRole, AdapterStatus } from '@/types/index';
 import S3CredentialForm from './S3CredentialForm';
+import AdapterBlocks from '../adpater-blocks';
 
 // ─── Status Indicator ────────────────────────────────────────────────────────
 
@@ -63,11 +64,23 @@ export function AdapterSelector({ role, adapter, disabledAdapter }: Props) {
       <div className="flex items-center gap-2 mb-3">
         <div className="w-2 h-2 rounded-full bg-primary" />
         <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">{label}</h3>
+        <AdapterBlocks
+          startIndex={label === 'Source' ? 0 : 3}
+          endIndex={label === 'Source' ? 3 : 6}
+        />
       </div>
 
       {/* Main Popover */}
       <Popover open={adapter.open} onOpenChange={adapter.setOpen}>
-        <PopoverTrigger asChild>
+        <PopoverTrigger
+          asChild
+          className={cn(
+            'rounded-sm cursor-pointer',
+            label === 'Source'
+              ? 'bg-green-50 hover:bg-green-100 border-green-400'
+              : 'bg-blue-50 hover:bg-blue-100 border-primary',
+          )}
+        >
           <Button
             variant="outline"
             role="combobox"
@@ -105,7 +118,9 @@ export function AdapterSelector({ role, adapter, disabledAdapter }: Props) {
                 )}
               </div>
             ) : (
-              <span className="text-muted-foreground">Select {label.toLowerCase()} adapter...</span>
+              <div className="flex items-center justify-between w-full">
+                <span className="text-muted-foreground">Select {label.toLowerCase()} adapter</span>
+              </div>
             )}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>

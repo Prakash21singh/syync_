@@ -16,7 +16,7 @@ export function EntityPicker({ files, view, onViewChange, isSelected, onSelect }
   if (!files.length) return null;
 
   return (
-    <div className="mt-6">
+    <div className="">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-foreground">Entities to Migrate</h2>
@@ -39,7 +39,7 @@ export function EntityPicker({ files, view, onViewChange, isSelected, onSelect }
       {/* File List / Grid */}
       <div
         className={cn(
-          'border border-border rounded-md max-h-60 overflow-y-auto p-2',
+          'border border-border rounded-md max-h-50 overflow-y-auto p-2',
           view === 'grid' ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2' : 'space-y-1',
         )}
       >

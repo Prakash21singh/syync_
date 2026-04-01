@@ -24,7 +24,7 @@ export function MigrationSummary({
   onMigrate,
 }: Props) {
   return (
-    <div className="mt-8 w-full">
+    <div className="mt-1 w-full">
       <div
         className={cn(
           'transition-all duration-300 ease-in-out',

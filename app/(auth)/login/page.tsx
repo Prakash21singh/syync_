@@ -1,7 +1,6 @@
 import Login from '@/components/auth/login';
 import AuthLayout from '@/components/layout/auth/auth-layout';
 import { constructMetadata } from '@/utils/functions/construct-metadata';
-import React from 'react';
 
 type Props = {};
 
