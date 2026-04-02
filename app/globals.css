@@ -9,6 +9,7 @@
   --color-surface: #f3f4f7;
   --color-foreground: #2a2d3a;
   --color-primary: #6d71f0;
+  --color-secondary:#ffd86f;
   --color-muted: #e5ebf4;
   --color-border: #e5ebf4;
   --color-border-secondary: #cacfe0;
@@ -83,6 +84,8 @@ body {
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
+  margin: 0px;
+  padding: 0px;
 }
 
 @layer base {
@@ -91,5 +94,23 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+  .react-flow__pane {
+  pointer-events: none;
+}
+
+.react-flow__node {
+  pointer-events: all;
+}
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
