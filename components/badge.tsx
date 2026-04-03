@@ -1,19 +1,17 @@
-import React from 'react'
+import React from 'react';
 
 type Props = {
-    name:string
-}
+  name: string;
+};
 
-function Badge({
-    name
-}: Props) {
+function Badge({ name }: Props) {
   return (
-    <div className='flex items-center justify-center my-5'>
-      <div className='rounded-full mx-auto inline-block border bg-black text-gray-300 py-2 px-5 text-sm'>
-          {name}
+    <div className="flex items-center justify-center my-5">
+      <div className="pill-light rounded-full mx-auto inline-block border py-2 px-5 text-sm">
+        {name}
       </div>
     </div>
-  )
+  );
 }
 
-export default Badge
+export default Badge;
