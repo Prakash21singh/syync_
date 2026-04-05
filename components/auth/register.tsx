@@ -20,7 +20,7 @@ function RegisterForm() {
     error,
     loading,
     handleSubmit,
-  } = useRegisterForm({ redirectTo: '/' });
+  } = useRegisterForm({ redirectTo: '/app' });
 
   const handleNameChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value),
@@ -63,7 +63,6 @@ function RegisterForm() {
           placeholder="Your name"
           value={name}
           onChange={handleNameChange}
-          autoComplete="name"
           required
         />
       </div>
@@ -79,7 +78,6 @@ function RegisterForm() {
           placeholder="you@example.com"
           value={email}
           onChange={handleEmailChange}
-          autoComplete="email"
           required
         />
       </div>
@@ -120,7 +118,7 @@ function RegisterForm() {
       <p className="text-center text-sm text-muted-foreground">
         {'Already have an account? '}
         <Link
-          href="/login"
+          href="/auth/login"
           className="text-foreground font-medium hover:underline underline-offset-4"
         >
           Sign in

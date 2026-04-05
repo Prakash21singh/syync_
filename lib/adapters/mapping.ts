@@ -14,6 +14,7 @@ export async function dataMapping(adapterType: AdapterType, data: any) {
         preview: file.iconLink || file.thumbailLink,
         type: file.mimeType === 'application/vnd.google-apps.folder' ? 'folder' : 'file',
         size: file.size ? Number(file.size) : null,
+        sourceId: file.id,
       };
       return data;
     });
@@ -26,6 +27,7 @@ export async function dataMapping(adapterType: AdapterType, data: any) {
         type: entry['.tag'] === 'folder' ? 'folder' : 'file',
         preview: entry['.tag'] === 'folder' ? '/dropbox/folder.png' : '/file.svg',
         pathname: entry.path_display,
+        sourceId: entry.id,
       };
       return data;
     });
@@ -38,6 +40,7 @@ export async function dataMapping(adapterType: AdapterType, data: any) {
         type: 'file',
         pathname: content.Key,
         preview: '/file.svg',
+        sourceId: content.Key,
       } as BaseFile;
     });
 

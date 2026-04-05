@@ -1,6 +1,7 @@
 import React from 'react';
 import Badge from '../badge';
 import { Button } from '../ui/button';
+import Link from 'next/link';
 
 type Props = {};
 
@@ -43,9 +44,11 @@ function CallToAction({}: Props) {
           Across every source.
         </h1>
 
-        <Button className="mt-8 mb-6 rounded-full px-10 py-6 text-lg font-medium shadow-sm hover:shadow-md transition-all">
-          Start syncing free
-        </Button>
+        <Link href={'/'}>
+          <Button className="mt-8 mb-6 rounded-full px-10 py-6 font-medium shadow-sm hover:shadow-md transition-all">
+            Start syncing free
+          </Button>
+        </Link>
 
         <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
           <span className="flex items-center gap-2">🔄 Real-time sync</span>

@@ -36,7 +36,7 @@ async function handler(request: NextRequest, session: any) {
 
     if (!tokenResponse.ok) {
       return NextResponse.redirect(
-        new URL('/?sync=google-drive&status=failed&error=token_exchange_failed', request.url),
+        new URL('/app?sync=google-drive&status=failed&error=token_exchange_failed', request.url),
       );
     }
 
@@ -45,6 +45,17 @@ async function handler(request: NextRequest, session: any) {
     const decodedToken = jwtDecode(tokenData.id_token) as DecodedGoogleAuthIDToken | null;
 
     if (!decodedToken) throw new Error('Invalid token returned by Google Provider');
+    console.log({
+      adapter_type: 'GOOGLE_DRIVE',
+      name: `${decodedToken.given_name}'s Google Drive`,
+      providerId: decodedToken.sub,
+      access_token: tokenData.access_token,
+      expires_in: tokenData.expires_in,
+      refresh_token: tokenData.refresh_token,
+      refresh_token_expires_in: tokenData.refresh_token_expires_in,
+      scope: tokenData.scope,
+      userId: session.user.id,
+    });
 
     const adapter = await createAndUpdateAdapter({
       adapter_type: 'GOOGLE_DRIVE',
@@ -65,8 +76,9 @@ async function handler(request: NextRequest, session: any) {
       name: decodedToken.name,
     });
 
-    return NextResponse.redirect(new URL('/?sync=google-drive&status=connected', request.url));
+    return NextResponse.redirect(new URL('/app?sync=google-drive&status=connected', request.url));
   } catch (error) {
+    console.log(error);
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.error('Prisma Known Error:', {
         code: error.code,
@@ -85,10 +97,9 @@ async function handler(request: NextRequest, session: any) {
       console.error('Unknown Error:', error);
     }
 
-    throw error;
-    // return NextResponse.redirect(
-    //   new URL('/?sync=google-drive&status=failed&error=unexpected_error', request.url),
-    // );
+    return NextResponse.redirect(
+      new URL('/app?sync=google-drive&status=failed&error=unexpected_error', request.url),
+    );
   }
 }
 

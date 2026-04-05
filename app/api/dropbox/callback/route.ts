@@ -97,12 +97,12 @@ async function handler(req: NextRequest, session: any) {
     });
 
     return Response.redirect(
-      `${process.env.NEXT_PUBLIC_BASE_URL}?sync=dropbox&status=connected&message=Dropbox account connected successfully`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/app?sync=dropbox&status=connected&message=Dropbox account connected successfully`,
     );
   } catch (error) {
     console.error('Error during Dropbox OAuth callback:', error);
     return Response.redirect(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/error?message=${error instanceof Error ? error.message : 'Unexpected error during Dropbox OAuth callback'}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/app?message=${error instanceof Error ? error.message : 'Unexpected error during Dropbox OAuth callback'}`,
     );
   }
 }

@@ -68,7 +68,7 @@ function FileSelectionNode({ data }: { data: any }) {
           />
         </div>
       </div>
-      <div className="bg-background rounded-lg p-2 w-3/5">
+      <div className="bg-background border border-border rounded-lg p-2 w-3/5">
         <h1 className="text-lg font-semibold">Entities selection</h1>
         <p className="text-sm">Select folder and files to migration.</p>
       </div>
@@ -78,48 +78,82 @@ function FileSelectionNode({ data }: { data: any }) {
   );
 }
 
-function DataMapping({ data }: { data: any }) {
+function SourceDataNode({
+  data,
+}: {
+  data: { name: string; icon: string; bg: string; tree: string[] };
+}) {
   return (
-    <div className="relative px-4 py-3 rounded-2xl bg-transparent border  flex items-center gap-3 w-fit">
-      <div
-        className="
-                absolute 
-                top-[70%]
-                right-3/5   
-                w-50
-                h-20
-                bg-background
-                rounded-xl
-                flex 
-                items-center
-                justify-center
-                font-semibold
-            "
-      >
-        Data Mapping
+    <div className={cn(`border border-[#EBEBF0] rounded-xl p-2.5 w-48 bg-[${data.bg}]`)}>
+      <div className="flex items-center gap-1.5 mb-1.5">
+        <div
+          className="w-[22px] h-[22px] p-1 rounded-md flex items-center justify-center flex-shrink-0"
+          style={{ background: data.bg }}
+        >
+          <Image src={data.icon} alt={data.name} width={30} height={40} />
+        </div>
+        <div className="flex-1">
+          <div className="text-[11px] font-semibold text-[#1a1a2e]">{data.name}</div>
+        </div>
       </div>
-      {/* LEFT: Source */}
-      <div
-        className="
-                flex
-                h-52
-                w-96
-                bg-[#c9ff85]
-                shadow-md
-                rounded-lg
-                items-center
-                justify-center
-                gap-x-6
-            "
-      >
-        <Image src={'/icons/dropbox.svg'} alt="dropbox" width={50} height={50} className="" />
-        <Image src={'/curl.png'} alt="dropbox" width={50} height={50} className="" />
-        <Image src={'/icons/drive.svg'} alt="google drive" width={50} height={50} className="" />
+      <div className="font-mono text-[9.5px] text-[#9090A8] bg-[#F9F9FC] rounded-md px-2 py-1.5 leading-[1.75]">
+        {data.tree.map((line, i) => (
+          <div key={i} className={i === 0 ? 'text-[#5a5a7a]' : ''}>
+            {line}
+          </div>
+        ))}
+      </div>
+      <Handle type="source" position={Position.Bottom} style={{ visibility: 'hidden' }} />
+    </div>
+  );
+}
+
+export function DataMapping() {
+  return (
+    <div className="relative bg-[#F4F4F8] rounded-2xl p-5 w-96">
+      <Handle type="target" position={Position.Top} style={{ visibility: 'hidden' }} />
+
+      {/* Platform */}
+      <div className="border-[1.5px] border-primary/40 rounded-xl bg-white overflow-hidden">
+        <div className=" px-3.5 py-2.5 border-b border-primary/50 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
+              {/* Sync icon */}
+            </div>
+            <div>
+              <div className="text-[12px] font-bold text-[#1a1a2e]">Sync — data mapping</div>
+              <div className="text-[10px] text-[#9090A8]">
+                Normalises all source structures into unified JSON
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="px-3.5 py-2.5">
+          <div className="text-[9px] font-semibold text-[#9090A8] mb-2">Normalized Output:</div>
+          <div className="bg-[#F9F9FC] border border-[#EBEBF0] rounded-lg p-2.5 font-mono text-[8px] text-[#5a5a7a] overflow-auto max-h-32">
+            <pre>{`{
+              "files": [
+                {
+                  "source": "S3",
+                  "path": "my-bucket/reports",
+                  "name": "q1.pdf",
+                  "destination": "/docs/q1.pdf"
+                },
+                ...
+              ]
+            }`}</pre>
+          </div>
+        </div>
       </div>
 
-      {/* handles */}
-      <Handle type="target" position={Position.Top} style={{ visibility: 'hidden' }} />
+      <Handle type="target" id="left" position={Position.Left} style={{ visibility: 'hidden' }} />
+      {/* RIGHT target — connects from sourcedata-drive */}
+      <Handle type="target" id="right" position={Position.Right} style={{ visibility: 'hidden' }} />
+      {/* CENTER target — connects from sourcedata-dropbox (middle) */}
+      <Handle type="target" id="top" position={Position.Top} style={{ visibility: 'hidden' }} />
+
       <Handle type="source" position={Position.Bottom} style={{ visibility: 'hidden' }} />
+      <Handle type="target" position={Position.Top} style={{ visibility: 'hidden' }} />
     </div>
   );
 }
@@ -134,10 +168,16 @@ function PlugNode({
   return (
     <div
       className={cn(
-        'transform-3d h-40 w-40 flex items-center justify-center perspective-distant rounded-2xl p-2',
+        'transform-3d h-40 w-40 flex relative items-center justify-center perspective-distant rounded-2xl p-2',
         data.type === 'source' ? 'bg-secondary' : 'bg-primary',
       )}
     >
+      <span
+        className={cn(
+          'w-44 aspect-square rounded-full blur-3xl absolute',
+          data.type === 'source' ? 'bg-secondary/50' : 'bg-primary/50',
+        )}
+      />
       <div className="bg-background w-full h-full relative rounded-xl flex items-center justify-center">
         <IconPlug />
         <div
@@ -171,6 +211,7 @@ const nodeTypes = {
   pipeline: PipelineNode,
   destinationAdapter: AdapterNode,
   datamapping: DataMapping,
+  sourcedata: SourceDataNode,
 };
 
 const nodes: Node[] = [
@@ -219,48 +260,89 @@ const nodes: Node[] = [
     position: { x: 107, y: 450 },
     data: { type: 'random' },
   },
-  { id: 'datamapping', type: 'datamapping', position: { x: 90, y: 750 }, data: { label: 'sdfds' } },
+
+  // Source Data Nodes (S3, Dropbox, Drive) with random positions
+  {
+    id: 'sourcedata-s3',
+    type: 'sourcedata',
+    position: { x: -150, y: 700 },
+    data: {
+      name: 'Amazon S3',
+      icon: '/icons/s3.svg',
+      bg: '#E8F5E9',
+      tree: ['my-bucket/', '├─ reports/q1.pdf', '├─ data/users.csv', '└─ assets/logo.png'],
+    },
+  },
+  {
+    id: 'sourcedata-dropbox',
+    type: 'sourcedata',
+    position: { x: 204, y: 680 },
+    data: {
+      name: 'Dropbox',
+      icon: '/icons/dropbox.svg',
+      bg: '#E3F2FD',
+      tree: ['/Home/Work/', '├─ report.pdf', '├─ sheet.csv', '└─ archive/'],
+    },
+  },
+  {
+    id: 'sourcedata-drive',
+    type: 'sourcedata',
+    position: { x: 580, y: 700 },
+    data: {
+      name: 'Google Drive',
+      icon: '/icons/drive.svg',
+      bg: '#E8F5E9',
+      tree: ['Shared Drive', '├─ id:1aB_xZ', '├─ id:3dE_kQ', '└─ id:7jK_mR'],
+    },
+  },
+
+  {
+    id: 'datamapping',
+    type: 'datamapping',
+    position: { x: 108, y: 900 },
+    data: { label: 'sdfds' },
+  },
   {
     id: 'destinationplug',
     type: 'destinationplug',
-    position: { x: 220, y: 1100 },
+    position: { x: 220, y: 1200 },
     data: { type: 'destination' },
   },
 
   {
     id: 'destination-drive',
     type: 'destinationAdapter',
-    position: { y: 1400, x: 0 },
+    position: { y: 1500, x: 0 },
     data: { src: '/icons/drive.svg', type: 'destination' },
   },
   {
     id: 'destination-dropbox',
     type: 'destinationAdapter',
-    position: { y: 1400, x: 100 },
+    position: { y: 1500, x: 100 },
     data: { src: '/icons/dropbox.svg', type: 'destination' },
   },
   {
     id: 'destination-photos',
     type: 'destinationAdapter',
-    position: { y: 1400, x: 200 },
+    position: { y: 1500, x: 200 },
     data: { src: '/icons/google-photos.svg', type: 'destination' },
   },
   {
     id: 'destination-icloud',
     type: 'destinationAdapter',
-    position: { y: 1400, x: 300 },
+    position: { y: 1500, x: 300 },
     data: { src: '/icons/icloud.svg', type: 'destination' },
   },
   {
     id: 'destination-onedrive',
     type: 'destinationAdapter',
-    position: { y: 1400, x: 400 },
+    position: { y: 1500, x: 400 },
     data: { src: '/icons/onedrive.svg', type: 'destination' },
   },
   {
     id: 'destination-s3',
     type: 'destinationAdapter',
-    position: { y: 1400, x: 500 },
+    position: { y: 1500, x: 500 },
     data: { src: '/icons/s3.svg', type: 'destination' },
   },
 ];
@@ -316,6 +398,7 @@ const edges: Edge[] = [
     type: 'smooth',
     animated: true,
   },
+
   {
     id: 'e-fileselect-datamapping',
     source: 'fileselect',
@@ -323,6 +406,33 @@ const edges: Edge[] = [
     type: 'smooth',
     animated: true,
   },
+
+  // Edges from source data nodes to datamapping
+  {
+    id: 'e-sourcedata-s3-datamapping',
+    source: 'sourcedata-s3',
+    target: 'datamapping',
+    targetHandle: 'left', // 👈 hits left side
+    type: 'smooth',
+    animated: true,
+  },
+  {
+    id: 'e-sourcedata-dropbox-datamapping',
+    source: 'sourcedata-dropbox',
+    target: 'datamapping',
+    targetHandle: 'top', // 👈 hits top center
+    type: 'smooth',
+    animated: true,
+  },
+  {
+    id: 'e-sourcedata-drive-datamapping',
+    source: 'sourcedata-drive',
+    target: 'datamapping',
+    targetHandle: 'right', // 👈 hits right side
+    type: 'smooth',
+    animated: true,
+  },
+
   {
     id: 'e-datamapping-destinationplug',
     source: 'datamapping',

@@ -21,7 +21,7 @@ export const FOOTER_CONFIG = {
     {
       label: 'GitHub',
       href: 'https://github.com/prakash21singh',
-      username: 'your-username',
+      username: 'prakash21singh',
       icon: 'github',
     },
     {
@@ -29,6 +29,12 @@ export const FOOTER_CONFIG = {
       href: 'https://x.com/Prakash87096639',
       username: '@Prakash87096639',
       icon: 'x',
+    },
+    {
+      label: 'Source Code',
+      href: 'https://github.com/prakash21singh/syync_',
+      username: 'Source Code',
+      icon: 'github',
     },
   ],
   links: [

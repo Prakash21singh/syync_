@@ -3,6 +3,8 @@ import React from 'react';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import Badge from '../badge';
+import Link from 'next/link';
+import { Backlight } from '../custom/backlight';
 
 type Props = {};
 
@@ -98,16 +100,12 @@ function VisualFunctionality() {
   return (
     <div className="w-[70%] mx-auto mt-10 relative">
       {/* Blur glow behind the card */}
-      <span className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-1/2 aspect-square rounded-full bg-gradient-to-b from-secondary via-transparent to-primary blur-3xl -z-10" />
+      {/* <span className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-1/2 aspect-square rounded-full bg-gradient-to-b from-secondary via-transparent to-primary blur-3xl -z-10" /> */}
 
       <div className="overflow-hidden shadow-lg rounded-lg border border-gray-200 box-shadow-app">
-        <Image
-          src={'/sync.png'}
-          alt="sync"
-          width={1200}
-          height={700}
-          className="max-w-5xl mx-auto object-contain"
-        />
+        <Backlight className="w-full">
+          <video src={'/demo.mp4'} autoPlay muted loop></video>
+        </Backlight>
       </div>
     </div>
   );
@@ -122,9 +120,10 @@ function CTA() {
           bg-black
           hover:bg-black/90
           text-white
+          hover:cursor-pointer
         "
       >
-        Start 14-Day Free Trial
+        <Link href={'/app'}>Start 14-Day Free Trial</Link>
       </Button>
 
       <Button
@@ -134,9 +133,10 @@ function CTA() {
           bg-secondary
           hover:bg-secondary/70
           text-black/90
+          hover:cursor-pointer
         "
       >
-        See how it works
+        <Link href={'/app'}>See how it works</Link>
       </Button>
     </div>
   );

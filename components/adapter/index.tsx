@@ -188,28 +188,27 @@ export default function AdapterSelection({ isLoggedIn, initialAdapters = [], use
   }, [canMigrate, source.selectedAdapter, source.selectedExistingId, bucketState, fetchFiles]);
 
   // ─── Start migration ──────────────────────────────────────────────────────
-  const handleMigrate = useCallback(async () => {
+  const handleMigrate = async () => {
     if (!canMigrate) return;
     setIsMigrating(true);
     try {
-      const formData = new FormData();
-      formData.append('sourceAdapterId', source.selectedExistingId!);
-      formData.append('destAdapterId', dest.selectedExistingId!);
-      formData.append('userId', userId);
-      formData.append('selectedFiles', JSON.stringify(selectedFiles));
-      if (bucketState.bucket) {
-        formData.append('bucket', bucketState.bucket);
-      }
+      const res = await fetch('/api/migrate/source/init', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          sourceAdapterId: source.selectedExistingId,
+          destAdapterId: dest.selectedExistingId,
+          selectedFiles,
+          ...(bucketState.bucket ? { bucket: bucketState.bucket } : {}),
+        }),
+      });
 
-      const { startMigration } = await import('@/app/actions');
-      const result = await startMigration(formData);
+      const result = await res.json();
+      if (!res.ok) throw new Error(result?.message ?? 'Failed to migrate');
 
-      if (result.success) {
-        setMessage({ type: 'success', message: 'Migration started! Redirecting in 3 seconds...' });
-        setTimeout(() => router.push(`/sync/${result.migrationId}`), 3000);
-      } else {
-        throw new Error(result.error);
-      }
+      setMessage({ type: 'success', message: 'Migration started' });
+      setTimeout(() => router.push(`/app/migration/${result.migration.id}`));
     } catch (err) {
       setMessage({
         type: 'error',
@@ -218,15 +217,47 @@ export default function AdapterSelection({ isLoggedIn, initialAdapters = [], use
     } finally {
       setIsMigrating(false);
     }
-  }, [
-    canMigrate,
-    source.selectedExistingId,
-    dest.selectedExistingId,
-    selectedFiles,
-    userId,
-    bucketState.bucket,
-    router,
-  ]);
+  };
+
+  // const handleMigrate = useCallback(async () => {
+  //   if (!canMigrate) return;
+  //   setIsMigrating(true);
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append('sourceAdapterId', source.selectedExistingId!);
+  //     formData.append('destAdapterId', dest.selectedExistingId!);
+  //     formData.append('userId', userId);
+  //     formData.append('selectedFiles', JSON.stringify(selectedFiles));
+  //     if (bucketState.bucket) {
+  //       formData.append('bucket', bucketState.bucket);
+  //     }
+
+  //     const { startMigration } = await import('@/app/actions');
+  //     const result = await startMigration(formData);
+
+  //     if (result.success) {
+  //       setMessage({ type: 'success', message: 'Migration started! Redirecting in 3 seconds...' });
+  //       setTimeout(() => router.push(`/sync/${result.migrationId}`), 3000);
+  //     } else {
+  //       throw new Error(result.error);
+  //     }
+  //   } catch (err) {
+  //     setMessage({
+  //       type: 'error',
+  //       message: err instanceof Error ? err.message : 'Migration failed.',
+  //     });
+  //   } finally {
+  //     setIsMigrating(false);
+  //   }
+  // }, [
+  //   canMigrate,
+  //   source.selectedExistingId,
+  //   dest.selectedExistingId,
+  //   selectedFiles,
+  //   userId,
+  //   bucketState.bucket,
+  //   router,
+  // ]);
 
   // ─── Guard: require login ─────────────────────────────────────────────────
   const handleAdapterSelect = useCallback(

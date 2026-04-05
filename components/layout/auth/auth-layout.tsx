@@ -36,6 +36,7 @@ export default function AuthLayout({ children }: Props) {
             backgroundSize: '128px 28px',
           }}
         />
+        <span className="absolute w-96 aspect-square rounded-full bg-primary/40 blur-3xl left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"></span>
 
         {/* Soft accent blob */}
         <div

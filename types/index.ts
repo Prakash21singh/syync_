@@ -61,6 +61,7 @@ export interface BaseFile {
   type: 'folder' | 'file';
   size: string | number | null;
   pathname?: string;
+  sourceId?: string;
 }
 export interface DropboxFile {
   id: string;

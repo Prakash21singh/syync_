@@ -1,4 +1,6 @@
 import { authClient, signUp } from '@/lib/auth-client';
+import { router } from 'better-auth/api';
+import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 
 export const useRegisterForm = ({ redirectTo }: { redirectTo: string }) => {
@@ -8,54 +10,60 @@ export const useRegisterForm = ({ redirectTo }: { redirectTo: string }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   function togglePassword() {
     setShowPassword((prev) => !prev);
   }
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    try {
-      if (!name || !email || !password) throw new Error('InvalidCredential');
-      if ([name, email, password].some((elem) => elem.trim() === ''))
-        throw new Error('EmptyRequiredField');
-      if (password.length < 6) throw new Error('PasswordStrength');
+      try {
+        console.log({ name, email, password });
+        if (!name || !email || !password) throw new Error('InvalidCredential');
+        if ([name, email, password].some((elem) => elem.trim() === ''))
+          throw new Error('EmptyRequiredField');
+        if (password.length < 6) throw new Error('PasswordStrength');
 
-      await signUp.email(
-        {
-          email,
-          name,
-          password,
-          callbackURL: redirectTo,
-        },
-        {
-          onRequest: () => {
-            setLoading(true);
-            setError('');
+        await signUp.email(
+          {
+            email,
+            name,
+            password,
+            callbackURL: redirectTo,
           },
-          onSuccess: () => {
-            setLoading(false);
+          {
+            onRequest: () => {
+              setLoading(true);
+              setError('');
+            },
+            onSuccess: () => {
+              setLoading(false);
+              router.push(redirectTo);
+            },
+            onError: (err) => {
+              console.log(err);
+              setLoading(false);
+              setError(err.error.message || 'An error occured while regitering user.');
+            },
           },
-          onError: (err) => {
-            console.log(err);
-            setLoading(false);
-            setError(err.error.message || 'An error occured while regitering user.');
-          },
-        },
-      );
-    } catch (error) {
-      if (error instanceof Error) {
-        error.message.includes('InvalidCredential')
-          ? setError('Invalid credential format')
-          : error.message.includes('PasswordStrength')
-            ? setError('Password strength should be least 6 characters')
-            : error.message.includes('EmptyRequiredField')
-              ? setError('Fields cannot be empty')
-              : setError('Something went wrong');
+        );
+      } catch (error) {
+        if (error instanceof Error) {
+          error.message.includes('InvalidCredential')
+            ? setError('Invalid credential format')
+            : error.message.includes('PasswordStrength')
+              ? setError('Password strength should be least 6 characters')
+              : error.message.includes('EmptyRequiredField')
+                ? setError('Fields cannot be empty')
+                : setError('Something went wrong');
+        }
       }
-    }
-  }, []);
+    },
+    [name, email, password, redirectTo, router],
+  );
 
   return {
     name,

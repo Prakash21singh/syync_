@@ -20,7 +20,7 @@ function LoginForm() {
     rememberMe,
     toggleRememberMe,
     handleSubmit,
-  } = useLoginForm({ redirectTo: '/' });
+  } = useLoginForm({ redirectTo: '/app' });
 
   const handleEmailChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value),
@@ -118,7 +118,7 @@ function LoginForm() {
       <p className="text-center text-sm text-muted-foreground">
         {"Don't have an account? "}
         <Link
-          href="/register"
+          href="/auth/register"
           className="text-foreground font-medium hover:underline underline-offset-4"
         >
           Sign up

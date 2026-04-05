@@ -301,11 +301,12 @@ export type AdapterOrderByWithRelationInput = {
 
 export type AdapterWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  name?: string
-  providerId?: string
+  userId_providerId?: Prisma.AdapterUserIdProviderIdCompoundUniqueInput
   AND?: Prisma.AdapterWhereInput | Prisma.AdapterWhereInput[]
   OR?: Prisma.AdapterWhereInput[]
   NOT?: Prisma.AdapterWhereInput | Prisma.AdapterWhereInput[]
+  name?: Prisma.StringFilter<"Adapter"> | string
+  providerId?: Prisma.StringFilter<"Adapter"> | string
   createdAt?: Prisma.DateTimeFilter<"Adapter"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Adapter"> | Date | string
   access_token?: Prisma.StringNullableFilter<"Adapter"> | string | null
@@ -323,7 +324,7 @@ export type AdapterWhereUniqueInput = Prisma.AtLeast<{
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   sourceMigrations?: Prisma.MigrationListRelationFilter
   destinationMigrations?: Prisma.MigrationListRelationFilter
-}, "id" | "name" | "providerId">
+}, "id" | "userId_providerId">
 
 export type AdapterOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -521,6 +522,11 @@ export type AdapterListRelationFilter = {
 
 export type AdapterOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type AdapterUserIdProviderIdCompoundUniqueInput = {
+  userId: string
+  providerId: string
 }
 
 export type AdapterCountOrderByAggregateInput = {
