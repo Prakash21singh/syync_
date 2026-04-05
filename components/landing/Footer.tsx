@@ -9,7 +9,7 @@ export const FOOTER_CONFIG = {
     tagline: 'Keep your data in sync. Across every source.',
   },
   contact: {
-    email: 'hello@yourdomain.com',
+    email: 'pk87096639@gmail.com',
   },
   socials: [
     {

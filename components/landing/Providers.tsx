@@ -186,16 +186,16 @@ function Providers() {
       <div className="mx-auto max-w-6xl">
         <div className="text-center mb-12">
           <Badge name="Supported Adapters" />
-          <h2 className="h2 text-primary font-semibold mt-4 mb-1 text-pretty">
+          <h2 className="text-xl md:text-2xl lg:text-4xl text-primary font-semibold mt-4 mb-1 text-pretty">
             Connect Your Favorite Cloud Services
           </h2>
-          <p className="max-w-2xl mx-auto">
+          <p className="text-sm md:text-lg max-w-2xl mx-auto">
             Sync works seamlessly with a growing ecosystem of cloud providers. More integrations
             coming soon.
           </p>
         </div>
 
-        <div className="w-full flex relative items-start  max-w-5xl mt-20 gap-x-6 mx-auto  justify-evenly">
+        <div className="w-full flex flex-col md:flex-row gap-y-20 md:gap-y-0 relative items-start  max-w-5xl mt-20 gap-x-6 mx-auto  justify-evenly">
           <MemoizedAdapterSelection
             label="SOURCE"
             adapters={sourceAdapters}

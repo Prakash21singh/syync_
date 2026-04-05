@@ -102,7 +102,7 @@ function CTA({ createdAt, isLoggedIn, subscription }: RibbonInterface) {
 
 function Ribbon({ createdAt, isLoggedIn, subscription }: RibbonInterface) {
   return (
-    <div className="fixed z-50 shadow left-0 top-0 font-[500] bg-primary overflow-hidden h-9 text-black/60 flex items-center justify-center w-full">
+    <div className="hidden md:fixed z-50 shadow left-0 top-0 font-[500] bg-primary overflow-hidden h-9 text-black/60 flex items-center justify-center w-full">
       <div className="h-full w-full absolute opacity-50 -z-10 bg-[radial-gradient(circle_at_center,_rgba(124,58,237,0.4),_transparent_70%)]"></div>
       {isLoggedIn ? (
         <div className="flex items-center gap-2">

@@ -62,7 +62,7 @@ function Plan({
   return (
     <div
       className={cn(
-        'rounded-4xl flex-1 p-6 border-border',
+        'rounded-4xl  flex-shrink-0 p-6 border-border',
         type === 'PRO' ? 'bg-primary' : 'bg-surface',
       )}
     >
@@ -149,7 +149,7 @@ function PlanExecution({}: Props) {
     "
     >
       <MemoizedPlanExecution billingCycle={billingCycle} setBillingCycle={setBillingCycle} />
-      <div className="w-full flex items-center justify-between gap-4 mt-10">
+      <div className="w-full flex flex-wrap lg:flex-row items-center justify-center lg:justify-between gap-4 mt-10">
         {PLANS.map((plan) => (
           <Plan
             advantages={plan.advantages}

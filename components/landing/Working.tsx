@@ -7,19 +7,18 @@ import { IconPlug } from '@tabler/icons-react';
 import {
   ReactFlow,
   Background,
-  Controls,
   type Node,
   type Edge,
   BackgroundVariant,
   Handle,
   Position,
+  useReactFlow,
+  ReactFlowProvider,
 } from '@xyflow/react';
 import { cn } from '@/lib/utils';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
-const getFlowHeight = (nodes: Node[]) => {
-  const maxY = Math.max(...nodes.map((n) => n.position.y));
-  return maxY + 120;
-};
+// ─── Node components (unchanged from original) ────────────────────────────────
 
 function AdapterNode({ data }: { data: { src: string; type: 'source' | 'destination' } }) {
   return (
@@ -38,11 +37,7 @@ function AdapterNode({ data }: { data: { src: string; type: 'source' | 'destinat
 
 function FileSelectionNode({ data }: { data: any }) {
   return (
-    <div
-      className={cn(
-        'transform-3d h-52 w-96 border bg-secondary flex items-end justify-start perspective-distant rounded-xl relative p-2',
-      )}
-    >
+    <div className="transform-3d h-52 w-96 border bg-secondary flex items-end justify-start perspective-distant rounded-xl relative p-2">
       <div className="h-4/5 absolute w-1/3 rounded-xl bg-background -right-5 bottom-1">
         <div className="w-full h-full relative">
           <Image
@@ -112,14 +107,10 @@ export function DataMapping() {
   return (
     <div className="relative bg-[#F4F4F8] rounded-2xl p-5 w-96">
       <Handle type="target" position={Position.Top} style={{ visibility: 'hidden' }} />
-
-      {/* Platform */}
       <div className="border-[1.5px] border-primary/40 rounded-xl bg-white overflow-hidden">
-        <div className=" px-3.5 py-2.5 border-b border-primary/50 flex items-center justify-between">
+        <div className="px-3.5 py-2.5 border-b border-primary/50 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-              {/* Sync icon */}
-            </div>
+            <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center" />
             <div>
               <div className="text-[12px] font-bold text-[#1a1a2e]">Sync — data mapping</div>
               <div className="text-[10px] text-[#9090A8]">
@@ -132,43 +123,32 @@ export function DataMapping() {
           <div className="text-[9px] font-semibold text-[#9090A8] mb-2">Normalized Output:</div>
           <div className="bg-[#F9F9FC] border border-[#EBEBF0] rounded-lg p-2.5 font-mono text-[8px] text-[#5a5a7a] overflow-auto max-h-32">
             <pre>{`{
-              "files": [
-                {
-                  "source": "S3",
-                  "path": "my-bucket/reports",
-                  "name": "q1.pdf",
-                  "destination": "/docs/q1.pdf"
-                },
-                ...
-              ]
-            }`}</pre>
+  "files": [
+    {
+      "source": "S3",
+      "path": "my-bucket/reports",
+      "name": "q1.pdf",
+      "destination": "/docs/q1.pdf"
+    },
+    ...
+  ]
+}`}</pre>
           </div>
         </div>
       </div>
-
       <Handle type="target" id="left" position={Position.Left} style={{ visibility: 'hidden' }} />
-      {/* RIGHT target — connects from sourcedata-drive */}
       <Handle type="target" id="right" position={Position.Right} style={{ visibility: 'hidden' }} />
-      {/* CENTER target — connects from sourcedata-dropbox (middle) */}
       <Handle type="target" id="top" position={Position.Top} style={{ visibility: 'hidden' }} />
-
       <Handle type="source" position={Position.Bottom} style={{ visibility: 'hidden' }} />
-      <Handle type="target" position={Position.Top} style={{ visibility: 'hidden' }} />
     </div>
   );
 }
 
-function PlugNode({
-  data,
-}: {
-  data: {
-    type: 'source' | 'destination';
-  };
-}) {
+function PlugNode({ data }: { data: { type: 'source' | 'destination' } }) {
   return (
     <div
       className={cn(
-        'transform-3d h-40 w-40 flex relative items-center justify-center perspective-distant rounded-2xl p-2',
+        'h-40 w-40 flex relative items-center justify-center rounded-2xl p-2',
         data.type === 'source' ? 'bg-secondary' : 'bg-primary',
       )}
     >
@@ -182,7 +162,7 @@ function PlugNode({
         <IconPlug />
         <div
           className={cn(
-            'absolute w-4/5 bottom-0 bg-secondary rounded-t-2xl p-1 left-1/2 -translate-x-1/2 flex items-end justify-center text-xs',
+            'absolute w-4/5 bottom-0 rounded-t-2xl p-1 left-1/2 -translate-x-1/2 flex items-end justify-center text-xs',
             data.type === 'source' ? 'bg-secondary' : 'bg-primary',
           )}
         >
@@ -213,6 +193,8 @@ const nodeTypes = {
   datamapping: DataMapping,
   sourcedata: SourceDataNode,
 };
+
+// ─── Static nodes & edges (your originals, untouched) ────────────────────────
 
 const nodes: Node[] = [
   {
@@ -253,7 +235,6 @@ const nodes: Node[] = [
   },
 
   { id: 'sourceplug', type: 'sourceplug', position: { x: 220, y: 200 }, data: { type: 'source' } },
-
   {
     id: 'fileselect',
     type: 'fileselection',
@@ -261,7 +242,6 @@ const nodes: Node[] = [
     data: { type: 'random' },
   },
 
-  // Source Data Nodes (S3, Dropbox, Drive) with random positions
   {
     id: 'sourcedata-s3',
     type: 'sourcedata',
@@ -398,7 +378,6 @@ const edges: Edge[] = [
     type: 'smooth',
     animated: true,
   },
-
   {
     id: 'e-fileselect-datamapping',
     source: 'fileselect',
@@ -407,12 +386,11 @@ const edges: Edge[] = [
     animated: true,
   },
 
-  // Edges from source data nodes to datamapping
   {
     id: 'e-sourcedata-s3-datamapping',
     source: 'sourcedata-s3',
     target: 'datamapping',
-    targetHandle: 'left', // 👈 hits left side
+    targetHandle: 'left',
     type: 'smooth',
     animated: true,
   },
@@ -420,7 +398,7 @@ const edges: Edge[] = [
     id: 'e-sourcedata-dropbox-datamapping',
     source: 'sourcedata-dropbox',
     target: 'datamapping',
-    targetHandle: 'top', // 👈 hits top center
+    targetHandle: 'top',
     type: 'smooth',
     animated: true,
   },
@@ -428,7 +406,7 @@ const edges: Edge[] = [
     id: 'e-sourcedata-drive-datamapping',
     source: 'sourcedata-drive',
     target: 'datamapping',
-    targetHandle: 'right', // 👈 hits right side
+    targetHandle: 'right',
     type: 'smooth',
     animated: true,
   },
@@ -485,18 +463,95 @@ const edges: Edge[] = [
   },
 ];
 
-type Props = {};
+const GRAPH_X0 = -150;
+const GRAPH_Y0 = 0;
+const GRAPH_W = 922;
+const GRAPH_H = 1580;
 
-function Working({}: Props) {
+function calcViewport(containerW: number, containerH: number) {
+  const PAD = 0.04;
+
+  // Width drives zoom on desktop (up to natural 1:1).
+  // Height is the tighter axis only on small screens.
+  const zoomByW = (containerW * (1 - PAD * 2)) / GRAPH_W;
+  const zoomByH = (containerH * (1 - PAD * 2)) / GRAPH_H;
+  const zoom = containerW >= 900 ? Math.min(zoomByW, 1) : Math.min(zoomByW, zoomByH);
+
+  const x = (containerW - GRAPH_W * zoom) / 2 - GRAPH_X0 * zoom;
+  const y = (containerH - GRAPH_H * zoom) / 2 - GRAPH_Y0 * zoom;
+
+  return { x, y, zoom };
+}
+
+// ─── Inner flow (needs ReactFlowProvider context) ─────────────────────────────
+
+function InnerFlow({ w, h }: { w: number; h: number }) {
+  const { setViewport } = useReactFlow();
+
+  // Re-centre whenever the container size changes
+  useEffect(() => {
+    setViewport(calcViewport(w, h), { duration: 0 });
+  }, [w, h, setViewport]);
+
   const defaultEdgeOptions = {
     type: 'smoothstep',
     animated: true,
-    style: { strokeWidth: 2 },
+    style: { strokeWidth: 1 },
   };
-  const flowHeight = getFlowHeight(nodes);
 
   return (
-    <div className="w-full max-w-5xl mx-auto mt-10 select-none">
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={nodeTypes}
+      proOptions={{ hideAttribution: true }}
+      defaultEdgeOptions={defaultEdgeOptions}
+      defaultViewport={calcViewport(w, h)}
+      panOnScroll={false}
+      zoomOnScroll={false}
+      panOnDrag={false}
+      zoomOnPinch={false}
+      zoomOnDoubleClick={false}
+      preventScrolling={false}
+      nodesDraggable={false}
+      nodesConnectable={false}
+      elementsSelectable={false}
+    >
+      <Background gap={16} variant={BackgroundVariant.Dots} />
+    </ReactFlow>
+  );
+}
+
+// ─── Public component ─────────────────────────────────────────────────────────
+
+type Props = {};
+
+function Working({}: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
+
+  const measure = useCallback(() => {
+    if (!containerRef.current) return;
+    const { offsetWidth: w } = containerRef.current;
+    const zoomByWidth = (w * 0.92) / GRAPH_W;
+    const maxZoom = w >= 900 ? 1 : zoomByWidth;
+    const zoom = Math.min(zoomByWidth, maxZoom);
+    const h =
+      w >= 900
+        ? GRAPH_H * zoom + 80
+        : Math.min(Math.max(GRAPH_H * zoom + 60, 420), window.innerHeight * 0.85);
+    setDims({ w, h });
+  }, []);
+
+  useEffect(() => {
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (containerRef.current) ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, [measure]);
+
+  return (
+    <div className="w-full max-w-5xl mx-auto mt-10">
       <div className="text-center">
         <Badge name="How it works" />
         <p className="text-center mt-5 text-lg">
@@ -504,30 +559,12 @@ function Working({}: Props) {
         </p>
       </div>
 
-      <div className="mt-10 w-full" style={{ height: flowHeight }}>
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          nodeTypes={nodeTypes}
-          proOptions={{ hideAttribution: true }}
-          defaultEdgeOptions={defaultEdgeOptions}
-          defaultViewport={{
-            x: 200,
-            y: 0,
-            zoom: 1,
-          }}
-          panOnScroll={false}
-          zoomOnScroll={false}
-          panOnDrag={false}
-          zoomOnPinch={false}
-          zoomOnDoubleClick={false}
-          preventScrolling={false}
-          nodesDraggable={false}
-          nodesConnectable={false}
-          elementsSelectable={false}
-        >
-          {/* <Background gap={16} variant={BackgroundVariant.Dots}/> */}
-        </ReactFlow>
+      <div ref={containerRef} className="mt-10 w-full" style={{ height: dims?.h ?? 600 }}>
+        {dims && (
+          <ReactFlowProvider>
+            <InnerFlow w={dims.w} h={dims.h} />
+          </ReactFlowProvider>
+        )}
       </div>
     </div>
   );

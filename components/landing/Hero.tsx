@@ -8,70 +8,25 @@ import { Backlight } from '../custom/backlight';
 
 type Props = {};
 
-function HangingCard() {
-  return (
-    <div
-      className="
-      absolute 
-      w-96 
-      h-40 
-      p-2 
-      rounded-md 
-      left-1/2 
-      top-0 
-      rotate-8 
-      -z-10 
-      bg-[#f2f2f2]
-      transform-3d
-      rotate-y-6
-    "
-    >
-      <div
-        className="
-          bg-secondary 
-          h-full
-          w-full
-          rounded-md
-          flex 
-          items-center
-          justify-center
-          gap-2
-        "
-      >
-        <Image
-          src={'/icons/drive.svg'}
-          alt="Google Drive"
-          width={50}
-          height={50}
-          className="border-2 border-dashed p-2 border-black/30 rounded-md"
-        />
-
-        <span className="text-black/40">---</span>
-
-        <Image
-          src={'/icons/s3.svg'}
-          alt="Google Drive"
-          width={50}
-          height={50}
-          className="border-2 border-dashed p-2 border-black/70 rounded-md"
-        />
-      </div>
-    </div>
-  );
-}
-
 function HeroContent() {
   return (
     <div className="flex flex-col items-center">
       <div>
-        <h1 className="h1">Move Data Across Clouds</h1>
+        <h1
+          className="
+        text-2xl md:text-3xl lg:text-4xl xl:text-6xl font-semibold
+        "
+        >
+          Move Data Across Clouds
+        </h1>
         <div
           className="
           flex 
           items-center 
           justify-center 
           gap-x-2
-          text-lg 
+          text-sm
+          md:text-lg 
           font-normal
           text-text-secondary
         "
@@ -87,7 +42,8 @@ function HeroContent() {
         w-[50%] 
         text-center 
         mt-5 
-        text-lg
+        text-sm
+        md:text-lg
       "
       >
         Sync lets you migrate files between Google Drive, Dropbox, S3 and more — with zero data
@@ -98,12 +54,9 @@ function HeroContent() {
 }
 function VisualFunctionality() {
   return (
-    <div className="w-[70%] mx-auto mt-10 relative">
-      {/* Blur glow behind the card */}
-      {/* <span className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-1/2 aspect-square rounded-full bg-gradient-to-b from-secondary via-transparent to-primary blur-3xl -z-10" /> */}
-
-      <div className="overflow-hidden shadow-lg rounded-lg border border-gray-200 box-shadow-app">
-        <Backlight className="w-full">
+    <div className="w-9/10 md:w-[70%] mx-auto mt-10 relative">
+      <div className="overflow-hidden rounded-lg border object-cover border-gray-200 box-shadow-app">
+        <Backlight className="w-full rounded-full">
           <video src={'/demo.mp4'} autoPlay muted loop></video>
         </Backlight>
       </div>
@@ -112,7 +65,7 @@ function VisualFunctionality() {
 }
 function CTA() {
   return (
-    <div className="flex items-center justify-center gap-x-6 mt-8">
+    <div className="flex items-center justify-center flex-col md:flex-row gap-3 md:gap-6 mt-8">
       <Button
         className="
           rounded-full 
@@ -121,6 +74,8 @@ function CTA() {
           hover:bg-black/90
           text-white
           hover:cursor-pointer
+          min-w-80
+          md:min-w-auto
         "
       >
         <Link href={'/app'}>Start 14-Day Free Trial</Link>
@@ -134,6 +89,8 @@ function CTA() {
           hover:bg-secondary/70
           text-black/90
           hover:cursor-pointer
+          min-w-80
+          md:min-w-auto
         "
       >
         <Link href={'/app'}>See how it works</Link>
@@ -146,7 +103,10 @@ function Adapter({ imageUrl, className }: { className?: string; imageUrl: string
   return (
     <Image
       alt="image"
-      className={cn('absolute border p-2 rounded-md border-dashed border-black/60', className)}
+      className={cn(
+        'absolute border w-10 md:w-12 lg:w-16 p-2 rounded-md border-dashed border-black/60',
+        className,
+      )}
       src={imageUrl}
       width={60}
       height={60}
@@ -158,11 +118,17 @@ function ScatteredAdapters() {
   return (
     <div className="w-full -z-50  h-full absolute left-0 top-0">
       <Adapter imageUrl="/icons/drive.svg" className="left-5 top-10 -rotate-5" />
-      <Adapter imageUrl="/icons/dropbox.svg" className="left-1/2 -bottom-20 ml-5 -rotate-10" />
-      <Adapter imageUrl="/icons/google-photos.svg" className="bottom-0 left-1/4 -rotate-12" />
       <Adapter imageUrl="/icons/icloud.svg" className="right-5 top-10 rotate-5" />
+      <Adapter imageUrl="/icons/dropbox.svg" className="left-1/2 -bottom-20 ml-5 -rotate-10" />
       <Adapter imageUrl="/icons/s3.svg" className="right-1/2 -bottom-20 mr-5 rotate-10" />
-      <Adapter imageUrl="/icons/onedrive.svg" className="bottom-0 right-1/4 rotate-12" />
+      <Adapter
+        imageUrl="/icons/google-photos.svg"
+        className="bottom-2/5 md:bottom-0 left-8 md:left-1/4 -rotate-12"
+      />
+      <Adapter
+        imageUrl="/icons/onedrive.svg"
+        className="bottom-2/5 md:bottom-0 right-8 md:right-1/4 rotate-12"
+      />
     </div>
   );
 }
