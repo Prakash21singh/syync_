@@ -127,3 +127,32 @@ export type AWSCredentials = {
   secretAccessKey: string;
   region?: string;
 };
+
+type BillingCycle = 'monthly' | 'annually';
+type PlanType = 'BASE' | 'PRO' | 'BUSINESS';
+
+interface Feature {
+  text: string;
+  optional?: boolean;
+}
+
+export interface SyncSubscriptionPlan {
+  id: string;
+  type: PlanType;
+  label: string;
+  planFor: string;
+  price: {
+    [key in BillingCycle]: {
+      amount: number;
+      id?: string;
+    };
+  };
+  currency: string;
+  dailyLimit: string;
+  connectors: number | 'Unlimited';
+  advantages: Feature[];
+  popular?: boolean;
+  cta: { label: string; style: 'outline' | 'primary' | 'ghost' };
+  ctaSecondary?: string;
+  featuresLabel?: string;
+}

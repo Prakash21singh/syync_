@@ -1,7 +1,6 @@
 'use client';
 import React, { memo, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
 import { PLANS, type Plan as PlanInterface } from '@/utils/config/subscription-config';
 import { Button } from '../ui/button';
 import { IconCircleCheckFilled } from '@tabler/icons-react';
