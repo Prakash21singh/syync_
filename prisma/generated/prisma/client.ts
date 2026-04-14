@@ -80,6 +80,11 @@ export type Migration = Prisma.MigrationModel
  */
 export type MigrationSelection = Prisma.MigrationSelectionModel
 /**
+ * Model Subscription
+ * 
+ */
+export type Subscription = Prisma.SubscriptionModel
+/**
  * Model MigrationFile
  * 
  */

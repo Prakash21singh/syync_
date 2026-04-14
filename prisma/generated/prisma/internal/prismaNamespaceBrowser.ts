@@ -59,6 +59,7 @@ export const ModelName = {
   AdapterAccountInfo: 'AdapterAccountInfo',
   Migration: 'Migration',
   MigrationSelection: 'MigrationSelection',
+  Subscription: 'Subscription',
   MigrationFile: 'MigrationFile'
 } as const
 
@@ -85,6 +86,7 @@ export const UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  stripe_customer_id: 'stripe_customer_id',
   image: 'image'
 } as const
 
@@ -201,6 +203,17 @@ export const MigrationSelectionScalarFieldEnum = {
 } as const
 
 export type MigrationSelectionScalarFieldEnum = (typeof MigrationSelectionScalarFieldEnum)[keyof typeof MigrationSelectionScalarFieldEnum]
+
+
+export const SubscriptionScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  userId: 'userId',
+  onTrial: 'onTrial',
+  trialEndsOn: 'trialEndsOn'
+} as const
+
+export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
 
 
 export const MigrationFileScalarFieldEnum = {

@@ -18,12 +18,12 @@ function Card({ plan, cycle }: PlanCardProps) {
   const initiateCheckout = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/stripe/checkout', {
+      const response = await fetch('/api/subscription/checkout', {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify({
           priceId: plan.price[cycle].id,
-          success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/subcription`,
+          success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/subscription/plan`,
           billing_cycle: cycle,
         }),
       });

@@ -1,12 +1,31 @@
 import Image from 'next/image';
-import React from 'react';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import Badge from '../badge';
 import Link from 'next/link';
 import { Backlight } from '../custom/backlight';
 
-type Props = {};
+type Props = {
+  isLoggedIn?: boolean;
+};
+
+function Hero({ isLoggedIn }: Props) {
+  return (
+    <div className="w-full section relative">
+      <div className="w-full min-h-[90vh] flex flex-col gap-y-4 ">
+        <div className="flex-1 flex items-center justify-center">
+          <div className="relative">
+            <Badge name="Introduction" />
+            <ScatteredAdapters />
+            <HeroContent />
+            <CTA isLoggedIn={isLoggedIn || false} />
+          </div>
+        </div>
+      </div>
+      <VisualFunctionality />
+    </div>
+  );
+}
 
 function HeroContent() {
   return (
@@ -52,6 +71,7 @@ function HeroContent() {
     </div>
   );
 }
+
 function VisualFunctionality() {
   return (
     <div className="w-9/10 md:w-[70%] mx-auto mt-10 relative">
@@ -63,7 +83,9 @@ function VisualFunctionality() {
     </div>
   );
 }
-function CTA() {
+function CTA({ isLoggedIn }: { isLoggedIn: boolean }) {
+  const ctaText = isLoggedIn ? 'Continue to App' : 'Start 14-Day Free Trial';
+
   return (
     <div className="flex items-center justify-center flex-col md:flex-row gap-3 md:gap-6 mt-8">
       <Button
@@ -78,7 +100,7 @@ function CTA() {
           md:min-w-auto
         "
       >
-        <Link href={'/app'}>Start 14-Day Free Trial</Link>
+        <Link href={'/app'}>{ctaText}</Link>
       </Button>
 
       <Button
@@ -129,25 +151,6 @@ function ScatteredAdapters() {
         imageUrl="/icons/onedrive.svg"
         className="bottom-2/5 md:bottom-0 right-8 md:right-1/4 rotate-12"
       />
-    </div>
-  );
-}
-
-function Hero({}: Props) {
-  return (
-    <div className="w-full section relative">
-      {/* <HangingCard /> */}
-      <div className="w-full min-h-[90vh] flex flex-col gap-y-4 ">
-        <div className="flex-1 flex items-center justify-center">
-          <div className="relative">
-            <Badge name="Introduction" />
-            <ScatteredAdapters />
-            <HeroContent />
-            <CTA />
-          </div>
-        </div>
-      </div>
-      <VisualFunctionality />
     </div>
   );
 }

@@ -226,6 +226,23 @@ export type EnumMigrationSelectionTypeWithAggregatesFilter<$PrismaModel = never>
   _max?: Prisma.NestedEnumMigrationSelectionTypeFilter<$PrismaModel>
 }
 
+export type EnumSubscriptionTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.SubscriptionType | Prisma.EnumSubscriptionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.SubscriptionType[] | Prisma.ListEnumSubscriptionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SubscriptionType[] | Prisma.ListEnumSubscriptionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSubscriptionTypeFilter<$PrismaModel> | $Enums.SubscriptionType
+}
+
+export type EnumSubscriptionTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SubscriptionType | Prisma.EnumSubscriptionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.SubscriptionType[] | Prisma.ListEnumSubscriptionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SubscriptionType[] | Prisma.ListEnumSubscriptionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSubscriptionTypeWithAggregatesFilter<$PrismaModel> | $Enums.SubscriptionType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSubscriptionTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSubscriptionTypeFilter<$PrismaModel>
+}
+
 export type IntNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
@@ -493,6 +510,23 @@ export type NestedEnumMigrationSelectionTypeWithAggregatesFilter<$PrismaModel = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumMigrationSelectionTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumMigrationSelectionTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumSubscriptionTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.SubscriptionType | Prisma.EnumSubscriptionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.SubscriptionType[] | Prisma.ListEnumSubscriptionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SubscriptionType[] | Prisma.ListEnumSubscriptionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSubscriptionTypeFilter<$PrismaModel> | $Enums.SubscriptionType
+}
+
+export type NestedEnumSubscriptionTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.SubscriptionType | Prisma.EnumSubscriptionTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.SubscriptionType[] | Prisma.ListEnumSubscriptionTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.SubscriptionType[] | Prisma.ListEnumSubscriptionTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumSubscriptionTypeWithAggregatesFilter<$PrismaModel> | $Enums.SubscriptionType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumSubscriptionTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumSubscriptionTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumMigrationFileStatusFilter<$PrismaModel = never> = {

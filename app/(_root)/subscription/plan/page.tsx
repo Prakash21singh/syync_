@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 async function SubscriptionPlan() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/stripe/plan`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/subscription/plan`, {
     credentials: 'include',
     headers: await headers(),
   });

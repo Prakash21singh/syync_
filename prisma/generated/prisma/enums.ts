@@ -47,3 +47,22 @@ export const MigrationStatus = {
 } as const
 
 export type MigrationStatus = (typeof MigrationStatus)[keyof typeof MigrationStatus]
+
+
+export const SubscriptionType = {
+  BASE: 'BASE',
+  PRO: 'PRO',
+  BUSINESS: 'BUSINESS'
+} as const
+
+export type SubscriptionType = (typeof SubscriptionType)[keyof typeof SubscriptionType]
+
+
+export const SubscriptionState = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  REVOKED: 'REVOKED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type SubscriptionState = (typeof SubscriptionState)[keyof typeof SubscriptionState]

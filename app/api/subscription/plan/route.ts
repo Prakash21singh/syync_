@@ -92,8 +92,6 @@ export const PLANS: SyncSubscriptionPlan[] = [
 
 export const handler = async () => {
   try {
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
     return NextResponse.json({
       plans: PLANS,
     });
