@@ -60,6 +60,7 @@ export const ModelName = {
   Migration: 'Migration',
   MigrationSelection: 'MigrationSelection',
   Subscription: 'Subscription',
+  Invoice: 'Invoice',
   MigrationFile: 'MigrationFile'
 } as const
 
@@ -207,13 +208,39 @@ export type MigrationSelectionScalarFieldEnum = (typeof MigrationSelectionScalar
 
 export const SubscriptionScalarFieldEnum = {
   id: 'id',
-  type: 'type',
   userId: 'userId',
-  onTrial: 'onTrial',
-  trialEndsOn: 'trialEndsOn'
+  subscriptionId: 'subscriptionId',
+  customerId: 'customerId',
+  priceId: 'priceId',
+  productId: 'productId',
+  type: 'type',
+  status: 'status',
+  isActive: 'isActive',
+  amount: 'amount',
+  currency: 'currency',
+  paidAt: 'paidAt',
+  currentPeriodStart: 'currentPeriodStart',
+  currentPeriodEnd: 'currentPeriodEnd',
+  latestInvoiceId: 'latestInvoiceId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+export const InvoiceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  subscriptionId: 'subscriptionId',
+  stripeInvoiceId: 'stripeInvoiceId',
+  customerId: 'customerId',
+  hostedInvoiceUrl: 'hostedInvoiceUrl',
+  invoicePdf: 'invoicePdf',
+  createdAt: 'createdAt'
+} as const
+
+export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
 
 
 export const MigrationFileScalarFieldEnum = {

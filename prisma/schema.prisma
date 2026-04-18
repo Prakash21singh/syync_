@@ -26,7 +26,8 @@
     sessions Session[]
     adapters Adapter[]
     migrations Migration[]
-    subscription Subscription[]
+    subscription Subscription?
+    invoices Invoice[]
     stripe_customer_id String?
     image    String?
 
@@ -169,12 +170,51 @@
   }
 
   model Subscription {
-    id String @id @default(uuid())
-    type SubscriptionType
-    userId String
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    onTrial Boolean @default(true)
-    trialEndsOn DateTime        
+    id                String   @id @default(uuid())
+
+    userId            String   @unique
+    user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    invoice           Invoice[] 
+
+    subscriptionId    String   
+    customerId        String  
+    priceId           String   
+    productId         String?  
+
+    type              SubscriptionType
+    status            SubscriptionStatus   
+    isActive          Boolean  @default(false)
+
+    amount            Int      
+    currency          String   
+
+    
+    paidAt             DateTime
+    currentPeriodStart DateTime
+    currentPeriodEnd   DateTime
+
+    latestInvoiceId   String?  
+
+    createdAt         DateTime @default(now())
+    updatedAt         DateTime @updatedAt
+  }
+
+  model Invoice {
+    id               String   @id @default(uuid())
+
+    userId           String
+    user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    subscriptionId   String
+    subscription     Subscription @relation(fields: [subscriptionId], references: [id])
+
+    stripeInvoiceId  String   @unique   
+    customerId       String   
+
+    hostedInvoiceUrl String?
+    invoicePdf       String?
+
+    createdAt        DateTime @default(now())
   }
   model MigrationFile {
     id String @id @default(uuid())
@@ -228,9 +268,12 @@
     BUSINESS
   }
 
-  enum SubscriptionState {
+  enum SubscriptionStatus {
     ACTIVE
-    INACTIVE
-    REVOKED
-    EXPIRED
+    INCOMPLETE
+    INCOMPLETE_EXPIRED
+    TRIALING
+    PAST_DUE
+    CANCELED
+    UNPAID
   }

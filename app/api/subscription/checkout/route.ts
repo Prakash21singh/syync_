@@ -1,15 +1,25 @@
 import prisma from '@/lib/prisma';
 import { stripeClient } from '@/lib/stripe';
 import { withAuth } from '@/lib/with-auth';
+import { PlanType, SyncSubscriptionPlan } from '@/types';
 import { NextRequest, NextResponse } from 'next/server';
 import z from 'zod';
 
 const requestBodySchema = z.object({
   priceId: z.string(),
   success_url: z.url(),
+  plan: z.enum(['BASE', 'PRO', 'BUSINESS']),
 });
 
-async function createCheckoutSession(priceId: string, success_url: string, customerId?: string) {
+async function createCheckoutSession(
+  priceId: string,
+  success_url: string,
+  metadata: {
+    userId: string;
+    plan: SyncSubscriptionPlan['type'];
+  },
+  customerId?: string,
+) {
   const session = await stripeClient.checkout.sessions.create({
     success_url,
     cancel_url: success_url,
@@ -25,6 +35,7 @@ async function createCheckoutSession(priceId: string, success_url: string, custo
       billing_mode: {
         type: 'flexible',
       },
+      metadata: metadata,
     },
   });
 
@@ -82,6 +93,10 @@ const handler = async (
     const portalSession = await createCheckoutSession(
       body.priceId,
       body.success_url,
+      {
+        plan: body.plan,
+        userId: session.user.id,
+      },
       customerId || undefined,
     );
 

@@ -85,6 +85,11 @@ export type MigrationSelection = Prisma.MigrationSelectionModel
  */
 export type Subscription = Prisma.SubscriptionModel
 /**
+ * Model Invoice
+ * 
+ */
+export type Invoice = Prisma.InvoiceModel
+/**
  * Model MigrationFile
  * 
  */

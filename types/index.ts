@@ -129,7 +129,7 @@ export type AWSCredentials = {
 };
 
 type BillingCycle = 'monthly' | 'annually';
-type PlanType = 'BASE' | 'PRO' | 'BUSINESS';
+export type PlanType = 'BASE' | 'PRO' | 'BUSINESS';
 
 interface Feature {
   text: string;

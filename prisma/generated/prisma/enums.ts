@@ -58,11 +58,14 @@ export const SubscriptionType = {
 export type SubscriptionType = (typeof SubscriptionType)[keyof typeof SubscriptionType]
 
 
-export const SubscriptionState = {
+export const SubscriptionStatus = {
   ACTIVE: 'ACTIVE',
-  INACTIVE: 'INACTIVE',
-  REVOKED: 'REVOKED',
-  EXPIRED: 'EXPIRED'
+  INCOMPLETE: 'INCOMPLETE',
+  INCOMPLETE_EXPIRED: 'INCOMPLETE_EXPIRED',
+  TRIALING: 'TRIALING',
+  PAST_DUE: 'PAST_DUE',
+  CANCELED: 'CANCELED',
+  UNPAID: 'UNPAID'
 } as const
 
-export type SubscriptionState = (typeof SubscriptionState)[keyof typeof SubscriptionState]
+export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]
